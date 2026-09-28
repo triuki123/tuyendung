@@ -1,0 +1,94 @@
+<svg viewBox="0 0 860 372" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif" role="img" aria-label="Cài đặt trên iPhone/iPad bằng Safari — 3 bước">
+  <defs>
+    <linearGradient id="iTile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e2748"/><stop offset="1" stop-color="#0a1c34"/>
+    </linearGradient>
+    <linearGradient id="iLeg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#c4b5fd"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="372" rx="18" fill="#0b1424"/>
+  <text x="28" y="36" font-size="17" font-weight="700" fill="#e2e8f0">Cài trên iPhone / iPad <tspan fill="#818cf8">(Safari)</tspan></text>
+  <rect x="28" y="48" width="46" height="3" rx="1.5" fill="#6366f1"/>
+
+  <!-- ===== PHONE 1: Safari + nút Chia sẻ ===== -->
+  <g transform="translate(40,66)">
+    <rect width="200" height="252" rx="26" fill="#16243d" stroke="#38496b" stroke-width="1.5"/>
+    <rect x="12" y="14" width="176" height="224" rx="16" fill="#0a1424"/>
+    <rect x="78" y="20" width="44" height="6" rx="3" fill="#38496b"/>
+    <!-- nội dung trang mờ -->
+    <rect x="28" y="40" width="96" height="9" rx="4" fill="#1e2c46"/>
+    <rect x="28" y="58" width="144" height="7" rx="3" fill="#15233c"/>
+    <rect x="28" y="72" width="120" height="7" rx="3" fill="#15233c"/>
+    <rect x="28" y="96" width="142" height="40" rx="8" fill="#13213a"/>
+    <!-- thanh công cụ dưới của Safari -->
+    <rect x="12" y="196" width="176" height="42" rx="14" fill="#16233c"/>
+    <text x="34" y="221" font-size="13" fill="#64748b">‹</text>
+    <text x="62" y="221" font-size="13" fill="#64748b">›</text>
+    <!-- nút Chia sẻ được tô sáng -->
+    <circle cx="100" cy="217" r="15" fill="#6366f1" fill-opacity="0.18" stroke="#818cf8" stroke-width="2"/>
+    <g stroke="#a5b4fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <path d="M100 210 v12"/>
+      <path d="M95.5 213.5 l4.5 -4.5 4.5 4.5"/>
+      <path d="M92 216 v7 a2 2 0 0 0 2 2 h12 a2 2 0 0 0 2 -2 v-7"/>
+    </g>
+    <text x="140" y="221" font-size="13" fill="#64748b">⤢</text>
+    <circle cx="26" cy="20" r="15" fill="#6366f1"/>
+    <text x="26" y="25" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+  </g>
+  <text x="140" y="340" font-size="11.5" fill="#cbd5e1" text-anchor="middle" font-weight="600">Mở Safari → nhấn <tspan fill="#a5b4fc">Chia sẻ</tspan></text>
+
+  <path d="M256 192 l16 0 m-6 -6 l6 6 -6 6" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ===== PHONE 2: bảng Chia sẻ ===== -->
+  <g transform="translate(330,66)">
+    <rect width="200" height="252" rx="26" fill="#16243d" stroke="#38496b" stroke-width="1.5"/>
+    <rect x="12" y="14" width="176" height="224" rx="16" fill="#0a1424"/>
+    <rect x="78" y="20" width="44" height="6" rx="3" fill="#38496b"/>
+    <!-- tấm share sheet trượt lên -->
+    <rect x="20" y="70" width="160" height="168" rx="16" fill="#16233c" stroke="#2a3a57"/>
+    <rect x="92" y="80" width="16" height="4" rx="2" fill="#38496b"/>
+    <!-- hàng icon ứng dụng share -->
+    <g fill="#22324f">
+      <rect x="34" y="96" width="30" height="30" rx="8"/><rect x="76" y="96" width="30" height="30" rx="8"/><rect x="118" y="96" width="30" height="30" rx="8"/>
+    </g>
+    <!-- dòng "Thêm vào MH chính" được tô sáng -->
+    <rect x="30" y="138" width="140" height="32" rx="9" fill="#6366f1" fill-opacity="0.22" stroke="#818cf8" stroke-width="1.5"/>
+    <rect x="40" y="147.5" width="14" height="14" rx="3.5" fill="none" stroke="#a5b4fc" stroke-width="1.7"/>
+    <path d="M47 151 v7 M43.5 154.5 h7" stroke="#a5b4fc" stroke-width="1.7" stroke-linecap="round"/>
+    <text x="62" y="159" font-size="9.5" font-weight="600" fill="#e2e8f0">Thêm vào MH chính</text>
+    <!-- các dòng khác -->
+    <rect x="40" y="184" width="100" height="8" rx="4" fill="#2a3a57"/>
+    <rect x="40" y="204" width="80" height="8" rx="4" fill="#2a3a57"/>
+    <circle cx="26" cy="20" r="15" fill="#6366f1"/>
+    <text x="26" y="25" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+  </g>
+  <text x="430" y="340" font-size="11.5" fill="#cbd5e1" text-anchor="middle" font-weight="600">Chọn “Thêm vào MH chính”</text>
+
+  <path d="M546 192 l16 0 m-6 -6 l6 6 -6 6" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ===== PHONE 3: màn hình chính ===== -->
+  <g transform="translate(620,66)">
+    <rect width="200" height="252" rx="26" fill="#16243d" stroke="#38496b" stroke-width="1.5"/>
+    <rect x="12" y="14" width="176" height="224" rx="16" fill="#0a1424"/>
+    <rect x="78" y="20" width="44" height="6" rx="3" fill="#38496b"/>
+    <g fill="#1c2c48">
+      <rect x="34" y="46" width="36" height="36" rx="9"/><rect x="82" y="46" width="36" height="36" rx="9"/><rect x="130" y="46" width="36" height="36" rx="9"/>
+      <rect x="82" y="98" width="36" height="36" rx="9"/><rect x="130" y="98" width="36" height="36" rx="9"/>
+    </g>
+    <g transform="translate(34,98)">
+      <rect x="-4" y="-4" width="44" height="44" rx="12" fill="#6366f1" fill-opacity="0.18"/>
+      <rect width="36" height="36" rx="9" fill="url(#iTile)" stroke="#818cf8" stroke-opacity="0.6"/>
+      <g transform="translate(6,6) scale(0.5)">
+        <path d="M10 40 L24 8 L38 40" fill="none" stroke="url(#iLeg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16.5 27 H31.5" fill="none" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
+      </g>
+    </g>
+    <text x="52" y="150" font-size="8" fill="#cbd5e1" text-anchor="middle">AssetFlow</text>
+    <rect x="60" y="206" width="80" height="6" rx="3" fill="#1c2c48"/>
+    <circle cx="26" cy="20" r="15" fill="#10b981"/>
+    <path d="M19 20 l5 5 9 -10" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="720" y="340" font-size="11.5" fill="#cbd5e1" text-anchor="middle" font-weight="600">Xong — mở từ màn hình chính</text>
+</svg>

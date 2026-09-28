@@ -1,0 +1,212 @@
+{
+  "brand": "FADO AssetFlow",
+  "canvas": {
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "slideDurationMs": 2600,
+    "transitionMs": 450
+  },
+  "guides": [
+    {
+      "slug": "dashboard-ca-nhan",
+      "title": "Dashboard Cá Nhân",
+      "eyebrow": "Tổng quan",
+      "summary": "Xem nhanh việc cần làm, thông tin đang chờ và lối vào các module chính.",
+      "slides": [
+        {
+          "caption": "Mở Dashboard để xem tổng quan cá nhân ngay sau khi đăng nhập.",
+          "image": "documentation/public/screenshots/dashboard/tong-quan.png"
+        },
+        {
+          "caption": "Theo dõi các thẻ thông tin nổi bật để biết việc nào cần ưu tiên trong ngày."
+        },
+        {
+          "caption": "Từ đây bạn có thể đi nhanh sang Tra Cứu, Ticket, Chấm Công và các khu vực đang dùng nhiều nhất."
+        }
+      ]
+    },
+    {
+      "slug": "tra-cuu-noi-bo",
+      "title": "Tra Cứu Nội Bộ",
+      "eyebrow": "Tra cứu",
+      "summary": "Tìm tài sản, văn bản, thông báo và đầu mối liên hệ trong cùng một khu vực.",
+      "slides": [
+        {
+          "caption": "Vào Tra Cứu để mở các nhóm dữ liệu nội bộ bạn cần xem.",
+          "image": "documentation/public/screenshots/tra-cuu/tong-quan.png"
+        },
+        {
+          "caption": "Chọn đúng thẻ chức năng như Văn Bản, Thông Báo, Tài Sản hoặc Đầu Mối để đi vào đúng nơi."
+        },
+        {
+          "caption": "Khi chỉ cần xem thông tin, đây là module nhanh và an toàn nhất để bắt đầu."
+        }
+      ]
+    },
+    {
+      "slug": "gui-ticket-ho-tro",
+      "title": "Gửi Ticket Hỗ Trợ",
+      "eyebrow": "Công việc",
+      "summary": "Tạo ticket đúng danh mục và theo dõi phản hồi đến khi hoàn thành.",
+      "slides": [
+        {
+          "caption": "Mở Ticket Hỗ Trợ để xem ticket của bạn và bắt đầu tạo yêu cầu mới.",
+          "image": "documentation/public/screenshots/tickets/tong-quan.png"
+        },
+        {
+          "caption": "Nhấn Tạo ticket, nhập tiêu đề, danh mục, mô tả và chọn đúng đơn vị xử lý."
+        },
+        {
+          "caption": "Đính kèm tệp nếu cần, rồi gửi để ticket đi vào luồng xử lý."
+        },
+        {
+          "caption": "Sau khi gửi, theo dõi trạng thái trong tab Đã gửi cho đến khi ticket được đóng."
+        }
+      ]
+    },
+    {
+      "slug": "cong-viec-noi-bo",
+      "title": "Công Việc Nội Bộ",
+      "eyebrow": "Công việc",
+      "summary": "Tạo, theo dõi và phối hợp công việc theo tiến độ.",
+      "slides": [
+        {
+          "caption": "Mở module Công Việc để theo dõi danh sách việc được giao hoặc việc bạn đang phụ trách.",
+          "image": "documentation/public/screenshots/cong-viec/tong-quan.png"
+        },
+        {
+          "caption": "Tạo công việc mới với tiêu đề rõ ràng, người phụ trách và hạn hoàn thành cụ thể."
+        },
+        {
+          "caption": "Cập nhật trạng thái thường xuyên để người liên quan nhìn thấy tiến độ thật."
+        }
+      ]
+    },
+    {
+      "slug": "dat-phong-hop",
+      "title": "Đặt Phòng Họp",
+      "eyebrow": "Công việc",
+      "summary": "Chọn phòng, nhập thời gian và theo dõi trạng thái duyệt.",
+      "slides": [
+        {
+          "caption": "Mở Đặt Phòng Họp để xem lịch hiện tại và bắt đầu tạo booking mới.",
+          "image": "documentation/public/screenshots/dat-phong/tong-quan.png"
+        },
+        {
+          "caption": "Chọn phòng, ngày, giờ bắt đầu, giờ kết thúc và nội dung cuộc họp."
+        },
+        {
+          "caption": "Hệ thống sẽ kiểm tra trùng lịch trước khi bạn gửi yêu cầu."
+        },
+        {
+          "caption": "Bạn cũng có thể xem lại lịch sử sử dụng phòng khi cần đối chiếu.",
+          "image": "documentation/public/screenshots/dat-phong/lich-su.png"
+        }
+      ]
+    },
+    {
+      "slug": "du-lieu-cham-cong",
+      "title": "Dữ Liệu Chấm Công",
+      "eyebrow": "Nhân sự",
+      "summary": "Chấm công, tra cứu bảng công, xin nghỉ phép và xử lý đề xuất công.",
+      "slides": [
+        {
+          "caption": "Vào Dữ Liệu Chấm Công để mở các phân hệ chấm công và bảng công cá nhân.",
+          "image": "documentation/public/screenshots/cham-cong/tong-quan.png"
+        },
+        {
+          "caption": "Nếu bộ phận của bạn chấm công qua điện thoại, dùng màn hình Chấm Công để điểm danh vào hoặc ra.",
+          "image": "documentation/public/screenshots/cham-cong/diem-danh.png"
+        },
+        {
+          "caption": "Tra Cứu Dữ Liệu Công giúp bạn xem bảng công tháng và theo dõi dữ liệu đã ghi nhận.",
+          "image": "documentation/public/screenshots/cham-cong/bang-thang.png"
+        },
+        {
+          "caption": "Khi cần nghỉ phép, mở phân hệ Nghỉ Phép để tạo đơn và theo dõi trạng thái duyệt.",
+          "image": "documentation/public/screenshots/cham-cong/nghi-phep.png"
+        }
+      ]
+    },
+    {
+      "slug": "hop-dong-ho-so",
+      "title": "Hợp Đồng & Hồ Sơ",
+      "eyebrow": "Nhân sự",
+      "summary": "Xem hồ sơ cá nhân, hợp đồng và thông tin nhân sự của chính bạn.",
+      "slides": [
+        {
+          "caption": "Mở Hợp Đồng & Hồ Sơ để xem thông tin nhân sự và các hồ sơ gắn với tài khoản của bạn.",
+          "image": "documentation/public/screenshots/ho-so-cua-toi/tong-quan.png"
+        },
+        {
+          "caption": "Dùng module này khi cần rà lại dữ liệu hồ sơ, hợp đồng hoặc các thông tin cá nhân đang lưu trên hệ thống."
+        }
+      ]
+    },
+    {
+      "slug": "chu-ky-email",
+      "title": "Chữ Ký Email",
+      "eyebrow": "Nhân sự",
+      "summary": "Tạo hoặc cập nhật chữ ký email cá nhân theo mẫu thống nhất của công ty.",
+      "slides": [
+        {
+          "caption": "Vào Chữ Ký Email để tạo chữ ký chuẩn dùng cho công việc hằng ngày."
+        },
+        {
+          "caption": "Điền đầy đủ họ tên, chức danh, đơn vị, số điện thoại và các thông tin liên hệ cần hiển thị."
+        },
+        {
+          "caption": "Sau khi xem trước ổn, sao chép chữ ký để dán vào ứng dụng email bạn đang dùng."
+        }
+      ]
+    },
+    {
+      "slug": "quan-solace",
+      "title": "Quán Solace",
+      "eyebrow": "Tiện ích",
+      "summary": "Dùng khu vực Solace cho các tiện ích đặt món hoặc thao tác liên quan đến quán.",
+      "slides": [
+        {
+          "caption": "Mở Quán Solace từ sidebar khi bạn cần dùng các tiện ích phục vụ quán."
+        },
+        {
+          "caption": "Tùy quyền và cấu hình hiện tại, bạn sẽ thấy các khu vực phù hợp với vai trò của mình."
+        },
+        {
+          "caption": "Nếu menu hoặc thao tác không xuất hiện, hãy kiểm tra lại quyền tài khoản hoặc liên hệ người quản trị."
+        }
+      ]
+    },
+    {
+      "slug": "nguoi-dung-phan-quyen",
+      "title": "Người Dùng & Phân Quyền",
+      "eyebrow": "Hệ thống",
+      "summary": "Quản lý tài khoản, quyền và trạng thái truy cập của người dùng trong hệ thống.",
+      "slides": [
+        {
+          "caption": "Mở Người Dùng để xem danh sách tài khoản và trạng thái hiện tại.",
+          "image": "documentation/public/screenshots/quan-tri/nguoi-dung.png"
+        },
+        {
+          "caption": "Tại đây có thể tra cứu người dùng, xem thông tin cơ bản và chỉnh phân quyền nếu bạn có thẩm quyền."
+        }
+      ]
+    },
+    {
+      "slug": "cai-dat-tai-khoan",
+      "title": "Cài Đặt",
+      "eyebrow": "Hệ thống",
+      "summary": "Điều chỉnh các thiết lập mà tài khoản của bạn được phép thay đổi.",
+      "slides": [
+        {
+          "caption": "Mở Cài Đặt để xem các tùy chọn cấu hình mà tài khoản của bạn có thể sử dụng.",
+          "image": "documentation/public/screenshots/quan-tri/cai-dat.png"
+        },
+        {
+          "caption": "Chỉ nên thay đổi các mục bạn hiểu rõ tác động; với phần dùng chung cho tổ chức, nên thống nhất trước khi sửa."
+        }
+      ]
+    }
+  ]
+}

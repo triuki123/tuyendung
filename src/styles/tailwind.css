@@ -1,0 +1,1508 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font chữ chính thức của hệ thống: Plus Jakarta Sans. Tự host file
+   woff2 (public/fonts/) thay vì next/font/google — server build Coolify
+   không ra internet nên next/font/google fetch lúc build sẽ fail (xem
+   docs/deploy). Chỉ lấy 2 subset cần dùng (vietnamese + latin) để nhẹ. */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/PlusJakartaSans-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url('/fonts/PlusJakartaSans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --font-plus-jakarta-sans: 'Plus Jakarta Sans', 'Segoe UI', Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+  --primary: #ffffff;
+  --primary-foreground: #1d1d1f;
+  --secondary: #f2f2f7;
+  --secondary-foreground: #3a3a3c;
+  --accent: #007aff;
+  --accent-foreground: #ffffff;
+  --indigo: #007aff;
+  --indigo-foreground: #ffffff;
+  --muted: #f2f2f7;
+  --muted-foreground: #515154;
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --border: rgba(60,60,67,0.18);
+  --border-subtle: rgba(60,60,67,0.12);
+  --input: #f2f2f7;
+  --ring: #007aff;
+  --radius: 1rem;
+  --font-sans: var(--font-plus-jakarta-sans);
+  --glass-bg: rgba(255,255,255,0.76);
+  --glass-border: rgba(255,255,255,0.72);
+  --shadow-glow: 0 10px 28px rgba(0,122,255,0.12);
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 10px 30px rgba(0,0,0,0.07);
+  --shadow-modal: 0 24px 80px rgba(0,0,0,0.20);
+
+  /* ── Token ngữ nghĩa (Phase 1) — DARK = ĐÚNG giá trị hardcode hiện tại.
+     Đổi component sang các token này (Phase 3) KHÔNG làm dark xê dịch 1 pixel. ── */
+  --canvas:      #090909;
+  --surface:     #111111;
+  --surface-2:   #171717;
+  --hover:       rgba(255,255,255,0.05);    /* = bg-white/5 (lớp hover) */
+  --line-subtle: rgba(255,255,255,0.05);    /* = border-white/5 */
+  --line:        rgba(255,255,255,0.10);    /* = border-white/10 */
+  --line-strong: rgba(255,255,255,0.20);    /* = border-white/20 */
+  --ink:         #f5f5f5;
+  --ink-muted:   #a3a3a3;
+  --ink-faint:   #737373;
+  --ink-bright:  #d4d4d4;
+  --hover-strong: rgba(255,255,255,0.10);    /* = bg-white/10 (hover/nền đậm hơn) */
+  /* Màu chữ logo (BrandLockup) — DARK = giá trị cũ ⇒ logo dark không đổi */
+  --brand-ink:     #ffffff;                   /* FADO + Asset */
+  --brand-tagline: #a3a3a3;
+  --topbar-bg:     rgba(9,9,9,0.94);
+  /* Số trong badge sidebar (NavBadge) — DARK = màu sáng cũ ⇒ không đổi */
+  --nav-badge-red: #fca5a5; --nav-badge-amber: #fcd34d; --nav-badge-indigo: #a5b4fc;
+  --nav-badge-teal: #5eead4; --nav-badge-emerald: #6ee7b7;
+}
+
+/* ============================================================
+   GIAO DIỆN SÁNG (Light theme)
+   Kích hoạt khi <html class="light">. CHỈ override — không đụng
+   chế độ tối mặc định (:root ở trên) ⇒ không thể gây hồi quy dark.
+   ============================================================ */
+html.light {
+  --background: #f5f5f7; /* Apple system grouped background */
+  --foreground: #1d1d1f;
+  --primary: #ffffff;
+  --primary-foreground: #1d1d1f;
+  --secondary: #f2f2f7;
+  --secondary-foreground: #3a3a3c;
+  --accent: #007aff;
+  --accent-foreground: #ffffff;
+  --indigo: #007aff;
+  --indigo-foreground: #ffffff;
+  --muted: #f2f2f7;
+  --muted-foreground: #6e6e73; /* đậm hơn (slate-600) cho dễ đọc trên nền sáng */
+  --card: #ffffff;
+  --card-foreground: #1d1d1f;
+  --border: rgba(60,60,67,0.18);
+  --border-subtle: rgba(60,60,67,0.12);
+  --input: #f2f2f7;
+  --glass-bg: rgba(255,255,255,0.76);
+  --glass-border: rgba(255,255,255,0.72);
+  --shadow-glow: 0 10px 28px rgba(0,122,255,0.12);
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 10px 30px rgba(0,0,0,0.07);
+  --shadow-modal: 0 24px 80px rgba(0,0,0,0.20);
+
+  /* Token ngữ nghĩa — bảng LIGHT (đã tinh chỉnh: nền dịu, chữ đậm, viền rõ) */
+  --canvas:      #f5f5f7;
+  --surface:     #ffffff;
+  --surface-2:   #f2f2f7;
+  --hover:       rgba(15,23,42,0.05);
+  --line-subtle: rgba(15,23,42,0.10);
+  --line:        rgba(15,23,42,0.14);
+  --line-strong: rgba(15,23,42,0.16);
+  --ink:         #1d1d1f;
+  --ink-muted:   #515154;
+  --ink-faint:   #6e6e73;
+  --ink-bright:  #3a3a3c;
+  --hover-strong: rgba(15,23,42,0.07);
+  /* Logo light: FADO/Asset navy, tagline navy mềm — như "Asset" trong brand kit */
+  --brand-ink:     #1d1d1f;
+  --brand-tagline: #6e6e73;
+  --topbar-bg:     rgba(255,255,255,0.78);    /* topbar trắng frosted ở light */
+  /* Số badge sidebar ở light: màu đậm cho rõ trên nền sáng */
+  --nav-badge-red: #dc2626; --nav-badge-amber: #b45309; --nav-badge-indigo: #4f46e5;
+  --nav-badge-teal: #0d9488; --nav-badge-emerald: #059669;
+}
+
+/* Shim: remap utility màu-tối hardcode sang tông sáng (chỉ trong .light).
+   Đặt ngoài @layer ⇒ thắng các utility của Tailwind mà không phá dark mode. */
+
+/* Viền trắng mờ → slate mờ */
+html.light .border-white\/5,
+html.light .border-white\/\[0\.04\] { border-color: rgba(15,23,42,0.10) !important; }
+html.light .border-white\/10 { border-color: rgba(15,23,42,0.14) !important; }
+html.light .border-white\/12 { border-color: rgba(15,23,42,0.11) !important; }
+html.light .border-white\/15 { border-color: rgba(15,23,42,0.13) !important; }
+html.light .border-white\/20 { border-color: rgba(15,23,42,0.16) !important; }
+html.light .hover\:border-white\/10:hover { border-color: rgba(15,23,42,0.12) !important; }
+html.light .hover\:border-white\/20:hover { border-color: rgba(15,23,42,0.18) !important; }
+html.light .hover\:border-white\/40:hover { border-color: rgba(15,23,42,0.28) !important; }
+
+/* Đường kẻ divide giữa item */
+html.light .divide-white\/5 > :not([hidden]) ~ :not([hidden]),
+html.light .divide-white\/\[0\.04\] > :not([hidden]) ~ :not([hidden]) { border-color: rgba(15,23,42,0.08) !important; }
+
+/* Nền trắng mờ (panel / hover) → slate mờ */
+html.light .bg-white\/5 { background-color: rgba(15,23,42,0.04) !important; }
+html.light .bg-white\/10 { background-color: rgba(15,23,42,0.06) !important; }
+html.light .bg-white\/20 { background-color: rgba(15,23,42,0.10) !important; }
+html.light .bg-white\/\[0\.02\] { background-color: rgba(15,23,42,0.02) !important; }
+html.light .bg-white\/\[0\.04\] { background-color: rgba(15,23,42,0.04) !important; }
+html.light .hover\:bg-white\/5:hover { background-color: rgba(15,23,42,0.05) !important; }
+html.light .hover\:bg-white\/10:hover { background-color: rgba(15,23,42,0.08) !important; }
+html.light .hover\:bg-white\/20:hover { background-color: rgba(15,23,42,0.10) !important; }
+html.light .hover\:bg-white\/\[0\.02\]:hover { background-color: rgba(15,23,42,0.03) !important; }
+html.light .hover\:bg-white\/\[0\.03\]:hover { background-color: rgba(15,23,42,0.04) !important; }
+html.light .hover\:bg-white\/\[0\.04\]:hover { background-color: rgba(15,23,42,0.05) !important; }
+
+/* Ô nhập / panel hardcode nền tối → nền sáng */
+html.light .bg-\[\#162033\],
+html.light .bg-\[\#0e1626\],
+html.light .bg-\[\#0f1726\],
+html.light .bg-\[\#0d1424\],
+html.light .bg-\[\#1a2740\],
+html.light .bg-\[\#1a2332\],
+html.light .bg-\[\#0f1419\],
+html.light .bg-\[\#0f1626\],
+html.light .bg-\[\#0f1c2e\],
+html.light .bg-\[\#0f172a\] { background-color: #f1f5f9 !important; }
+
+/* Chữ input/textarea/select + placeholder + lịch */
+html.light input[type="text"],
+html.light input[type="email"],
+html.light input[type="password"],
+html.light input[type="number"],
+html.light input[type="date"],
+html.light input[type="search"],
+html.light input[type="time"],
+html.light textarea,
+html.light select { color: #0f172a; background-color: #f1f5f9; }
+html.light select option { background-color: #ffffff; color: #0f172a; }
+html.light select option:checked,
+html.light select option:hover { background-color: #e2e8f0; color: #0f172a; }
+html.light ::placeholder { color: #94a3b8; opacity: 1; }
+html.light input[type="date"]::-webkit-calendar-picker-indicator { filter: none; }
+
+/* Nút ghost + nav + table hover ở tông sáng */
+html.light .btn-ghost { background: rgba(15,23,42,0.04); color: #475569; border: 1px solid rgba(15,23,42,0.10); }
+html.light .btn-ghost:hover { background: rgba(15,23,42,0.08); color: #0f172a; border-color: rgba(15,23,42,0.16); }
+html.light .nav-item-hover:hover { background: rgba(15,23,42,0.05); color: #0f172a; }
+html.light .table-row-hover:hover { background: rgba(99,102,241,0.06); }
+
+/* Chữ phụ màu nhạt (hợp nền tối) → slate đậm cho dễ đọc trên nền sáng.
+   KHÔNG đụng `.text-white` thuần (đa số nằm trên nút màu — phải giữ trắng). */
+html.light .text-slate-300,
+html.light .text-slate-400,
+html.light .text-gray-300,
+html.light .text-gray-400 { color: #475569 !important; } /* slate-600 */
+html.light .text-slate-500,
+html.light .text-gray-500 { color: #334155 !important; } /* slate-700 */
+html.light .text-slate-200,
+html.light .text-gray-200 { color: #64748b !important; }
+
+/* Chữ trắng mờ (text-white/xx) → slate đậm tương ứng, đủ tương phản */
+html.light .text-white\/90 { color: rgba(15,23,42,0.92) !important; }
+html.light .text-white\/85 { color: rgba(15,23,42,0.88) !important; }
+html.light .text-white\/80 { color: rgba(15,23,42,0.82) !important; }
+html.light .text-white\/70 { color: rgba(15,23,42,0.74) !important; }
+html.light .text-white\/60 { color: rgba(15,23,42,0.66) !important; }
+html.light .text-white\/50 { color: rgba(15,23,42,0.60) !important; }
+html.light .text-white\/40 { color: rgba(15,23,42,0.55) !important; }
+
+/* Chữ "mảnh": antialiased làm nét chữ mỏng đi (đẹp trên nền tối, nhưng nhạt trên
+   nền sáng). Đổi sang auto ⇒ chữ dày/nét hơn, dễ đọc hơn — chỉ trong light. */
+html.light,
+html.light body {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* Chiều sâu: card lớn (panel) có đổ bóng + viền nhẹ để tách khỏi nền dịu */
+html.light .rounded-2xl.border,
+html.light .rounded-3xl.border {
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 6px 16px rgba(15,23,42,0.06);
+}
+
+/* Màu nhấn (text accent) → biến thể -600 cho tương phản trên nền sáng */
+html.light .text-indigo-400,  html.light .text-indigo-300  { color: #007aff !important; }
+html.light .text-emerald-400, html.light .text-emerald-300 { color: #059669 !important; }
+html.light .text-green-400,   html.light .text-green-300   { color: #16a34a !important; }
+html.light .text-amber-400,   html.light .text-amber-300   { color: #b45309 !important; }
+html.light .text-rose-400,    html.light .text-rose-300,
+html.light .text-red-400,     html.light .text-red-300     { color: #dc2626 !important; }
+html.light .text-cyan-400,    html.light .text-cyan-300    { color: #0891b2 !important; }
+html.light .text-sky-400,     html.light .text-sky-300     { color: #0284c7 !important; }
+html.light .text-teal-400,    html.light .text-teal-300    { color: #0d9488 !important; }
+html.light .text-violet-400,  html.light .text-violet-300  { color: #7c3aed !important; }
+html.light .text-orange-400,  html.light .text-orange-300  { color: #ea580c !important; }
+html.light .text-pink-400,    html.light .text-pink-300    { color: #db2777 !important; }
+html.light .text-purple-400,  html.light .text-purple-300  { color: #7c3aed !important; }
+html.light .text-blue-400,    html.light .text-blue-300    { color: #2563eb !important; }
+
+/* Sticky header/toolbar/cột dùng bg-slate-900/xx (tối hardcode) → nền sáng mờ
+   để chúng blend với nền trang khi cuộn (audit light phát hiện ở tickets/tasks/room-bookings). */
+html.light .bg-slate-900\/95 { background-color: rgba(232,235,241,0.95) !important; }
+html.light .bg-slate-900\/90 { background-color: rgba(232,235,241,0.90) !important; }
+html.light .bg-slate-900\/85 { background-color: rgba(232,235,241,0.88) !important; }
+html.light .bg-slate-900\/80 { background-color: rgba(232,235,241,0.85) !important; }
+html.light .bg-slate-900,
+html.light .bg-slate-800 { background-color: #ffffff !important; }
+html.light .bg-slate-800\/95 { background-color: rgba(255,255,255,0.96) !important; }
+/* Slate-shade panel/nút trong modal & khu phụ → tông sáng */
+html.light .bg-slate-700,
+html.light .bg-slate-600 { background-color: #eef2f7 !important; }
+html.light .bg-slate-700\/50,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-900\/50 { background-color: rgba(15,23,42,0.06) !important; }
+html.light .bg-slate-700\/30,
+html.light .bg-slate-800\/30,
+html.light .bg-slate-900\/30 { background-color: rgba(15,23,42,0.04) !important; }
+/* Gradient slate tối (header/toolbar modal) → sáng */
+html.light .from-slate-900,
+html.light .from-slate-800 { --tw-gradient-from: #eef2f7 var(--tw-gradient-from-position) !important; }
+html.light .via-slate-900,
+html.light .via-slate-800 { --tw-gradient-via-position: ; --tw-gradient-to: rgba(238,242,247,0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), #eef2f7 var(--tw-gradient-via-position), var(--tw-gradient-to) !important; }
+html.light .to-slate-900,
+html.light .to-slate-800 { --tw-gradient-to: #f5f7fb var(--tw-gradient-to-position) !important; }
+/* Gradient slate-900 (toolbar dính) → sáng */
+html.light .from-slate-900\/95 { --tw-gradient-from: rgba(232,235,241,0.95) var(--tw-gradient-from-position) !important; }
+html.light .from-slate-900\/90 { --tw-gradient-from: rgba(232,235,241,0.90) var(--tw-gradient-from-position) !important; }
+html.light .to-slate-900\/90 { --tw-gradient-to: rgba(232,235,241,0.90) var(--tw-gradient-to-position) !important; }
+html.light .to-slate-900\/95 { --tw-gradient-to: rgba(232,235,241,0.95) var(--tw-gradient-to-position) !important; }
+
+/* Badge trạng thái tài sản (status-* / StatusBadge) — light: đậm chữ cho dễ đọc,
+   nền tint giữ pale. Chỉ .light ⇒ dark giữ nguyên. */
+html.light .status-available  { color: #047857 !important; background: rgba(16,185,129,0.12) !important; border-color: rgba(16,185,129,0.30) !important; }
+html.light .status-assigned   { color: #4338ca !important; background: rgba(99,102,241,0.12) !important; border-color: rgba(99,102,241,0.30) !important; }
+html.light .status-maintenance{ color: #b45309 !important; background: rgba(245,158,11,0.14) !important; border-color: rgba(245,158,11,0.32) !important; }
+html.light .status-broken     { color: #b91c1c !important; background: rgba(198,40,40,0.12) !important; border-color: rgba(198,40,40,0.30) !important; }
+html.light .status-retired    { color: #475569 !important; background: rgba(100,116,139,0.12) !important; border-color: rgba(100,116,139,0.30) !important; }
+
+/* Tag badge (org tag, màu động qua --tag) — DARK: đặc + chữ trắng (y như cũ);
+   LIGHT: mềm (nền tint 16% + chữ màu tag) cho dịu mắt. */
+.tag-badge { background-color: var(--tag, #64748b); color: #ffffff; }
+html.light .tag-badge { background-color: color-mix(in srgb, var(--tag, #64748b) 16%, transparent); color: var(--tag, #64748b); }
+
+/* Thanh cuộn sáng */
+html.light ::-webkit-scrollbar-track { background: #e2e8f0; }
+html.light ::-webkit-scrollbar-thumb { background: rgba(82,82,82,0.35); }
+
+/* Recruitment workspace: a restrained monochrome accent system. Error and
+   warning colors remain semantic, but navigational/presentation accents use
+   neutral gray so the screen feels calm and premium. */
+.recruitment-shell .text-indigo-200,
+.recruitment-shell .text-indigo-300,
+.recruitment-shell .text-indigo-400,
+.recruitment-shell .text-purple-300,
+.recruitment-shell .text-purple-400,
+.recruitment-shell .text-violet-300,
+.recruitment-shell .text-violet-400,
+.recruitment-shell .text-sky-300,
+.recruitment-shell .text-sky-400,
+.recruitment-shell .text-cyan-300,
+.recruitment-shell .text-cyan-400,
+.recruitment-shell .text-teal-300,
+.recruitment-shell .text-teal-400 { color: #007aff !important; }
+.recruitment-shell .bg-indigo-500\/10,
+.recruitment-shell .bg-indigo-500\/15,
+.recruitment-shell .bg-indigo-500\/20,
+.recruitment-shell .bg-indigo-500\/25,
+.recruitment-shell .bg-purple-500\/15,
+.recruitment-shell .bg-sky-500\/15,
+.recruitment-shell .bg-violet-500\/15 { background-color: rgba(0,122,255,0.10) !important; }
+.recruitment-shell .border-indigo-500\/20,
+.recruitment-shell .border-indigo-500\/30,
+.recruitment-shell .border-indigo-500\/35,
+.recruitment-shell .border-indigo-500\/40,
+.recruitment-shell .border-indigo-500\/50,
+.recruitment-shell .border-purple-500\/30,
+.recruitment-shell .border-sky-500\/30 { border-color: rgba(0,122,255,0.24) !important; }
+
+/* Readable, touch-friendly workspace for Talent Acquisition. */
+.recruitment-shell {
+  color: #1d1d1f;
+}
+.recruitment-shell .recruitment-header {
+  background: rgba(255,255,255,0.88);
+  border-color: rgba(60,60,67,0.18);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.80), 0 4px 18px rgba(0,0,0,0.05);
+}
+.recruitment-shell .recruitment-header .text-foreground {
+  color: #1d1d1f;
+}
+.recruitment-shell .recruitment-header .text-muted-foreground {
+  color: #515154;
+}
+.recruitment-shell .text-muted-foreground {
+  color: #515154;
+}
+.recruitment-shell .text-2xs {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+}
+.recruitment-shell input,
+.recruitment-shell select,
+.recruitment-shell textarea {
+  border-radius: 0.75rem;
+}
+.recruitment-shell input:focus,
+.recruitment-shell select:focus,
+.recruitment-shell textarea:focus,
+.recruitment-shell button:focus-visible,
+.recruitment-shell a:focus-visible {
+  outline: 3px solid rgba(0,122,255,0.28);
+  outline-offset: 2px;
+}
+.recruitment-shell .rounded-2xl.border,
+.recruitment-shell .rounded-3xl.border {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.05);
+}
+.recruitment-shell .rounded-2xl.border:hover {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05), 0 14px 30px rgba(0,0,0,0.08);
+}
+.recruitment-nav::-webkit-scrollbar { display: none; }
+.recruitment-nav { scrollbar-width: none; }
+.recruitment-shell .industry-folder-card,
+.recruitment-shell .industry-unclassified-card {
+  background: #ffffff;
+  box-shadow: none;
+}
+.recruitment-shell .industry-folder-card .text-foreground,
+.recruitment-shell .industry-unclassified-card .text-foreground {
+  color: #1d1d1f;
+}
+.recruitment-shell .industry-folder-card .text-muted-foreground,
+.recruitment-shell .industry-unclassified-card .text-muted-foreground {
+  color: #515154;
+}
+.recruitment-shell .industry-unclassified-card .text-amber-200,
+.recruitment-shell .industry-unclassified-card .text-amber-200\/80,
+.recruitment-shell .industry-unclassified-card .text-amber-300 {
+  color: #8a5a00 !important;
+}
+.candidate-add-modal .candidate-add-field {
+  background: #f2f2f7;
+  border-color: transparent;
+  color: #1d1d1f;
+  box-shadow: inset 0 0 0 1px rgba(60,60,67,0.10);
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.candidate-add-modal .candidate-add-field::placeholder {
+  color: #86868b;
+}
+.candidate-add-modal .candidate-add-field:hover {
+  background: #ebebf0;
+}
+.candidate-add-modal .candidate-add-field:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0,122,255,0.16), inset 0 0 0 1px #007aff;
+}
+.candidate-add-modal .candidate-add-upload {
+  background: #f7f7f9;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.candidate-add-modal .candidate-add-upload:hover {
+  background: #f0f7ff;
+  border-color: rgba(0,122,255,0.45);
+}
+.recruitment-shell .industry-folder-card:hover {
+  background: #f7fbff;
+  border-color: rgba(0,122,255,0.38);
+  box-shadow: 0 6px 18px rgba(0,122,255,0.08);
+}
+.recruitment-shell .industry-unclassified-card {
+  background: #fffdf7;
+}
+.recruitment-shell .industry-unclassified-card:hover {
+  background: #fff9e8;
+}
+/* Primary CV search: explicit light colors avoid inheriting legacy dark tokens. */
+.recruitment-shell .candidate-pool-search {
+  background: #ffffff;
+  border-color: #d2d2d7;
+  color: #1d1d1f;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.recruitment-shell .candidate-pool-search::placeholder { color: #6e6e73; opacity: 1; }
+.recruitment-shell .candidate-pool-search:hover { background: #fbfbfd; border-color: #aeaeb2; }
+.recruitment-shell .candidate-pool-search:focus {
+  background: #ffffff;
+  border-color: #007aff;
+  box-shadow: 0 0 0 4px rgba(0,122,255,0.18);
+}
+.recruitment-shell .candidate-pool-search-icon { color: #515154; }
+/* Candidate detail fields use a fixed light palette because legacy surface
+   tokens can otherwise resolve to the old dark theme inside this drawer. */
+.recruitment-shell .candidate-drawer-field {
+  background: #f2f2f7;
+  border-color: rgba(60,60,67,0.16);
+  color: #1d1d1f;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.recruitment-shell .candidate-drawer-field::placeholder { color: #6e6e73; opacity: 1; }
+.recruitment-shell .candidate-drawer-field:hover { background: #ebebf0; border-color: rgba(60,60,67,0.24); }
+.recruitment-shell .candidate-drawer-field:focus {
+  background: #ffffff;
+  border-color: #007aff;
+  box-shadow: 0 0 0 4px rgba(0,122,255,0.16);
+}
+
+/* Liquid Glass — scoped to Tuyển dụng.  Only selected/active surfaces receive
+   blur and the animated highlight, keeping candidate lists inexpensive to
+   render on lower-powered local machines. */
+.recruitment-shell {
+  background-image: radial-gradient(circle at 12% -8%, rgba(0,122,255,0.09), transparent 30rem), radial-gradient(circle at 90% 4%, rgba(94,92,230,0.06), transparent 26rem);
+}
+.recruitment-shell .recruitment-header {
+  background: rgba(255,255,255,0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+.recruitment-shell .recruitment-header nav a[aria-current="page"],
+.recruitment-shell [role="tab"][aria-selected="true"],
+.recruitment-shell button[aria-pressed="true"] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.82) !important;
+  background: linear-gradient(135deg, rgba(0,122,255,0.94), rgba(88,86,214,0.88)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.46), 0 6px 16px rgba(0,122,255,0.22);
+}
+.recruitment-shell .recruitment-header nav a[aria-current="page"]::after,
+.recruitment-shell [role="tab"][aria-selected="true"]::after,
+.recruitment-shell button[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.58;
+  background: linear-gradient(112deg, transparent 18%, rgba(255,255,255,0.42) 47%, transparent 74%);
+  transform: translateX(-130%);
+}
+.recruitment-shell .industry-folder-card,
+.recruitment-shell .industry-unclassified-card,
+.recruitment-shell .candidate-master-folder,
+.recruitment-shell .candidate-summary-card,
+.recruitment-shell .cv-batch-entry,
+.recruitment-shell .cv-extraction-report {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(60,60,67,0.14);
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(248,250,255,0.72));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 5px 18px rgba(15,23,42,0.05);
+  transition: transform 180ms cubic-bezier(.2,.8,.2,1), border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+.recruitment-shell .industry-folder-card::before,
+.recruitment-shell .industry-unclassified-card::before,
+.recruitment-shell .candidate-master-folder::before,
+.recruitment-shell .candidate-summary-card::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(115deg, transparent 24%, rgba(255,255,255,0.74) 48%, transparent 69%);
+  transform: translateX(-115%);
+  transition: opacity 160ms ease, transform 420ms cubic-bezier(.2,.8,.2,1);
+}
+.recruitment-shell .industry-folder-card:hover,
+.recruitment-shell .industry-unclassified-card:hover,
+.recruitment-shell .candidate-master-folder:hover,
+.recruitment-shell .candidate-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,122,255,0.38);
+  background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(235,245,255,0.82));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.96), 0 11px 26px rgba(0,122,255,0.13);
+}
+.recruitment-shell .industry-folder-card:hover::before,
+.recruitment-shell .industry-unclassified-card:hover::before,
+.recruitment-shell .candidate-master-folder:hover::before,
+.recruitment-shell .candidate-summary-card:hover::before { opacity: 1; transform: translateX(115%); }
+.recruitment-shell .candidate-master-folder {
+  border: 1px solid rgba(0,122,255,0.27);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(231,243,255,0.94), rgba(255,255,255,0.88) 55%, rgba(239,238,255,0.84));
+}
+.recruitment-shell .candidate-master-folder-icon {
+  border-radius: 14px;
+  color: #ffffff;
+  background: linear-gradient(145deg, #007aff, #5856d6);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 7px 16px rgba(0,122,255,0.20);
+}
+.recruitment-shell .candidate-master-folder-action {
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.74);
+  border: 1px solid rgba(0,122,255,0.24);
+  color: #0068d9;
+  font-size: 12px;
+  font-weight: 700;
+}
+.recruitment-shell :is(input, select, textarea):focus {
+  background-color: rgba(255,255,255,0.94);
+  border-color: rgba(0,122,255,0.72) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.92), 0 0 0 4px rgba(0,122,255,0.13) !important;
+}
+.recruitment-shell [role="tabpanel"] { animation: recruitment-glass-enter 180ms cubic-bezier(.2,.8,.2,1); }
+@keyframes recruitment-glass-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: no-preference) {
+  .recruitment-shell .recruitment-header nav a[aria-current="page"]::after,
+  .recruitment-shell [role="tab"][aria-selected="true"]::after,
+  .recruitment-shell button[aria-pressed="true"]::after { animation: recruitment-glass-sheen 620ms 90ms cubic-bezier(.2,.8,.2,1) both; }
+}
+@keyframes recruitment-glass-sheen { to { transform: translateX(130%); } }
+@media (prefers-reduced-motion: reduce) {
+  .recruitment-shell .industry-folder-card,
+  .recruitment-shell .industry-unclassified-card,
+  .recruitment-shell .candidate-summary-card { transition: none; }
+  .recruitment-shell [role="tabpanel"] { animation: none; }
+}
+@media (max-width: 640px) {
+  .recruitment-shell .text-2xs { font-size: 0.8125rem; line-height: 1.2rem; }
+  .recruitment-shell .rounded-2xl.border { box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.28);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.48);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-card-hover {
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .metric-card-hover {
+    transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+  }
+
+  .metric-card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+
+  .nav-item-active {
+    background: rgba(255,255,255,0.12);
+    border-left: 3px solid #f5f5f5;
+    color: #f5f5f5;
+  }
+
+  .nav-item-hover {
+    transition: all 150ms ease;
+  }
+
+  .nav-item-hover:hover {
+    background: rgba(255,255,255,0.05);
+    color: #e2e8f0;
+  }
+
+  .btn-accent {
+    background: #007aff;
+    color: #ffffff;
+    transition: all 150ms ease;
+  }
+
+  .btn-accent:hover {
+    background: #006ee6;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,122,255,0.28);
+  }
+
+  .btn-accent:active {
+    transform: scale(0.97) translateY(0);
+  }
+
+  .btn-indigo {
+    background: #007aff;
+    color: #ffffff;
+    transition: all 150ms ease;
+  }
+
+  .btn-indigo:hover {
+    background: #006ee6;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,122,255,0.28);
+  }
+
+  .btn-indigo:active {
+    transform: scale(0.97) translateY(0);
+  }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 150ms ease;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.1);
+    color: #e2e8f0;
+    border-color: rgba(255,255,255,0.15);
+  }
+
+  .status-available {
+    background: rgba(16,185,129,0.15);
+    color: #34d399;
+    border: 1px solid rgba(16,185,129,0.3);
+  }
+
+  .status-assigned {
+    background: rgba(99,102,241,0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(99,102,241,0.3);
+  }
+
+  .status-maintenance {
+    background: rgba(245,158,11,0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245,158,11,0.3);
+  }
+
+  .status-broken {
+    background: rgba(198,40,40,0.15);
+    color: #f87171;
+    border: 1px solid rgba(198,40,40,0.3);
+  }
+
+  .status-retired {
+    background: rgba(100,116,139,0.15);
+    color: #94a3b8;
+    border: 1px solid rgba(100,116,139,0.3);
+  }
+
+  .table-row-hover {
+    transition: background 150ms ease;
+  }
+
+  .table-row-hover:hover {
+    background: rgba(99,102,241,0.06);
+  }
+
+  .sidebar-transition {
+    transition: width 300ms ease;
+  }
+
+  .fade-in {
+    animation: fadeIn 200ms ease forwards;
+  }
+
+  .slide-up {
+    animation: slideUp 200ms ease forwards;
+  }
+
+  .modal-entrance {
+    animation: modalEntrance 200ms ease forwards;
+  }
+
+  .sheet-up {
+    animation: sheetUp 260ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Toast: trượt vào từ phải + thanh đếm ngược */
+  .toast-enter {
+    animation: toastEnter 220ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes toastEnter {
+    from { opacity: 0; transform: translateX(24px) scale(0.96); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  .toast-progress {
+    width: 100%;
+    transform-origin: left;
+    animation: toastProgress linear forwards;
+    opacity: 0.6;
+  }
+  @keyframes toastProgress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+  }
+
+  @keyframes sheetUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .pulse-highlight {
+    animation: pulseHighlight 600ms ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes modalEntrance {
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  @keyframes pulseHighlight {
+    0% { background: rgba(99,102,241,0.3); }
+    100% { background: transparent; }
+  }
+
+  /* Logo spin — 14s slow rotation for FlowNodeIcon outer arcs */
+  .logo-spin-slow {
+    transform-box: view-box;
+    transform-origin: 32px 32px;
+    animation: logo-spin 14s linear infinite;
+  }
+
+  @keyframes logo-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .text-gradient-indigo {
+    background: linear-gradient(135deg, #818cf8 0%, #c4b5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-red {
+    background: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-glow-indigo {
+    box-shadow: 0 0 0 1px rgba(99,102,241,0.4), 0 0 20px rgba(99,102,241,0.1);
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sidebar-collapsed-width {
+    width: 72px;
+  }
+
+  .sidebar-expanded-width {
+    width: 260px;
+  }
+
+  .content-with-sidebar {
+    margin-left: 260px;
+    transition: margin-left 300ms ease;
+  }
+
+  .content-with-sidebar-collapsed {
+    margin-left: 72px;
+    transition: margin-left 300ms ease;
+  }
+
+  /* Fix select option contrast — browser renders options with OS defaults */
+  select {
+    color: #f1f5f9;
+    background-color: #0f1c2e;
+  }
+
+  select option {
+    background-color: #0f1c2e;
+    color: #f1f5f9;
+  }
+
+  select option:checked,
+  select option:hover {
+    background-color: #162033;
+    color: #ffffff;
+  }
+
+  /* Ensure inputs always have readable text */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="search"],
+  textarea {
+    color: #f1f5f9;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.5);
+  }
+
+  /* Placeholder contrast */
+  ::placeholder {
+    color: #64748b;
+    opacity: 1;
+  }
+
+  /* Bottom-sheet hoá MỌI modal-giữa-màn trên mobile bằng 1 quy tắc (toàn app).
+     Modal dùng pattern .fixed.inset-0.z-50.flex.items-center.justify-center →
+     trên mobile: dồn xuống đáy, sát mép, full-width, card bo góc-trên + trượt lên,
+     cao tối đa 92vh và cuộn trong. Desktop (≥640px) GIỮ NGUYÊN modal giữa màn. */
+  @media (max-width: 639px) {
+    div.fixed.inset-0.z-50.flex.items-center.justify-center {
+      align-items: flex-end !important;
+      padding: 0 !important;
+    }
+    div.fixed.inset-0.z-50.flex.items-center.justify-center > div {
+      max-width: 100% !important;
+      width: 100% !important;
+      max-height: 92vh !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      padding-bottom: env(safe-area-inset-bottom) !important;
+      animation: sheetUp 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  /* Chống iOS tự ZOOM khi focus input: trình duyệt mobile phóng to nếu field < 16px.
+     App dùng text-sm (14px) → ép tối thiểu 16px trên mobile/tablet (<lg). Desktop GIỮ NGUYÊN.
+     Dùng !important để thắng utility text-sm/text-xs trên field. */
+  @media (max-width: 1023px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  /* HTML5 QR Code Scanner Styles */
+  #qr-scanner-container {
+    min-height: 300px;
+    width: 100%;
+    height: 100%;
+  }
+
+  #qr-scanner-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #qr-scanner-container div {
+    width: 100%;
+    height: 100%;
+  }
+
+  .qr-shaded-region {
+    background: rgba(0, 0, 0, 0.3) !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .qr-shaded-region video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .qr-shaded-region canvas {
+    display: none !important;
+  }
+
+  .html5-qrcode-element video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Scanner container background - full screen */
+  .html5-qrcode-element {
+    background: #000 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Scanner buttons styling - positioned for mobile */
+  .html5-qrcode-element button {
+    background: rgba(99, 102, 241, 0.9) !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 150ms ease !important;
+    margin: 12px 6px !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  .html5-qrcode-element button:hover {
+    background: rgba(79, 70, 229, 0.95) !important;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.6) !important;
+  }
+
+  .html5-qrcode-element button:active {
+    transform: scale(0.95) !important;
+  }
+
+  /* Torch button specific styling - mobile friendly */
+  #qr-shaded-region button {
+    background: rgba(99, 102, 241, 0.9) !important;
+    color: white !important;
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+    border-radius: 50px !important;
+    z-index: 50 !important;
+  }
+
+  #qr-shaded-region button:hover {
+    background: rgba(79, 70, 229, 0.95) !important;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6) !important;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    #qr-scanner-container {
+      min-height: 100vh;
+    }
+
+    .html5-qrcode-element button {
+      padding: 12px 24px !important;
+      font-size: 16px !important;
+    }
+
+    #qr-shaded-region button {
+      padding: 14px 28px !important;
+      font-size: 16px !important;
+      bottom: 30px !important;
+    }
+  }
+}
+
+/* ============================================================
+   PRINT — Sơ Yếu Lý Lịch Điện Tử
+   ============================================================ */
+
+/* Ẩn khỏi màn hình nhưng vẫn có trong DOM (không dùng display:none) */
+.print-only {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 210mm;
+  visibility: hidden;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+  }
+
+  /* Ẩn toàn bộ bằng visibility (override được dù lồng sâu) */
+  body * { visibility: hidden !important; }
+
+  /* Chỉ hiện vùng in */
+  #print-profile,
+  #print-profile * { visibility: visible !important; }
+
+  .print-only { position: static; left: 0; }
+
+  #print-profile {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: #fff !important;
+    color: #171717 !important;
+    font-family: 'Times New Roman', serif !important;
+    font-size: 11pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Tiêu đề trang — letterhead có gạch chân accent, đồng bộ phiếu KPI */
+  #print-profile .pp-titleblock {
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    border-bottom: 2pt solid #3730a3;
+  }
+  #print-profile .pp-title {
+    font-size: 16pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
+  #print-profile .pp-subtitle {
+    font-size: 9.5pt;
+    color: #555;
+  }
+
+  /* Khối avatar + tên */
+  #print-profile .pp-header {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 16px;
+    border: 1px solid #ccc;
+    border-left: 3pt solid #3730a3;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: #fafafa !important;
+  }
+  #print-profile .pp-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+  }
+  #print-profile .pp-avatar-initials {
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    background: #3730a3 !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 22pt;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  #print-profile .pp-name { font-size: 14pt; font-weight: 700; margin-bottom: 3px; }
+  #print-profile .pp-meta { font-size: 9pt; color: #444; margin-top: 2px; }
+
+  /* Section */
+  #print-profile .pp-section { margin-bottom: 14px; break-inside: avoid; }
+  #print-profile .pp-section-title {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    font-size: 10pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #3730a3;
+    border-bottom: 1.5px solid #3730a3;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  #print-profile .pp-section-title::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #3730a3 !important;
+    flex-shrink: 0;
+  }
+  #print-profile .pp-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  #print-profile .pp-row {
+    display: flex !important;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 8px;
+    border-bottom: 0.5px solid #e5e5e5;
+    font-size: 10pt;
+  }
+  #print-profile .pp-row:nth-child(odd)  { background: #f7f7fa !important; }
+  #print-profile .pp-row:nth-child(even) { background: #fff !important; }
+  #print-profile .pp-label { color: #666; flex-shrink: 0; min-width: 110px; }
+  #print-profile .pp-value { font-weight: 600; text-align: right; }
+
+  /* Ký tên */
+  #print-profile .pp-sign-date {
+    text-align: right;
+    font-style: italic;
+    font-size: 9.5pt;
+    color: #555;
+    margin-top: 22px;
+  }
+  #print-profile .pp-sign {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 10pt;
+  }
+  #print-profile .pp-sign-line {
+    border-top: 1px solid #333;
+    margin: 48px 16px 4px;
+  }
+}
+
+/* Phiếu KPI in để lưu hồ sơ nhân sự / đem ra bàn luận — cùng kỹ thuật với #print-profile. */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm 14mm;
+  }
+
+  body * { visibility: hidden !important; }
+  #kpi-print-report,
+  #kpi-print-report * { visibility: visible !important; }
+
+  #kpi-print-report {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: #fff !important;
+    color: #171717 !important;
+    font-family: 'Times New Roman', serif !important;
+    font-size: 11pt !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Watermark trạng thái — mờ, chéo, không cản đọc nội dung */
+  #kpi-print-report .kr-watermark {
+    position: fixed !important;
+    top: 46% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-32deg);
+    font-size: 46pt;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #16a34a;
+    opacity: 0.08;
+    z-index: 0;
+  }
+  #kpi-print-report .kr-watermark.kr-watermark-pending { color: #dc2626; }
+
+  #kpi-print-report .kr-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    border-bottom: 2pt solid #3730a3;
+  }
+  #kpi-print-report .kr-title {
+    font-size: 16pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
+  #kpi-print-report .kr-subtitle {
+    font-size: 9.5pt;
+    color: #555;
+  }
+
+  #kpi-print-report .kr-meta {
+    position: relative;
+    z-index: 1;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 10pt;
+    background: #fafafa !important;
+  }
+  #kpi-print-report .kr-meta-row { display: flex !important; justify-content: space-between; gap: 8px; padding: 2px 0; }
+  #kpi-print-report .kr-meta-label { color: #666; }
+  #kpi-print-report .kr-meta-value { font-weight: 600; }
+
+  #kpi-print-report .kr-status-pill {
+    display: inline-block;
+    padding: 1px 9px;
+    border-radius: 999px;
+    font-size: 8.5pt;
+    font-weight: 700;
+    border: 1px solid currentColor;
+  }
+  #kpi-print-report .kr-status-draft { color: #666; }
+  #kpi-print-report .kr-status-self_review { color: #0284c7; }
+  #kpi-print-report .kr-status-manager_review { color: #b45309; }
+  #kpi-print-report .kr-status-senior_review { color: #c2410c; }
+  #kpi-print-report .kr-status-concluded { color: #047857; }
+
+  #kpi-print-report table {
+    position: relative;
+    z-index: 1;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 9.5pt;
+    margin-bottom: 16px;
+  }
+  #kpi-print-report th, #kpi-print-report td {
+    border: 0.75px solid #ccc !important;
+    padding: 5px 7px !important;
+    text-align: left;
+    vertical-align: middle;
+  }
+  #kpi-print-report th {
+    background: #3730a3 !important;
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  #kpi-print-report .kr-row-alt td { background: #f5f5f7 !important; }
+  #kpi-print-report .kr-num { text-align: center; white-space: nowrap; }
+
+  #kpi-print-report .kr-score-cell { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; min-width: 34px; }
+  #kpi-print-report .kr-score-num { font-weight: 600; }
+  #kpi-print-report .kr-score-bar-track { width: 34px; height: 3px; border-radius: 2px; background: #e5e5e5 !important; overflow: hidden; }
+  #kpi-print-report .kr-score-bar-fill { display: block; height: 100%; border-radius: 2px; }
+  #kpi-print-report .kr-tone-self { background: #0ea5e9 !important; }
+  #kpi-print-report .kr-tone-manager { background: #d97706 !important; }
+  #kpi-print-report .kr-tone-final { background: #059669 !important; }
+
+  #kpi-print-report .kr-final-box {
+    position: relative;
+    z-index: 1;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 6px 0 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa !important;
+  }
+  #kpi-print-report .kr-final-label { font-size: 10pt; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+  #kpi-print-report .kr-final-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 14pt;
+    font-weight: 700;
+    color: #fff !important;
+  }
+  #kpi-print-report .kr-final-A { background: #047857 !important; }
+  #kpi-print-report .kr-final-B { background: #0284c7 !important; }
+  #kpi-print-report .kr-final-C { background: #b45309 !important; }
+  #kpi-print-report .kr-final-D { background: #be123c !important; }
+  #kpi-print-report .kr-final-pending { background: #737373 !important; }
+  #kpi-print-report .kr-final-grade { font-size: 10pt; font-weight: 600; color: #333; }
+
+  #kpi-print-report .kr-sign {
+    position: relative;
+    z-index: 1;
+    margin-top: 22px;
+  }
+  #kpi-print-report .kr-sign-date {
+    text-align: right;
+    font-style: italic;
+    font-size: 9.5pt;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  #kpi-print-report .kr-sign-cols {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    text-align: center;
+    font-size: 10pt;
+  }
+  #kpi-print-report .kr-sign-cols > div { font-weight: 600; }
+  #kpi-print-report .kr-sign-line {
+    border-top: 1px solid #333;
+    margin: 44px 10px 4px;
+  }
+}
+/* Nội dung WYSIWYG (mô tả biểu mẫu + khối nội dung) — định dạng cơ bản khi render HTML. */
+.rich-content { line-height: 1.6; word-break: break-word; }
+.rich-content p { margin: 0 0 0.5em; }
+.rich-content p:last-child { margin-bottom: 0; }
+.rich-content h1 { font-size: 1.5em; font-weight: 700; margin: 0.6em 0 0.35em; }
+.rich-content h2 { font-size: 1.25em; font-weight: 700; margin: 0.6em 0 0.35em; }
+.rich-content h3 { font-size: 1.1em; font-weight: 600; margin: 0.5em 0 0.3em; }
+.rich-content ul { list-style: disc; padding-left: 1.4em; margin: 0.4em 0; }
+.rich-content ol { list-style: decimal; padding-left: 1.5em; margin: 0.4em 0; }
+.rich-content li { margin: 0.15em 0; }
+.rich-content strong, .rich-content b { font-weight: 700; }
+.rich-content em, .rich-content i { font-style: italic; }
+.rich-content u { text-decoration: underline; }
+.rich-content a { color: #818cf8; text-decoration: underline; }
+.rich-content blockquote { border-left: 3px solid var(--line, #334155); padding-left: 0.8em; margin: 0.5em 0; color: var(--muted-foreground, #94a3b8); }
+
+/* CV filter sheet: reference layout, scoped so other recruitment forms stay intact. */
+.cv-extraction-report { padding: 12px; border: 1px solid #d8e8fb; border-radius: 12px; background: #f5f9ff; color: #1d1d1f; font-size: 12px; }
+.cv-extraction-report > p:first-child { font-weight: 600; }
+.cv-extraction-help { color: #52525b; margin-top: 6px; line-height: 1.5; }
+.cv-extraction-warnings { color: #854d0e; background: #fff8ed; border-radius: 8px; padding: 8px 10px; margin-top: 8px; line-height: 1.5; }
+.cv-extraction-warnings li + li { margin-top: 5px; }
+.cv-extraction-report summary { cursor: pointer; color: #0068d9; padding-top: 10px; }
+.cv-extraction-report dl { margin-top: 8px; }
+.cv-extraction-report dl > div { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid #e2e8f0; }
+.cv-extraction-report dd[data-field-status="missing"], .cv-extraction-report dd[data-field-status="review"] { color: #854d0e; }
+.cv-extraction-report dd[data-field-status="high"] { color: #166534; }
+.cv-extraction-report dd[data-field-status="manual"] { color: #0068d9; }
+.cv-batch-entry { padding: 12px; border: 1px solid var(--line); border-radius: 12px; min-width: 0; }
+.cv-batch-entry > summary { cursor: pointer; font-size: 13px; color: var(--foreground); font-weight: 600; overflow-wrap: anywhere; }
+.cv-batch-entry > summary > span { display: block; padding-top: 4px; color: var(--muted-foreground); font-size: 12px; font-weight: 400; }
+.cv-batch-entry .cv-extraction-report { margin-top: 12px; }
+
+/* Original CV and editable profile share a single sheet, with independent desktop scrolling. */
+.candidate-detail-overlay { position: fixed; inset: 0; margin: 0 !important; z-index: 40; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.32); }
+.candidate-detail-shell { width: min(560px, 100%); height: 100%; display: flex; flex-direction: column; background: var(--card); color: var(--foreground); box-shadow: -12px 0 40px rgba(0,0,0,0.14); }
+.candidate-detail-shell.candidate-detail-with-cv { width: min(1440px, 100%); }
+.candidate-detail-header { flex-shrink: 0; }
+.candidate-detail-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; }
+.candidate-detail-info { min-width: 0; }
+.candidate-detail-cv { display: flex; flex-direction: column; min-width: 0; flex-shrink: 0; height: clamp(400px, 65vh, 680px); background: #f5f5f7; border-bottom: 1px solid var(--line); }
+.candidate-detail-cv-heading { display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: var(--card); border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.candidate-detail-cv-heading > svg { color: #007aff; }
+.candidate-detail-cv-heading h3 { font-size: 14px; font-weight: 600; color: var(--foreground); }
+.candidate-detail-cv-heading p { font-size: 12px; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+.candidate-detail-cv-heading button { display: flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 8px 10px; border-radius: 10px; background: #eaf3ff; color: #0068d9; font-size: 12px; font-weight: 600; }
+.candidate-detail-cv-heading button:hover { background: #dcecff; }
+.candidate-detail-cv-heading button:focus-visible { outline: 2px solid #007aff; outline-offset: 2px; }
+.candidate-detail-cv-content { flex: 1; min-height: 0; overflow: hidden; }
+.file-preview-content iframe { display: block; }
+@media (min-width: 1024px) {
+  .candidate-detail-with-cv .candidate-detail-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, 520px); overflow: hidden; }
+  .candidate-detail-with-cv .candidate-detail-cv { height: 100%; min-height: 0; border-bottom: 0; border-right: 1px solid var(--line); }
+  .candidate-detail-with-cv .candidate-detail-info { overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-width: 520px) {
+  .candidate-detail-header { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; padding: 14px 16px; }
+  .candidate-detail-header > div:first-child { width: 40px; height: 40px; }
+  .candidate-detail-header > div:last-child { grid-column: 1 / -1; justify-content: flex-end; }
+  .candidate-detail-cv-heading { padding: 12px 16px; }
+  .candidate-detail-cv-heading button span { display: none; }
+}
+
+.cv-filter-overlay { position: fixed; inset: 0; margin: 0 !important; z-index: 60; display: flex; justify-content: flex-end; background: rgba(0,0,0,0.24); }
+.cv-filter-drawer { width: min(440px, 100%); height: 100%; display: flex; flex-direction: column; background: #fff; color: #1d1d1f; box-shadow: -12px 0 40px rgba(0,0,0,0.12); font-size: 14px; }
+.cv-filter-drawer header { display: flex; align-items: center; justify-content: space-between; padding: 26px 28px 18px; }
+.cv-filter-drawer header h2 { font-size: 21px; font-weight: 700; color: #424247; }
+.cv-filter-drawer header button { padding: 6px; color: #424247; border-radius: 8px; }
+.cv-filter-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 28px 24px; }
+.cv-filter-drawer .cv-filter-select-wrap { position: relative; }
+.cv-filter-drawer .cv-filter-select-wrap > svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #5b36b6; pointer-events: none; }
+html.light .cv-filter-drawer select, html.light .cv-filter-drawer input[type="number"] { appearance: none; width: 100%; height: 44px; background: #fff; color: #1d1d1f; border: 1px solid #b6d2ff; border-radius: 5px; padding: 0 12px; font-size: 14px; }
+html.light .cv-filter-drawer select { padding-right: 36px; }
+.cv-filter-drawer input::placeholder { color: #8a8a90; }
+.cv-filter-drawer input[type="checkbox"], .cv-filter-drawer input[type="radio"] { appearance: none; width: 18px; height: 18px; flex-shrink: 0; margin: 0; border: 1px solid #007aff; border-radius: 2px; background: #fff; }
+.cv-filter-drawer input[type="checkbox"]:checked { background: #007aff; }
+.cv-filter-drawer input[type="checkbox"]:checked::after { content: '✓'; display: block; color: #fff; font-size: 14px; line-height: 16px; text-align: center; }
+.cv-filter-drawer input[type="radio"] { border-radius: 50%; }
+.cv-filter-drawer input[type="radio"]:checked { background: radial-gradient(circle, #007aff 0 5px, #fff 6px); }
+.cv-filter-drawer label { display: flex; align-items: center; gap: 9px; cursor: pointer; }
+.cv-filter-drawer button:focus-visible, .cv-filter-drawer select:focus, .cv-filter-drawer input:focus { outline: 2px solid #007aff; outline-offset: 2px; }
+.cv-filter-time { margin-top: 22px; border: 0; padding: 0; }
+.cv-filter-time legend { display: flex; align-items: center; gap: 8px; color: #505057; margin-bottom: 13px; font-size: 13px; }
+.cv-filter-time legend span { color: #8a8a90; }
+.cv-filter-time-option { margin: 12px 0; }
+.cv-filter-time-option > label { margin-bottom: 10px; }
+.cv-filter-time-range { margin-left: 22px; }
+.cv-filter-advanced { border-top: 1px solid #e3e3e8; margin-top: 18px; padding-top: 19px; }
+.cv-filter-advanced h3 { font-size: 15px; font-weight: 700; color: #505057; margin-bottom: 14px; }
+.cv-filter-links { display: flex; flex-direction: column; gap: 20px; }
+.cv-filter-link-row { display: flex; flex-wrap: wrap; column-gap: 14px; row-gap: 12px; }
+.cv-filter-link-row button { display: inline-flex; align-items: center; gap: 4px; color: #007aff; font-size: 15px; }
+.cv-filter-link-row button[aria-expanded="true"] { font-weight: 600; }
+.cv-filter-new { background: #ff7324; color: white; font-size: 11px; line-height: 17px; padding: 0 4px; border-radius: 6px; }
+.cv-filter-section { margin-top: 14px; padding: 12px; background: #f8f9fb; border: 1px solid #e3e3e8; border-radius: 8px; }
+.cv-filter-section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.cv-filter-section-heading h4 { font-weight: 600; }
+.cv-filter-section-heading button { color: #6e6e73; padding: 4px; border-radius: 6px; }
+.cv-filter-choices { display: flex; flex-wrap: wrap; gap: 12px 16px; }
+.cv-filter-choices label { font-size: 13px; }
+.cv-filter-education-choices { display: flex; flex-direction: column; gap: 0; margin: 0 -8px; }
+.cv-filter-education-choices label { min-height: 39px; padding: 8px 10px; font-size: 15px; }
+.cv-filter-education-choices label:hover, .cv-filter-education-choices label:focus-within { background: #f1f2f6; }
+.cv-filter-range { display: flex; align-items: center; gap: 8px; }
+.cv-filter-help { font-size: 12px; color: #6e6e73; margin: 6px 0 8px; }
+.cv-filter-unviewed { margin-top: 24px; border-top: 1px solid #e3e3e8; padding-top: 18px; }
+.cv-filter-extra { margin-top: 20px; font-size: 13px; color: #6e6e73; }
+.cv-filter-extra summary { cursor: pointer; }
+.cv-filter-extra h4 { font-weight: 600; color: #424247; margin: 16px 0 10px; }
+.cv-filter-extra > label { display: block; margin-top: 16px; }
+.cv-filter-extra .cv-filter-select-wrap { margin-top: 8px; }
+.cv-filter-loading { display: flex; align-items: center; gap: 6px; margin-top: 15px; }
+.cv-filter-error { color: #b91c1c; font-size: 13px; margin-top: 14px; }
+.cv-filter-error button, .cv-filter-load, .cv-filter-reset { color: #007aff; font-size: 13px; margin-top: 16px; }
+.cv-filter-reset { margin-left: 14px; }
+.cv-filter-drawer footer { display: flex; gap: 10px; padding: 24px 28px 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); background: #fff; box-shadow: 0 -8px 22px rgba(0,0,0,0.025); }
+.cv-filter-drawer footer button { height: 44px; border-radius: 8px; font-weight: 600; }
+.cv-filter-save { flex: 0.8; background: #f2f2f5; color: #424247; }
+.cv-filter-save:disabled { background: #f6f6f7; color: #aaaab0; cursor: not-allowed; }
+.cv-filter-apply { flex: 1.2; background: #5b36b6; color: #fff; }
+.cv-filter-apply:hover { background: #492998; }
+@media (prefers-reduced-motion: no-preference) { .cv-filter-drawer { animation: cv-filter-enter 150ms ease-out; } }
+@keyframes cv-filter-enter { from { transform: translateX(30px); opacity: 0.7; } to { transform: translateX(0); opacity: 1; } }

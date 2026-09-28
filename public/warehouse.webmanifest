@@ -1,0 +1,16 @@
+{
+  "name": "Warehouse — Chấm công kho",
+  "short_name": "Warehouse",
+  "id": "/warehouse",
+  "start_url": "/warehouse",
+  "scope": "/warehouse",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060e1a",
+  "theme_color": "#060e1a",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

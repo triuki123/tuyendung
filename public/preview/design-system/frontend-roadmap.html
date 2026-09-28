@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frontend Refactoring Roadmap — FADO AssetFlowPro</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #060e1a;
+    --card: #0f1c2e;
+    --card2: #122033;
+    --indigo: #4f46e5;
+    --indigo-light: #6366f1;
+    --accent: #C62828;
+    --accent-light: #ef4444;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --green: #22c55e;
+    --yellow: #eab308;
+    --orange: #f97316;
+    --purple: #a855f7;
+    --cyan: #06b6d4;
+    --teal: #14b8a6;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ─── HEADER ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding: 48px 32px;
+    background: linear-gradient(135deg, #0f1c2e 0%, #162033 50%, #0a1628 100%);
+    border-radius: 24px;
+    border: 1px solid var(--border2);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(79,70,229,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(198,40,40,0.08) 0%, transparent 60%);
+  }
+  .header > * { position: relative; }
+  .header-badge {
+    display: inline-block;
+    background: rgba(79,70,229,0.2);
+    border: 1px solid rgba(79,70,229,0.4);
+    color: #818cf8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 800;
+    color: var(--fg);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .header h1 span { color: var(--indigo-light); }
+  .header p { color: var(--muted); font-size: 15px; }
+  .header-meta {
+    display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .header-meta-item {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--muted); font-size: 12px;
+  }
+  .header-meta-item .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    margin-bottom: 40px;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .section-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 17px; font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .section-header .section-num {
+    margin-left: auto;
+    font-size: 11px; font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .section-body { padding: 28px; }
+
+  /* ─── SCORE CARD ─── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .score-circle {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--yellow) 0% 65%, rgba(255,255,255,0.08) 65% 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .score-circle::before {
+    content: '';
+    position: absolute;
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: var(--card);
+  }
+  .score-inner {
+    position: relative;
+    text-align: center;
+  }
+  .score-num { font-size: 30px; font-weight: 800; color: var(--yellow); line-height: 1; }
+  .score-den { font-size: 14px; color: var(--muted); }
+  .score-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .top5-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .top5-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .top5-rank {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .top5-content h4 { font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 2px; }
+  .top5-content p { font-size: 12px; color: var(--muted); }
+
+  /* ─── ISSUES TABLE ─── */
+  .issues-list { display: flex; flex-direction: column; gap: 12px; }
+  .issue-card {
+    padding: 16px 20px;
+    border-radius: 14px;
+    border-left: 3px solid transparent;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .issue-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .issue-card.high::before { background: var(--accent-light); }
+  .issue-card.medium::before { background: var(--orange); }
+  .issue-card.low::before { background: var(--cyan); }
+  .issue-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .severity-badge {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 2px 8px; border-radius: 100px;
+  }
+  .severity-badge.high { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .severity-badge.medium { background: rgba(249,115,22,0.15); color: #fdba74; }
+  .severity-badge.low { background: rgba(6,182,212,0.15); color: #67e8f9; }
+  .issue-title { font-size: 13px; font-weight: 600; }
+  .issue-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .issue-fix {
+    margin-top: 8px; padding: 8px 12px;
+    background: rgba(79,70,229,0.08);
+    border-radius: 8px; border: 1px solid rgba(79,70,229,0.2);
+    font-size: 11px; color: #a5b4fc;
+  }
+  .issue-fix strong { color: #818cf8; }
+
+  /* ─── COMPONENTS GRID ─── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .comp-card {
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .comp-card h4 {
+    font-size: 13px; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap-6px; gap: 8px;
+  }
+  .comp-tag {
+    font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px;
+    background: rgba(79,70,229,0.2); color: #818cf8;
+  }
+  .comp-tag.new { background: rgba(34,197,94,0.15); color: #86efac; }
+  .comp-tag.refactor { background: rgba(234,179,8,0.15); color: #fde047; }
+  .comp-card ul { list-style: none; }
+  .comp-card ul li {
+    font-size: 12px; color: var(--muted); padding: 3px 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .comp-card ul li::before { content: '›'; color: var(--indigo-light); font-weight: 700; }
+
+  /* ─── 2x2 MATRIX ─── */
+  .matrix-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+    aspect-ratio: 16/9;
+    position: relative;
+  }
+  .matrix-axis-label-y {
+    position: absolute;
+    left: -32px; top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .matrix-axis-label-x {
+    text-align: center; margin-top: 8px;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .matrix-cell {
+    border-radius: 16px; padding: 16px;
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative; overflow: hidden;
+  }
+  .matrix-cell::after {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0.04;
+  }
+  .matrix-cell.q1 { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); }
+  .matrix-cell.q2 { background: rgba(79,70,229,0.08); border-color: rgba(79,70,229,0.2); }
+  .matrix-cell.q3 { background: rgba(148,163,184,0.06); border-color: rgba(148,163,184,0.15); }
+  .matrix-cell.q4 { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.15); }
+  .matrix-cell-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 4px;
+  }
+  .matrix-cell.q1 .matrix-cell-label { color: #86efac; }
+  .matrix-cell.q2 .matrix-cell-label { color: #a5b4fc; }
+  .matrix-cell.q3 .matrix-cell-label { color: var(--muted); }
+  .matrix-cell.q4 .matrix-cell-label { color: #fca5a5; }
+  .matrix-item {
+    font-size: 11px; padding: 4px 8px; border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    color: var(--fg);
+    line-height: 1.4;
+  }
+
+  /* ─── PERF METRICS ─── */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .perf-card {
+    padding: 20px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+  }
+  .perf-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+  .perf-bar-wrap { margin-bottom: 8px; }
+  .perf-bar-label {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .perf-bar-label span:first-child { font-size: 11px; color: var(--muted); }
+  .perf-bar-label span:last-child { font-size: 11px; font-weight: 700; }
+  .perf-bar-track {
+    height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden;
+  }
+  .perf-bar-fill { height: 100%; border-radius: 100px; }
+
+  /* ─── ROADMAP TIMELINE ─── */
+  .roadmap-track {
+    display: flex; gap: 0;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .phase-block {
+    flex: 1; padding: 20px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .phase-block:last-child { border-right: none; }
+  .phase-block.p1 { background: rgba(34,197,94,0.06); }
+  .phase-block.p2 { background: rgba(79,70,229,0.06); }
+  .phase-block.p3 { background: rgba(249,115,22,0.06); }
+  .phase-block.p4 { background: rgba(168,85,247,0.06); }
+  .phase-label {
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; margin-bottom: 6px;
+  }
+  .phase-block.p1 .phase-label { color: #86efac; }
+  .phase-block.p2 .phase-label { color: #a5b4fc; }
+  .phase-block.p3 .phase-label { color: #fdba74; }
+  .phase-block.p4 .phase-label { color: #d8b4fe; }
+  .phase-sprint { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  .phase-item {
+    font-size: 11px; color: var(--fg); padding: 3px 0;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .phase-item::before { content: '→'; color: inherit; opacity: 0.5; flex-shrink: 0; }
+
+  /* ─── EFFORT TABLE ─── */
+  .effort-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px;
+  }
+  .effort-table th {
+    text-align: left; padding: 10px 14px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .effort-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .effort-table tr:last-child td { border-bottom: none; }
+  .effort-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .effort-pill {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 5px;
+    font-size: 10px; font-weight: 700;
+    white-space: nowrap;
+  }
+  .effort-xs { background: rgba(34,197,94,0.15); color: #86efac; }
+  .effort-s  { background: rgba(6,182,212,0.15); color: #67e8f9; }
+  .effort-m  { background: rgba(234,179,8,0.15); color: #fde047; }
+  .effort-l  { background: rgba(249,115,22,0.15); color: #fdba74; }
+  .effort-xl { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .impact-pill {
+    display: inline-block;
+    padding: 2px 8px; border-radius: 5px;
+    font-size: 10px; font-weight: 700;
+  }
+  .impact-high   { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .impact-medium { background: rgba(234,179,8,0.15); color: #fde047; }
+  .impact-low    { background: rgba(148,163,184,0.15); color: #cbd5e1; }
+  .prio-pill {
+    display: inline-block;
+    padding: 2px 10px; border-radius: 100px;
+    font-size: 10px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .prio-p1 { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .prio-p2 { background: rgba(249,115,22,0.2); color: #fdba74; }
+  .prio-p3 { background: rgba(79,70,229,0.2); color: #a5b4fc; }
+  .prio-p4 { background: rgba(148,163,184,0.15); color: #cbd5e1; }
+
+  /* ─── STRENGTHS ─── */
+  .strengths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .strength-card {
+    padding: 14px 16px;
+    background: rgba(34,197,94,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(34,197,94,0.15);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .strength-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(34,197,94,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .strength-card h4 { font-size: 12px; font-weight: 700; color: #86efac; margin-bottom: 3px; }
+  .strength-card p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* ─── DEBT ITEMS ─── */
+  .debt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .debt-card {
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+  .debt-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .debt-risk {
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 2px 7px; border-radius: 4px;
+  }
+  .debt-risk.critical { background: rgba(239,68,68,0.2); color: #fca5a5; }
+  .debt-risk.high { background: rgba(249,115,22,0.2); color: #fdba74; }
+  .debt-risk.medium { background: rgba(234,179,8,0.2); color: #fde047; }
+  .debt-risk.low { background: rgba(148,163,184,0.15); color: #cbd5e1; }
+  .debt-title { font-size: 13px; font-weight: 700; }
+  .debt-body { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .debt-fix-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #818cf8; margin-bottom: 4px; }
+  .debt-fix-steps { list-style: none; }
+  .debt-fix-steps li {
+    font-size: 11px; color: var(--fg); padding: 3px 0;
+    display: flex; align-items: flex-start; gap: 6px;
+  }
+  .debt-fix-steps li::before { content: '✓'; color: var(--green); flex-shrink: 0; }
+
+  /* ─── UTIL ─── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .sub-section { margin-bottom: 24px; }
+  .sub-section h3 {
+    font-size: 13px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .token-item {
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .token-swatch-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .token-swatch { width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
+  .token-name { font-size: 10px; font-weight: 700; color: var(--fg); }
+  .token-value { font-size: 10px; color: var(--muted); font-family: monospace; }
+  .token-desc { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .note-box {
+    padding: 12px 16px;
+    background: rgba(79,70,229,0.07);
+    border-radius: 10px;
+    border: 1px solid rgba(79,70,229,0.2);
+    font-size: 12px; color: #a5b4fc;
+    margin-bottom: 16px;
+  }
+  .note-box strong { color: #818cf8; }
+
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 32px;
+  }
+  .toc a {
+    padding: 6px 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px; font-weight: 500;
+    transition: all 0.15s;
+  }
+  .toc a:hover { background: rgba(79,70,229,0.12); color: #a5b4fc; border-color: rgba(79,70,229,0.3); }
+
+  .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+  .stat-chip {
+    padding: 10px 18px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    flex: 1; min-width: 120px;
+  }
+  .stat-chip .val { font-size: 22px; font-weight: 800; line-height: 1; }
+  .stat-chip .lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+    .matrix-container { aspect-ratio: auto; }
+    .roadmap-track { flex-direction: column; }
+    .score-grid { grid-template-columns: 1fr; }
+    .score-circle { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">Frontend Refactoring Roadmap · 2026</div>
+    <h1>FADO <span>AssetFlowPro</span></h1>
+    <p>Phân tích toàn diện UI/UX · Lộ trình cải tiến ưu tiên hóa · Ước tính nỗ lực thực tế</p>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <div class="dot" style="background:#22c55e"></div>
+        Next.js 13.5 · React 19 · TypeScript 5
+      </div>
+      <div class="header-meta-item">
+        <div class="dot" style="background:#4f46e5"></div>
+        20 modules RBAC · 282 API endpoints
+      </div>
+      <div class="header-meta-item">
+        <div class="dot" style="background:#f97316"></div>
+        167 migrations · Multi-tenant ready
+      </div>
+      <div class="header-meta-item">
+        <div class="dot" style="background:#C62828"></div>
+        Cập nhật: 18/06/2026
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <a href="#s1">1. Executive Summary</a>
+    <a href="#s2">2. UI Standardization</a>
+    <a href="#s3">3. UX Improvements</a>
+    <a href="#s4">4. Performance</a>
+    <a href="#s5">5. Scalability</a>
+    <a href="#s6">6. Technical Debt</a>
+    <a href="#s7">7. Roadmap</a>
+    <a href="#s8">8. Effort Estimates</a>
+  </nav>
+
+  <!-- ══════════════════════════════════
+       SECTION 1 — EXECUTIVE SUMMARY
+  ══════════════════════════════════ -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(234,179,8,0.15)">📊</div>
+      <h2>Executive Summary</h2>
+      <span class="section-num">01 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div class="score-grid" style="margin-bottom:32px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div class="score-circle">
+            <div class="score-inner">
+              <div class="score-num">6.5</div>
+              <div class="score-den">/10</div>
+            </div>
+          </div>
+          <div class="score-label" style="text-align:center;font-size:11px;color:var(--muted)">Tech Debt Score<br><span style="color:var(--yellow);font-weight:700">Moderate Risk</span></div>
+        </div>
+        <div>
+          <div class="stat-row">
+            <div class="stat-chip">
+              <div class="val" style="color:#ef4444">2</div>
+              <div class="lbl">Lỗi HIGH</div>
+            </div>
+            <div class="stat-chip">
+              <div class="val" style="color:#f97316">5</div>
+              <div class="lbl">Lỗi MEDIUM</div>
+            </div>
+            <div class="stat-chip">
+              <div class="val" style="color:#06b6d4">1</div>
+              <div class="lbl">Lỗi LOW</div>
+            </div>
+            <div class="stat-chip">
+              <div class="val" style="color:#22c55e">11</div>
+              <div class="lbl">Điểm mạnh</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px">
+            Hệ thống có nền kiến trúc vững chắc với App Router nhất quán, RBAC chi tiết và design system dark-mode-first. Điểm yếu chính tập trung ở
+            <strong style="color:var(--fg)">bảo mật API</strong> (permission spoofing), <strong style="color:var(--fg)">cấu trúc URL</strong> không nhất quán,
+            và <strong style="color:var(--fg)">component duplication</strong> giữa Ticket/Task. Không có blocker production ngay lập tức nhưng cần giải quyết
+            debt bảo mật trước khi mở public access.
+          </p>
+          <div class="note-box">
+            <strong>Ưu tiên tuyệt đối:</strong> Vá lỗ hổng permission spoofing trước Sprint 2 — đây là rủi ro bảo mật critical ảnh hưởng toàn bộ 282 API endpoints.
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Top 5 Cải Tiến Ưu Tiên</h3>
+        <ul class="top5-list">
+          <li class="top5-item">
+            <div class="top5-rank" style="background:rgba(239,68,68,0.2);color:#fca5a5">🔴</div>
+            <div class="top5-content">
+              <h4>Server-side Permission Verification</h4>
+              <p>Thay thế header-based permission check bằng JWT/session verify — ngăn chặn privilege escalation toàn hệ thống</p>
+            </div>
+          </li>
+          <li class="top5-item">
+            <div class="top5-rank" style="background:rgba(249,115,22,0.2);color:#fdba74">🟠</div>
+            <div class="top5-content">
+              <h4>Tách Chấm Công thành Top-level Route</h4>
+              <p>Di chuyển /tra-cuu/du-lieu-cong → /cham-cong, tăng discoverability và giảm breadcrumb depth</p>
+            </div>
+          </li>
+          <li class="top5-item">
+            <div class="top5-rank" style="background:rgba(249,115,22,0.2);color:#fdba74">🟠</div>
+            <div class="top5-content">
+              <h4>URL Slug Chuẩn hóa sang Tiếng Anh</h4>
+              <p>Thống nhất tất cả route sang kebab-case tiếng Anh (SEO-friendly, bookmark-safe, copy-paste không bị encode)</p>
+            </div>
+          </li>
+          <li class="top5-item">
+            <div class="top5-rank" style="background:rgba(79,70,229,0.2);color:#a5b4fc">🔵</div>
+            <div class="top5-content">
+              <h4>Shared DetailPanel / CommentThread Component</h4>
+              <p>Tái sử dụng UI Ticket/Task — giảm 40%+ code duplication, đảm bảo behavior nhất quán</p>
+            </div>
+          </li>
+          <li class="top5-item">
+            <div class="top5-rank" style="background:rgba(79,70,229,0.2);color:#a5b4fc">🔵</div>
+            <div class="top5-content">
+              <h4>Thống nhất Auth System (DB + bcrypt only)</h4>
+              <p>Xóa MOCK_USERS authStore.ts, giữ luồng /api/auth/login duy nhất — loại bỏ dual auth paradox</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 2 — UI STANDARDIZATION
+  ══════════════════════════════════ -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(79,70,229,0.15)">🎨</div>
+      <h2>UI Standardization</h2>
+      <span class="section-num">02 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div class="sub-section">
+        <h3>Vấn Đề Nhất Quán Hiện Tại</h3>
+        <div class="issues-list">
+          <div class="issue-card high">
+            <div class="issue-top">
+              <span class="severity-badge high">HIGH</span>
+              <span class="issue-title">Chấm Công bị chôn vùi trong /tra-cuu</span>
+            </div>
+            <p class="issue-body">Module chấm công là chức năng hàng ngày của toàn bộ nhân viên nhưng đặt sâu trong "Tra Cứu" — breadcrumb 3 cấp, người dùng mới khó tìm, sidebar không reflect đúng tầm quan trọng.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Tạo top-level route /attendance (hoặc /cham-cong), thêm vào nhóm HOẠT ĐỘNG trong sidebar, redirect từ URL cũ</div>
+          </div>
+          <div class="issue-card high">
+            <div class="issue-top">
+              <span class="severity-badge high">HIGH</span>
+              <span class="issue-title">Empty State không nhất quán toàn hệ thống</span>
+            </div>
+            <p class="issue-body">Mỗi trang tự implement empty state riêng theo template CLAUDE.md — không có shared component → inconsistent icon, text style, action button. Ước tính 22+ trang bị ảnh hưởng.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Tạo <code>components/ui/EmptyState.tsx</code> với props: icon, title, description, action (label + onClick)</div>
+          </div>
+          <div class="issue-card medium">
+            <div class="issue-top">
+              <span class="severity-badge medium">MEDIUM</span>
+              <span class="issue-title">URL mixing: tiếng Việt + tiếng Anh</span>
+            </div>
+            <p class="issue-body">Ví dụ: /tra-cuu, /nguon-nhan-luc, /duyet-yeu-cau (tiếng Việt) vs /asset-management, /tickets, /tasks (tiếng Anh). URL tiếng Việt bị percent-encode thành %2F%74%72%61... khi copy.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Chuẩn hóa toàn bộ sang kebab-case tiếng Anh. Thêm redirect 308 từ URL cũ. Ưu tiên tiếng Anh vì SEO + bookmark-safe.</div>
+          </div>
+          <div class="issue-card medium">
+            <div class="issue-top">
+              <span class="severity-badge medium">MEDIUM</span>
+              <span class="issue-title">delete-requests vs duyet-yeu-cau — chức năng chồng lấp</span>
+            </div>
+            <p class="issue-body">Hai entry point khác nhau cho cùng workflow duyệt xóa tài sản — người dùng không biết nên dùng cái nào, data phân tán, breadcrumb không thống nhất.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Gộp về /approval-requests với tab con: "Xóa Tài Sản" | "Yêu Cầu Khác". Xóa một trong hai route, redirect về route gộp.</div>
+          </div>
+          <div class="issue-card medium">
+            <div class="issue-top">
+              <span class="severity-badge medium">MEDIUM</span>
+              <span class="issue-title">Onboarding route nhầm lẫn: HR vs Public</span>
+            </div>
+            <p class="issue-body">/nguon-nhan-luc/onboarding (authenticated HR) và /onboarding/thong-tin-nhan-su-dau-vao (public form) dùng cùng tên — dễ nhầm trong analytics, link sharing, và routing logic.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Đổi public form → /forms/onboarding hoặc /forms/[token]. HR management giữ nguyên trong /hr/onboarding.</div>
+          </div>
+          <div class="issue-card low">
+            <div class="issue-top">
+              <span class="severity-badge low">LOW</span>
+              <span class="issue-title">Module color collision: announcements vs recruitment-order</span>
+            </div>
+            <p class="issue-body">Cả hai module dùng #F97316 trong permission matrix — visual fingerprint bị trùng, khó phân biệt trong dashboard và audit logs.</p>
+            <div class="issue-fix"><strong>Fix:</strong> Gán màu duy nhất theo nhóm: HR group dùng palette teal/emerald, Operations dùng orange/amber, Admin dùng purple/violet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Component Chuẩn Hóa Cần Làm</h3>
+        <div class="comp-grid">
+          <div class="comp-card">
+            <h4><span class="comp-tag new">NEW</span> EmptyState</h4>
+            <ul>
+              <li>Props: icon, title, description, action</li>
+              <li>Dùng cho 22+ trang hiện tại</li>
+              <li>Animate: fade-in icon với opacity</li>
+              <li>Variant: compact (inline) vs full (centered)</li>
+            </ul>
+          </div>
+          <div class="comp-card">
+            <h4><span class="comp-tag new">NEW</span> DetailPanel</h4>
+            <ul>
+              <li>Shared giữa Ticket và Task detail modal</li>
+              <li>Slots: header, meta, body, sidebar, footer</li>
+              <li>Props: title, status, priority, assignee, dates</li>
+              <li>Giảm ~400 dòng code duplicate</li>
+            </ul>
+          </div>
+          <div class="comp-card">
+            <h4><span class="comp-tag new">NEW</span> CommentThread</h4>
+            <ul>
+              <li>Reuse cho Ticket, Task, Approval</li>
+              <li>Rich text input (markdown lite)</li>
+              <li>Attachment support</li>
+              <li>Optimistic updates via SSE</li>
+            </ul>
+          </div>
+          <div class="comp-card">
+            <h4><span class="comp-tag refactor">REFACTOR</span> PermissionGate</h4>
+            <ul>
+              <li>Thêm server-side verify thay header</li>
+              <li>Cache permission check 60s</li>
+              <li>Fallback skeleton thay blank render</li>
+              <li>Dev mode: show permission name overlay</li>
+            </ul>
+          </div>
+          <div class="comp-card">
+            <h4><span class="comp-tag new">NEW</span> StatusBadge</h4>
+            <ul>
+              <li>Unified status across Ticket/Task/Leave</li>
+              <li>Color-coded theo semantic status</li>
+              <li>Icon variant (dot/icon/text)</li>
+              <li>i18n-ready label system</li>
+            </ul>
+          </div>
+          <div class="comp-card">
+            <h4><span class="comp-tag refactor">REFACTOR</span> DataTable</h4>
+            <ul>
+              <li>Tách khỏi page-level component</li>
+              <li>Column config object thay hardcode</li>
+              <li>Built-in sort, filter, pagination</li>
+              <li>Export button slot</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Design Token Implementation</h3>
+        <div class="note-box" style="margin-bottom:16px">
+          Design tokens hiện tại đã tốt (CSS variables + Tailwind). Cần bổ sung semantic tokens cho component states và motion system.
+        </div>
+        <div class="token-grid">
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#060e1a"></div>
+              <div class="token-name">--bg</div>
+            </div>
+            <div class="token-value">#060e1a</div>
+            <div class="token-desc">Page background</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#0f1c2e"></div>
+              <div class="token-name">--card</div>
+            </div>
+            <div class="token-value">#0f1c2e</div>
+            <div class="token-desc">Card / panel</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#4f46e5"></div>
+              <div class="token-name">--indigo</div>
+            </div>
+            <div class="token-value">#4f46e5</div>
+            <div class="token-desc">Primary action</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#C62828"></div>
+              <div class="token-name">--accent</div>
+            </div>
+            <div class="token-value">#C62828</div>
+            <div class="token-desc">Destructive / alert</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#22c55e"></div>
+              <div class="token-name">--success</div>
+            </div>
+            <div class="token-value">#22c55e</div>
+            <div class="token-desc">Cần thêm token này</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#eab308"></div>
+              <div class="token-name">--warning</div>
+            </div>
+            <div class="token-value">#eab308</div>
+            <div class="token-desc">Cần thêm token này</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:#94a3b8"></div>
+              <div class="token-name">--muted-fg</div>
+            </div>
+            <div class="token-value">#94a3b8</div>
+            <div class="token-desc">Secondary text</div>
+          </div>
+          <div class="token-item">
+            <div class="token-swatch-row">
+              <div class="token-swatch" style="background:rgba(255,255,255,0.07)"></div>
+              <div class="token-name">--border</div>
+            </div>
+            <div class="token-value">white/7%</div>
+            <div class="token-desc">Default border</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 3 — UX IMPROVEMENTS
+  ══════════════════════════════════ -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(6,182,212,0.15)">🎯</div>
+      <h2>UX Improvements — Priority Matrix</h2>
+      <span class="section-num">03 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div style="position:relative;padding-left:40px;margin-bottom:8px">
+        <div class="matrix-axis-label-y">IMPACT →</div>
+        <div class="matrix-container">
+          <!-- Q1: High Impact / Low Effort -->
+          <div class="matrix-cell q1">
+            <div class="matrix-cell-label">⚡ Quick Wins — Làm ngay</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px">High Impact · Low Effort</div>
+            <div class="matrix-item">Tách /cham-cong top-level route</div>
+            <div class="matrix-item">Chuẩn hóa URL slug → tiếng Anh</div>
+            <div class="matrix-item">Gộp delete-requests + duyet-yeu-cau</div>
+            <div class="matrix-item">EmptyState shared component</div>
+            <div class="matrix-item">StatusBadge unified component</div>
+          </div>
+          <!-- Q2: High Impact / High Effort -->
+          <div class="matrix-cell q2">
+            <div class="matrix-cell-label">🏗️ Major Projects — Lên kế hoạch</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px">High Impact · High Effort</div>
+            <div class="matrix-item">Server-side permission verification</div>
+            <div class="matrix-item">Thống nhất Auth (xóa MOCK_USERS)</div>
+            <div class="matrix-item">DetailPanel + CommentThread shared</div>
+            <div class="matrix-item">DataTable generic component</div>
+            <div class="matrix-item">Migration renumbering (conflict fix)</div>
+          </div>
+          <!-- Q3: Low Impact / Low Effort -->
+          <div class="matrix-cell q3">
+            <div class="matrix-cell-label">✨ Nice to Have — Backlog</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Low Impact · Low Effort</div>
+            <div class="matrix-item">Module color deduplication</div>
+            <div class="matrix-item">Console.log cleanup</div>
+            <div class="matrix-item">Onboarding route rename /forms</div>
+            <div class="matrix-item">JSDoc bổ sung service layer</div>
+          </div>
+          <!-- Q4: Low Impact / High Effort -->
+          <div class="matrix-cell q4">
+            <div class="matrix-cell-label">🚫 Tránh — ROI thấp</div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Low Impact · High Effort</div>
+            <div class="matrix-item">Full dark/light mode toggle</div>
+            <div class="matrix-item">Storybook component library</div>
+            <div class="matrix-item">Rewrite legacy authStore test suite</div>
+          </div>
+        </div>
+        <div class="matrix-axis-label-x">← EFFORT →</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px">
+        <div style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);border-radius:14px;padding:16px">
+          <div style="font-size:11px;font-weight:800;color:#86efac;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Quick Wins — Chi tiết thực hiện</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            <strong style="color:var(--fg)">1. /cham-cong route:</strong> Tạo src/app/cham-cong/page.tsx, thêm sidebar entry vào nhóm HOẠT ĐỘNG, thêm redirect từ /tra-cuu/du-lieu-cong → 2 giờ<br><br>
+            <strong style="color:var(--fg)">2. URL normalization:</strong> Đổi folder names + next.config.js redirects array, update all hrefs → 4 giờ<br><br>
+            <strong style="color:var(--fg)">3. Gộp approval:</strong> Tạo /approval-requests với tabs, redirect 2 route cũ → 3 giờ
+          </div>
+        </div>
+        <div style="background:rgba(79,70,229,0.05);border:1px solid rgba(79,70,229,0.2);border-radius:14px;padding:16px">
+          <div style="font-size:11px;font-weight:800;color:#a5b4fc;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px">Major Projects — Lưu ý</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            <strong style="color:var(--fg)">Server-side auth:</strong> Cần thiết kế session store (Redis hoặc DB), middleware Next.js, migration token table. Không nên làm vội — plan kỹ.<br><br>
+            <strong style="color:var(--fg)">Shared components:</strong> Audit tất cả page hiện tại trước khi extract — tránh over-abstraction. Bắt đầu từ Ticket+Task vì overlap lớn nhất.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 4 — PERFORMANCE
+  ══════════════════════════════════ -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(249,115,22,0.15)">⚡</div>
+      <h2>Performance Improvements</h2>
+      <span class="section-num">04 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div class="perf-grid">
+        <div class="perf-card">
+          <h4 style="color:#fdba74">Code Splitting per Module</h4>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>Initial bundle</span><span style="color:#ef4444">Nặng</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:78%;background:#ef4444"></div></div>
+          </div>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>Sau lazy load</span><span style="color:#22c55e">Cải thiện ~45%</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:43%;background:#22c55e"></div></div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            Dùng <code>dynamic()</code> cho heavy modules: ATS Kanban (@dnd-kit), Excel export (xlsx-js-style), PDF parser. Ước tính tiết kiệm 300-500KB initial JS.
+          </p>
+        </div>
+
+        <div class="perf-card">
+          <h4 style="color:#86efac">Image Optimization</h4>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>Avatar/logo hiện tại</span><span style="color:#eab308">Chưa tối ưu</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:60%;background:#eab308"></div></div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            Dùng <code>next/image</code> với <code>sizes</code> prop cho avatar. Thêm <code>priority</code> cho logo sidebar. Convert uploaded assets sang WebP tại server trước khi lưu.
+          </p>
+        </div>
+
+        <div class="perf-card">
+          <h4 style="color:#67e8f9">Bundle Analysis</h4>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>@dnd-kit</span><span>~85KB</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:85%;background:#4f46e5"></div></div>
+          </div>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>xlsx-js-style</span><span>~120KB</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:120%;background:#C62828;width:100%"></div></div>
+          </div>
+          <div class="perf-bar-wrap">
+            <div class="perf-bar-label"><span>pdf-parse + mammoth</span><span>~200KB</span></div>
+            <div class="perf-bar-track"><div class="perf-bar-fill" style="width:100%;background:#f97316"></div></div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">
+            Tất cả 3 thư viện trên nên lazy-load và chạy qua API route (server-only), không import vào client bundle.
+          </p>
+        </div>
+
+        <div class="perf-card">
+          <h4 style="color:#d8b4fe">DB Query Optimization</h4>
+          <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:10px">
+            Các N+1 query patterns cần sửa:
+          </p>
+          <ul style="list-style:none;font-size:11px;color:var(--muted)">
+            <li style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px">
+              <span style="color:#ef4444">✗</span> Lấy user → loop query permissions từng user
+            </li>
+            <li style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px">
+              <span style="color:#ef4444">✗</span> Asset list → query assignee riêng từng row
+            </li>
+            <li style="padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:8px">
+              <span style="color:#ef4444">✗</span> Ticket list → N queries lấy comment count
+            </li>
+            <li style="padding:4px 0;display:flex;gap:8px">
+              <span style="color:#22c55e">✓</span> Fix: JOIN + GROUP BY thay cho loop queries
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding:16px 20px;background:rgba(255,255,255,0.02);border-radius:14px;border:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:10px">Caching Strategy Đề Xuất</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;font-size:11px">
+          <div style="padding:8px 12px;background:rgba(79,70,229,0.06);border-radius:8px;border:1px solid rgba(79,70,229,0.15)">
+            <div style="color:#a5b4fc;font-weight:700;margin-bottom:3px">Permissions</div>
+            <div style="color:var(--muted)">Cache 5 phút per user_id trong memory hoặc Redis. Invalidate khi role thay đổi.</div>
+          </div>
+          <div style="padding:8px 12px;background:rgba(34,197,94,0.06);border-radius:8px;border:1px solid rgba(34,197,94,0.15)">
+            <div style="color:#86efac;font-weight:700;margin-bottom:3px">Module List</div>
+            <div style="color:var(--muted)">Cache indefinitely (static), busted khi deploy mới.</div>
+          </div>
+          <div style="padding:8px 12px;background:rgba(249,115,22,0.06);border-radius:8px;border:1px solid rgba(249,115,22,0.15)">
+            <div style="color:#fdba74;font-weight:700;margin-bottom:3px">User Profile</div>
+            <div style="color:var(--muted)">SWR với staleWhileRevalidate 30s. Không cache password hash phía client.</div>
+          </div>
+          <div style="padding:8px 12px;background:rgba(6,182,212,0.06);border-radius:8px;border:1px solid rgba(6,182,212,0.15)">
+            <div style="color:#67e8f9;font-weight:700;margin-bottom:3px">Dashboard Stats</div>
+            <div style="color:var(--muted)">Precompute mỗi 5 phút qua scheduler, lưu vào bảng dashboard_cache.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 5 — SCALABILITY
+  ══════════════════════════════════ -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(168,85,247,0.15)">📐</div>
+      <h2>Scalability Improvements</h2>
+      <span class="section-num">05 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div class="two-col">
+        <div>
+          <div class="sub-section">
+            <h3>Component Reusability</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Barrel exports</div>
+                <div style="font-size:11px;color:var(--muted)">Tạo components/ui/index.ts với named exports — import gọn hơn, tree-shaking hiệu quả hơn</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Compound components</div>
+                <div style="font-size:11px;color:var(--muted)">DetailPanel.Header, DetailPanel.Body, DetailPanel.Sidebar — flexible nhưng type-safe</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Render slot pattern</div>
+                <div style="font-size:11px;color:var(--muted)">PageLayout nhận renderHeader, renderFilters, renderContent slots — tránh prop drilling sâu</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-section">
+            <h3>Multi-tenant Architecture</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#a5b4fc;margin-bottom:4px">✓ Đã có: Company switcher + getEffectiveContext</div>
+                <div style="font-size:11px;color:var(--muted)">Multi-company membership (migration 149) đã hoạt động tốt</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#fde047;margin-bottom:4px">⚠ Cần: Row-level isolation thực sự</div>
+                <div style="font-size:11px;color:var(--muted)">RLS policy hiện là USING(true) — mọi query cần thêm WHERE company_id = $current để data isolation</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#fdba74;margin-bottom:4px">→ Kế hoạch: CompanyContext middleware</div>
+                <div style="font-size:11px;color:var(--muted)">Middleware tự động inject company_id vào mọi DB query thông qua withCompanyContext() helper</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sub-section">
+            <h3>Service Layer Separation</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#86efac;margin-bottom:4px">✓ Điểm mạnh: 90+ service files</div>
+                <div style="font-size:11px;color:var(--muted)">Business logic tách biệt khỏi API route — dễ test, dễ tái sử dụng trong scheduler</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#fde047;margin-bottom:4px">⚠ Cần: Service interfaces (contracts)</div>
+                <div style="font-size:11px;color:var(--muted)">Khai báo interface IUserService, IAssetService — giúp mock trong test và swap implementation</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:#fdba74;margin-bottom:4px">→ Error handling chuẩn hóa</div>
+                <div style="font-size:11px;color:var(--muted)">Tạo ServiceError class với code, message, statusCode — API route chỉ cần catch và forward</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sub-section">
+            <h3>API Caching Strategy</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Giai đoạn 1: SWR client-side</div>
+                <div style="font-size:11px;color:var(--muted)">useSWR với stale-while-revalidate cho list endpoints ổn định (modules, permissions, users)</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Giai đoạn 2: Next.js Route Handlers cache</div>
+                <div style="font-size:11px;color:var(--muted)">revalidate: 300 cho static data endpoints — giảm DB load ~60%</div>
+              </div>
+              <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border)">
+                <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Giai đoạn 3: Redis (khi scale)</div>
+                <div style="font-size:11px;color:var(--muted)">Shared cache giữa Docker containers, session store, rate limiting</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 6 — TECHNICAL DEBT
+  ══════════════════════════════════ -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(239,68,68,0.15)">⚠️</div>
+      <h2>Technical Debt</h2>
+      <span class="section-num">06 / 08</span>
+    </div>
+    <div class="section-body">
+      <div class="debt-grid">
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk critical">CRITICAL</span>
+            <span class="debt-title">Permission Spoofing</span>
+          </div>
+          <p class="debt-body">checkPermission() đọc quyền từ header <code>x-user-permissions</code> do client gửi. Bất kỳ ai cũng có thể curl với header giả để truy cập admin API endpoints. Ảnh hưởng 282 endpoints.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>Tạo bảng sessions (token, user_id, expires_at, company_id)</li>
+            <li>Middleware Next.js đọc cookie httpOnly, verify token từ DB</li>
+            <li>Inject user context vào request.headers nội bộ (server-only)</li>
+            <li>Deprecate x-user-permissions header hoàn toàn</li>
+            <li>Estimate: 2-3 sprint nếu làm cẩn thận</li>
+          </ul>
+        </div>
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk high">HIGH</span>
+            <span class="debt-title">Dual Auth Systems</span>
+          </div>
+          <p class="debt-body">Hai hệ thống auth song song: <strong>DB + bcrypt</strong> (đúng, an toàn) và <strong>authStore.ts + MOCK_USERS</strong> (so sánh plaintext client-side — cực kỳ nguy hiểm). Risk: user có thể bypass DB auth.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>Audit tất cả import của authStore.ts (grep toàn repo)</li>
+            <li>Migrate từng consumer sang /api/auth/login flow</li>
+            <li>Delete src/lib/authStore.ts khi không còn import nào</li>
+            <li>Thêm ESLint rule ban import từ authStore</li>
+          </ul>
+        </div>
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk medium">MEDIUM</span>
+            <span class="debt-title">Migration Numbering Conflicts</span>
+          </div>
+          <p class="debt-body">Hai file cùng số 008, 009, 012 — thứ tự chạy không xác định khi init DB mới từ scratch. Có thể gây lỗi ALTER TABLE khi cột chưa tồn tại hoặc đã tồn tại.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>Audit đầy đủ tất cả file migration hiện tại (167 files)</li>
+            <li>Rename theo timestamp: YYYYMMDD_HHMMSS_description.sql</li>
+            <li>Tạo migration registry table để track đã chạy migration nào</li>
+            <li>Script runner check registry trước khi apply</li>
+          </ul>
+        </div>
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk medium">MEDIUM</span>
+            <span class="debt-title">RLS Policy Placeholder</span>
+          </div>
+          <p class="debt-body">Các policy USING(true) trong migration cũ không có giá trị bảo mật — mọi role đều đọc/ghi mọi row. Multi-tenant isolation dựa hoàn toàn vào WHERE clause trong application code.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>Implement company_id isolation tại service layer trước</li>
+            <li>Sau đó mới enforce RLS với company_id = current_setting(app.company)</li>
+            <li>Test isolation với superAdmin cross-company queries</li>
+          </ul>
+        </div>
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk low">LOW</span>
+            <span class="debt-title">Console.log Cleanup</span>
+          </div>
+          <p class="debt-body">Nhiều console.log trong service layer và API routes — một số có thể log dữ liệu nhạy cảm (user info, request body). Cũng gây noise trong production logs.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>ESLint rule: no-console warn trong src/ (trừ lib/logger.ts)</li>
+            <li>Tạo logger.ts với level control (debug/info/warn/error)</li>
+            <li>Grep và replace console.log → logger.debug trong services</li>
+          </ul>
+        </div>
+
+        <div class="debt-card">
+          <div class="debt-header">
+            <span class="debt-risk low">LOW</span>
+            <span class="debt-title">camelCase Column Debt</span>
+          </div>
+          <p class="debt-body">Tên cột trộn camelCase (roleLabel, userId) và snake_case (created_at, updated_at). Raw SQL phải double-quote cột camelCase. Dễ gây lỗi khi thêm cột mới.</p>
+          <div class="debt-fix-label">Kế hoạch sửa</div>
+          <ul class="debt-fix-steps">
+            <li>Quy ước mới: tất cả cột mới dùng snake_case</li>
+            <li>Không rename cột cũ (breaking migration risk)</li>
+            <li>Document rõ trong CLAUDE.md danh sách cột camelCase cần quote</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 7 — ROADMAP
+  ══════════════════════════════════ -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(20,184,166,0.15)">🗺️</div>
+      <h2>Implementation Roadmap</h2>
+      <span class="section-num">07 / 08</span>
+    </div>
+    <div class="section-body">
+
+      <div class="roadmap-track">
+        <div class="phase-block p1">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-sprint">Sprint 1–2 · ~4 tuần</div>
+          <div style="font-size:11px;font-weight:700;color:#86efac;margin-bottom:8px">Quick Wins</div>
+          <div class="phase-item">Tách /cham-cong top-level</div>
+          <div class="phase-item">Chuẩn hóa URL sang tiếng Anh</div>
+          <div class="phase-item">Gộp approval routes</div>
+          <div class="phase-item">EmptyState component</div>
+          <div class="phase-item">StatusBadge unified</div>
+          <div class="phase-item">Console.log cleanup</div>
+          <div class="phase-item">Module color fix</div>
+        </div>
+        <div class="phase-block p2">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-sprint">Sprint 3–6 · ~8 tuần</div>
+          <div style="font-size:11px;font-weight:700;color:#a5b4fc;margin-bottom:8px">UI Standardization</div>
+          <div class="phase-item">DetailPanel shared component</div>
+          <div class="phase-item">CommentThread reusable</div>
+          <div class="phase-item">DataTable generic</div>
+          <div class="phase-item">Barrel exports setup</div>
+          <div class="phase-item">Xóa authStore.ts (MOCK)</div>
+          <div class="phase-item">SWR caching layer</div>
+          <div class="phase-item">Onboarding route rename</div>
+        </div>
+        <div class="phase-block p3">
+          <div class="phase-label">Phase 3</div>
+          <div class="phase-sprint">Sprint 7–12 · ~12 tuần</div>
+          <div style="font-size:11px;font-weight:700;color:#fdba74;margin-bottom:8px">Security + Performance</div>
+          <div class="phase-item">Session-based auth (JWT)</div>
+          <div class="phase-item">Server-side permission verify</div>
+          <div class="phase-item">Migration renumbering</div>
+          <div class="phase-item">Lazy load heavy modules</div>
+          <div class="phase-item">N+1 query fixes</div>
+          <div class="phase-item">Image optimization next/image</div>
+          <div class="phase-item">Company data isolation</div>
+        </div>
+        <div class="phase-block p4">
+          <div class="phase-label">Phase 4</div>
+          <div class="phase-sprint">Sprint 13+ · Ongoing</div>
+          <div style="font-size:11px;font-weight:700;color:#d8b4fe;margin-bottom:8px">Advanced Features</div>
+          <div class="phase-item">Redis caching layer</div>
+          <div class="phase-item">RLS policy enforcement</div>
+          <div class="phase-item">ServiceError standardization</div>
+          <div class="phase-item">Service interface contracts</div>
+          <div class="phase-item">Dashboard precompute cache</div>
+          <div class="phase-item">CompanyContext middleware</div>
+          <div class="phase-item">E2E test coverage</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px">
+        <div style="padding:12px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);border-radius:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:#86efac">~80h</div>
+          <div style="font-size:10px;color:var(--muted)">Phase 1 effort</div>
+        </div>
+        <div style="padding:12px;background:rgba(79,70,229,0.05);border:1px solid rgba(79,70,229,0.2);border-radius:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:#a5b4fc">~200h</div>
+          <div style="font-size:10px;color:var(--muted)">Phase 2 effort</div>
+        </div>
+        <div style="padding:12px;background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.2);border-radius:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:#fdba74">~320h</div>
+          <div style="font-size:10px;color:var(--muted)">Phase 3 effort</div>
+        </div>
+        <div style="padding:12px;background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:10px;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:#d8b4fe">Ongoing</div>
+          <div style="font-size:10px;color:var(--muted)">Phase 4 effort</div>
+        </div>
+      </div>
+
+      <!-- Strengths to preserve -->
+      <div class="sub-section">
+        <h3>Điểm Mạnh Cần Giữ Nguyên</h3>
+        <div class="strengths-grid">
+          <div class="strength-card">
+            <div class="strength-icon">🏗️</div>
+            <div>
+              <h4>App Router Architecture</h4>
+              <p>Service layer tách biệt rõ ràng, 90+ service files — không đụng vào pattern này</p>
+            </div>
+          </div>
+          <div class="strength-card">
+            <div class="strength-icon">🔐</div>
+            <div>
+              <h4>RBAC Module System</h4>
+              <p>20 modules + 25 con, 7 action types — chỉ thêm layer server-verify, không refactor logic</p>
+            </div>
+          </div>
+          <div class="strength-card">
+            <div class="strength-icon">🎨</div>
+            <div>
+              <h4>Design System</h4>
+              <p>CSS variables dark-mode-first đã rất tốt — chỉ thêm semantic tokens còn thiếu</p>
+            </div>
+          </div>
+          <div class="strength-card">
+            <div class="strength-icon">🏢</div>
+            <div>
+              <h4>Multi-company Support</h4>
+              <p>Company switcher + getEffectiveContext hoạt động — chỉ cần enforce DB isolation thêm</p>
+            </div>
+          </div>
+          <div class="strength-card">
+            <div class="strength-icon">📡</div>
+            <div>
+              <h4>SSE Realtime</h4>
+              <p>Attendance + notifications qua SSE nhẹ hơn WebSocket — giữ nguyên, không over-engineer</p>
+            </div>
+          </div>
+          <div class="strength-card">
+            <div class="strength-icon">📊</div>
+            <div>
+              <h4>ATS + Attendance Export</h4>
+              <p>Tính năng differentiation cao — ưu tiên UX polish thay vì refactor architecture</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       SECTION 8 — EFFORT ESTIMATES
+  ══════════════════════════════════ -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-icon" style="background:rgba(6,182,212,0.15)">📋</div>
+      <h2>Effort Estimates</h2>
+      <span class="section-num">08 / 08</span>
+    </div>
+    <div class="section-body">
+      <div style="overflow-x:auto">
+        <table class="effort-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Effort</th>
+              <th>Giờ</th>
+              <th>Impact</th>
+              <th>Priority</th>
+              <th>Owner</th>
+              <th>Phase</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Server-side permission verification</strong><br><span style="color:var(--muted);font-size:11px">Session table + middleware + deprecate header</span></td>
+              <td><span class="effort-pill effort-xl">XL</span></td>
+              <td style="color:var(--fg);font-weight:700">80-120h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p1">P1</span></td>
+              <td style="color:var(--muted)">Backend Lead</td>
+              <td style="color:#fdba74">Phase 3</td>
+            </tr>
+            <tr>
+              <td><strong>Tách /cham-cong top-level route</strong><br><span style="color:var(--muted);font-size:11px">New page + sidebar entry + redirect</span></td>
+              <td><span class="effort-pill effort-xs">XS</span></td>
+              <td style="color:var(--fg);font-weight:700">4-6h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p1">P1</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>Chuẩn hóa URL slug → tiếng Anh</strong><br><span style="color:var(--muted);font-size:11px">Rename folders + next.config.js redirects + update hrefs</span></td>
+              <td><span class="effort-pill effort-s">S</span></td>
+              <td style="color:var(--fg);font-weight:700">8-12h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p1">P1</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>Gộp delete-requests + duyet-yeu-cau</strong><br><span style="color:var(--muted);font-size:11px">Tạo /approval-requests với tabs + redirect 2 route cũ</span></td>
+              <td><span class="effort-pill effort-s">S</span></td>
+              <td style="color:var(--fg);font-weight:700">6-10h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p1">P1</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>EmptyState shared component</strong><br><span style="color:var(--muted);font-size:11px">Component + props interface + rollout 22 trang</span></td>
+              <td><span class="effort-pill effort-s">S</span></td>
+              <td style="color:var(--fg);font-weight:700">8-14h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p1">P1</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>Xóa authStore.ts MOCK_USERS</strong><br><span style="color:var(--muted);font-size:11px">Audit imports + migrate consumers + delete file</span></td>
+              <td><span class="effort-pill effort-m">M</span></td>
+              <td style="color:var(--fg);font-weight:700">20-30h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p2">P2</span></td>
+              <td style="color:var(--muted)">Full-stack</td>
+              <td style="color:#a5b4fc">Phase 2</td>
+            </tr>
+            <tr>
+              <td><strong>DetailPanel shared component</strong><br><span style="color:var(--muted);font-size:11px">Compound component + migrate Ticket + Task</span></td>
+              <td><span class="effort-pill effort-m">M</span></td>
+              <td style="color:var(--fg);font-weight:700">24-40h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p2">P2</span></td>
+              <td style="color:var(--muted)">Frontend Lead</td>
+              <td style="color:#a5b4fc">Phase 2</td>
+            </tr>
+            <tr>
+              <td><strong>CommentThread reusable</strong><br><span style="color:var(--muted);font-size:11px">Rich text + attachment + SSE + migrate Ticket/Task/Approval</span></td>
+              <td><span class="effort-pill effort-m">M</span></td>
+              <td style="color:var(--fg);font-weight:700">20-32h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p2">P2</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#a5b4fc">Phase 2</td>
+            </tr>
+            <tr>
+              <td><strong>Migration renumbering + registry</strong><br><span style="color:var(--muted);font-size:11px">Audit 167 files + rename + runner script</span></td>
+              <td><span class="effort-pill effort-l">L</span></td>
+              <td style="color:var(--fg);font-weight:700">40-60h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p2">P2</span></td>
+              <td style="color:var(--muted)">Backend</td>
+              <td style="color:#fdba74">Phase 3</td>
+            </tr>
+            <tr>
+              <td><strong>Lazy load heavy modules</strong><br><span style="color:var(--muted);font-size:11px">dynamic() cho dnd-kit, xlsx, pdf-parse</span></td>
+              <td><span class="effort-pill effort-s">S</span></td>
+              <td style="color:var(--fg);font-weight:700">8-12h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p3">P3</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#fdba74">Phase 3</td>
+            </tr>
+            <tr>
+              <td><strong>N+1 query fixes</strong><br><span style="color:var(--muted);font-size:11px">Audit service layer + rewrite với JOIN/GROUP BY</span></td>
+              <td><span class="effort-pill effort-m">M</span></td>
+              <td style="color:var(--fg);font-weight:700">24-40h</td>
+              <td><span class="impact-pill impact-high">HIGH</span></td>
+              <td><span class="prio-pill prio-p3">P3</span></td>
+              <td style="color:var(--muted)">Backend</td>
+              <td style="color:#fdba74">Phase 3</td>
+            </tr>
+            <tr>
+              <td><strong>Module color deduplication</strong><br><span style="color:var(--muted);font-size:11px">Gán palette màu duy nhất cho 20 module</span></td>
+              <td><span class="effort-pill effort-xs">XS</span></td>
+              <td style="color:var(--fg);font-weight:700">2-4h</td>
+              <td><span class="impact-pill impact-low">LOW</span></td>
+              <td><span class="prio-pill prio-p4">P4</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>Console.log cleanup + logger.ts</strong><br><span style="color:var(--muted);font-size:11px">ESLint rule + logger utility + grep replace</span></td>
+              <td><span class="effort-pill effort-s">S</span></td>
+              <td style="color:var(--fg);font-weight:700">6-10h</td>
+              <td><span class="impact-pill impact-low">LOW</span></td>
+              <td><span class="prio-pill prio-p4">P4</span></td>
+              <td style="color:var(--muted)">Any</td>
+              <td style="color:#86efac">Phase 1</td>
+            </tr>
+            <tr>
+              <td><strong>Onboarding route rename /forms</strong><br><span style="color:var(--muted);font-size:11px">Đổi public form route + cập nhật links</span></td>
+              <td><span class="effort-pill effort-xs">XS</span></td>
+              <td style="color:var(--fg);font-weight:700">3-5h</td>
+              <td><span class="impact-pill impact-low">LOW</span></td>
+              <td><span class="prio-pill prio-p4">P4</span></td>
+              <td style="color:var(--muted)">Frontend</td>
+              <td style="color:#a5b4fc">Phase 2</td>
+            </tr>
+            <tr>
+              <td><strong>Redis caching layer</strong><br><span style="color:var(--muted);font-size:11px">Setup Redis + cache permissions + sessions + rate limit</span></td>
+              <td><span class="effort-pill effort-l">L</span></td>
+              <td style="color:var(--fg);font-weight:700">60-80h</td>
+              <td><span class="impact-pill impact-medium">MEDIUM</span></td>
+              <td><span class="prio-pill prio-p4">P4</span></td>
+              <td style="color:var(--muted)">Backend Lead</td>
+              <td style="color:#d8b4fe">Phase 4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px">
+        <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border);text-align:center">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px">
+            <span class="effort-pill effort-xs">XS</span>
+            <span style="font-size:11px;color:var(--fg)">= &lt;10 giờ</span>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border);text-align:center">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px">
+            <span class="effort-pill effort-s">S</span>
+            <span style="font-size:11px;color:var(--fg)">= 10–20 giờ</span>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border);text-align:center">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px">
+            <span class="effort-pill effort-m">M</span>
+            <span style="font-size:11px;color:var(--fg)">= 20–40 giờ</span>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border);text-align:center">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px">
+            <span class="effort-pill effort-l">L</span>
+            <span style="font-size:11px;color:var(--fg)">= 40–80 giờ</span>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:rgba(255,255,255,0.025);border-radius:10px;border:1px solid var(--border);text-align:center">
+          <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:6px">
+            <span class="effort-pill effort-xl">XL</span>
+            <span style="font-size:11px;color:var(--fg)">= 80+ giờ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top:32px;padding:20px 24px;background:rgba(255,255,255,0.02);border-radius:14px;border:1px solid var(--border);display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--fg)">Tổng ước tính nỗ lực</div>
+          <div style="font-size:12px;color:var(--muted)">Phase 1–3 · Không tính Phase 4 ongoing</div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:800;color:#86efac">~80h</div>
+            <div style="font-size:10px;color:var(--muted)">Phase 1</div>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--muted)">+</div>
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:800;color:#a5b4fc">~200h</div>
+            <div style="font-size:10px;color:var(--muted)">Phase 2</div>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--muted)">+</div>
+          <div style="text-align:center">
+            <div style="font-size:20px;font-weight:800;color:#fdba74">~320h</div>
+            <div style="font-size:10px;color:var(--muted)">Phase 3</div>
+          </div>
+          <div style="display:flex;align-items:center;color:var(--muted)">=</div>
+          <div style="text-align:center">
+            <div style="font-size:24px;font-weight:800;color:var(--fg)">~600h</div>
+            <div style="font-size:10px;color:var(--muted)">Total (12 sprint)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="text-align:center;padding:24px 0 8px;color:var(--muted);font-size:11px">
+    FADO AssetFlowPro · Frontend Refactoring Roadmap · Tạo bởi Claude Code · 18/06/2026
+  </div>
+
+</div>
+<script src="/preview/_nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FADO AssetFlow — Component Library</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-base:       #060e1a;
+    --bg-card:       #0f1c2e;
+    --bg-input:      #162033;
+    --border-subtle: rgba(255,255,255,0.05);
+    --border-mid:    rgba(255,255,255,0.10);
+    --primary:       #4f46e5;
+    --primary-hover: #4338ca;
+    --accent:        #C62828;
+    --accent-hover:  #b71c1c;
+    --primary-light: #a5b4fc;
+    --text-main:     #f1f5f9;
+    --text-muted:    #94a3b8;
+    --success:       #22c55e;
+    --warning:       #f59e0b;
+    --error:         #ef4444;
+    --info:          #3b82f6;
+    --radius-sm:     8px;
+    --radius-md:     12px;
+    --radius-lg:     16px;
+    --radius-xl:     20px;
+    --radius-2xl:    24px;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    background: var(--bg-base);
+    color: var(--text-main);
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+  }
+
+  /* ===== TOC SIDEBAR ===== */
+  .toc {
+    position: fixed;
+    top: 0; right: 0;
+    width: 200px;
+    height: 100vh;
+    background: var(--bg-card);
+    border-left: 1px solid var(--border-mid);
+    overflow-y: auto;
+    padding: 20px 12px;
+    z-index: 100;
+    font-size: 12px;
+  }
+  .toc h3 {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+  .toc a {
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 2px;
+    transition: all 0.15s;
+  }
+  .toc a:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+  .toc a.active { background: rgba(79,70,229,0.2); color: var(--primary-light); }
+
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    flex: 1;
+    margin-right: 200px;
+    padding: 40px 48px;
+    max-width: calc(100% - 200px);
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-mid);
+  }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 6px;
+  }
+  .page-header p { color: var(--text-muted); font-size: 14px; }
+  .page-header .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 4px 12px;
+    background: rgba(79,70,229,0.15);
+    border: 1px solid rgba(79,70,229,0.3);
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--primary-light);
+    font-weight: 600;
+  }
+
+  /* ===== SECTION ===== */
+  .section {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: rgba(79,70,229,0.2);
+    border: 1px solid rgba(79,70,229,0.4);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary-light);
+    flex-shrink: 0;
+  }
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+    margin-left: 38px;
+  }
+
+  /* ===== DEMO CARD ===== */
+  .demo-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .demo-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 12px 20px 0;
+  }
+  .demo-area {
+    padding: 24px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .demo-area.col { flex-direction: column; align-items: flex-start; }
+  .demo-area.center { justify-content: center; }
+  .demo-area.grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+  .demo-area.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .demo-code {
+    background: rgba(0,0,0,0.4);
+    border-top: 1px solid var(--border-subtle);
+    padding: 12px 20px;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #7dd3fc;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-sm  { padding: 6px 12px;  font-size: 12px; }
+  .btn-md  { padding: 9px 18px;  font-size: 13px; }
+  .btn-lg  { padding: 12px 24px; font-size: 15px; }
+
+  .btn-primary    { background: var(--primary);    color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-secondary  { background: rgba(79,70,229,0.15); color: var(--primary-light); border: 1px solid rgba(79,70,229,0.3); }
+  .btn-secondary:hover { background: rgba(79,70,229,0.25); }
+  .btn-accent     { background: var(--accent);     color: #fff; }
+  .btn-accent:hover { background: var(--accent-hover); }
+  .btn-ghost      { background: transparent; color: var(--text-muted); border: 1px solid var(--border-mid); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+  .btn-destructive { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .btn-destructive:hover { background: rgba(239,68,68,0.25); }
+  .btn:disabled   { opacity: 0.4; cursor: not-allowed; }
+  .btn-loading    { position: relative; color: transparent !important; }
+  .btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== FORM INPUTS ===== */
+  .form-group { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 320px; }
+  .form-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .form-input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-md);
+    padding: 9px 13px;
+    color: var(--text-main);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+  .form-input.error { border-color: var(--error); }
+  .form-input.error:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+  .form-input.success { border-color: var(--success); }
+  .form-input::placeholder { color: rgba(148,163,184,0.5); }
+  .form-input:disabled { opacity: 0.4; cursor: not-allowed; }
+  .form-hint { font-size: 11px; color: var(--text-muted); }
+  .form-hint.error { color: var(--error); }
+  .form-hint.success { color: var(--success); }
+
+  /* Select */
+  select.form-input { cursor: pointer; }
+
+  /* Textarea */
+  textarea.form-input { resize: vertical; min-height: 80px; }
+
+  /* Checkbox & Radio */
+  .check-group { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .check-group input[type=checkbox], .check-group input[type=radio] {
+    width: 16px; height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+  .check-label { font-size: 13px; color: var(--text-main); }
+
+  /* Toggle */
+  .toggle { position: relative; display: inline-block; width: 40px; height: 22px; }
+  .toggle input { display: none; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; top: 3px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--primary); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); background: #fff; }
+
+  /* Search input */
+  .search-wrap { position: relative; width: 100%; max-width: 320px; }
+  .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+  .search-wrap .form-input { padding-left: 34px; }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+  .badge-sm  { padding: 2px 7px;  font-size: 10px; }
+  .badge-md  { padding: 3px 10px; font-size: 11px; }
+  .badge-lg  { padding: 5px 14px; font-size: 13px; }
+  .badge-dot::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+
+  .badge-success  { background: rgba(34,197,94,0.15);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+  .badge-warning  { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-error    { background: rgba(239,68,68,0.15);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+  .badge-info     { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+  .badge-neutral  { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
+
+  /* Asset status */
+  .badge-asset-available  { background: rgba(34,197,94,0.12);  color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+  .badge-asset-assigned   { background: rgba(79,70,229,0.15);  color: #a5b4fc; border: 1px solid rgba(79,70,229,0.3); }
+  .badge-asset-maintain   { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+  .badge-asset-broken     { background: rgba(239,68,68,0.12);  color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+  .badge-asset-retired    { background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.15); }
+
+  /* Role badges */
+  .badge-superadmin { background: rgba(198,40,40,0.15);  color: #f87171; border: 1px solid rgba(198,40,40,0.3); }
+  .badge-admin      { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+  .badge-manager    { background: rgba(79,70,229,0.15);  color: #a5b4fc; border: 1px solid rgba(79,70,229,0.3); }
+  .badge-user       { background: rgba(34,197,94,0.10);  color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .card-body  { padding: 16px 20px; }
+
+  /* KPI card */
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+  .kpi-icon {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .kpi-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .kpi-value { font-size: 28px; font-weight: 800; color: var(--text-main); line-height: 1; }
+  .kpi-trend { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .kpi-trend.up   { color: var(--success); }
+  .kpi-trend.down { color: var(--error); }
+  /* Sparkline CSS */
+  .sparkline {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 32px;
+    margin-top: 4px;
+  }
+  .sparkline span {
+    flex: 1;
+    background: rgba(79,70,229,0.4);
+    border-radius: 2px;
+    min-width: 4px;
+    transition: background 0.15s;
+  }
+  .sparkline span:last-child { background: var(--primary); }
+
+  /* Asset card */
+  .asset-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    padding: 16px;
+  }
+  .asset-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+  .asset-icon {
+    width: 44px; height: 44px;
+    background: rgba(79,70,229,0.15);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .asset-name { font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+  .asset-code { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+  .asset-meta { display: flex; flex-direction: column; gap: 5px; }
+  .asset-meta-row { display: flex; justify-content: space-between; align-items: center; }
+  .asset-meta-key { font-size: 11px; color: var(--text-muted); }
+  .asset-meta-val { font-size: 12px; color: var(--text-main); font-weight: 500; }
+
+  /* User card */
+  .user-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .avatar-lg { width: 56px; height: 56px; font-size: 20px; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+  .user-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .user-dept { font-size: 11px; color: var(--text-muted); opacity: 0.7; }
+
+  /* Module card */
+  .module-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .module-card:hover { border-color: rgba(79,70,229,0.4); transform: translateY(-2px); }
+  .module-card-icon {
+    width: 48px; height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .module-card-title { font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+  .module-card-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ===== MODALS ===== */
+  .modal-demo {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    width: 100%;
+    max-width: 460px;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .modal-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .modal-close {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.05);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text-main); }
+  .modal-body  { padding: 20px 24px; }
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  /* Confirm modal */
+  .confirm-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 24px;
+  }
+
+  /* ===== DATA TABLE ===== */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--border-mid);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .data-table th:hover { color: var(--text-main); }
+  .data-table th .sort-icon { display: inline; opacity: 0.5; margin-left: 4px; font-size: 9px; }
+  .data-table th.sorted { color: var(--primary-light); }
+  .data-table th.sorted .sort-icon { opacity: 1; }
+  .data-table td {
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .data-table tr.selected td { background: rgba(79,70,229,0.06); }
+  .data-table .td-action { display: flex; gap: 4px; }
+  .td-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border: none; border-radius: 6px;
+    cursor: pointer; font-size: 12px;
+    transition: background 0.15s;
+  }
+  .td-btn-edit { background: rgba(79,70,229,0.1); color: var(--primary-light); }
+  .td-btn-edit:hover { background: rgba(79,70,229,0.2); }
+  .td-btn-del  { background: rgba(239,68,68,0.1);  color: #f87171; }
+  .td-btn-del:hover  { background: rgba(239,68,68,0.2); }
+
+  /* Table skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+    height: 14px;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  /* Pagination */
+  .pagination { display: flex; align-items: center; gap: 4px; }
+  .page-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border-mid);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .page-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+  .page-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
+  .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ===== NAVIGATION ===== */
+  /* Sidebar item */
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    position: relative;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
+  .nav-item.active { background: rgba(79,70,229,0.15); color: var(--primary-light); }
+  .nav-item.active .nav-icon { color: var(--primary-light); }
+  .nav-item.disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav-item.disabled:hover { background: transparent; color: var(--text-muted); }
+  .nav-icon { font-size: 16px; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 999px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .nav-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 12px 12px 4px;
+    opacity: 0.7;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+  .breadcrumb a:hover { color: var(--text-main); }
+  .breadcrumb-sep { color: var(--text-muted); opacity: 0.4; font-size: 11px; }
+  .breadcrumb-current { color: var(--text-main); font-weight: 500; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border-mid); }
+  .tab-item {
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab-item:hover { color: var(--text-main); }
+  .tab-item.active { color: var(--primary-light); border-bottom-color: var(--primary); font-weight: 600; }
+
+  /* ===== FEEDBACK ===== */
+  /* Toast */
+  .toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+    min-width: 280px;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .toast-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .toast-title { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+  .toast-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .toast-success { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.2); }
+  .toast-warning { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); }
+  .toast-error   { background: rgba(239,68,68,0.08);  border-color: rgba(239,68,68,0.2); }
+  .toast-info    { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.2); }
+
+  /* Alert banner */
+  .alert-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid;
+    width: 100%;
+  }
+  .alert-banner-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .alert-banner-desc  { font-size: 12px; line-height: 1.4; opacity: 0.85; }
+  .alert-success { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.25);  color: #4ade80; }
+  .alert-warning { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.25); color: #fbbf24; }
+  .alert-error   { background: rgba(239,68,68,0.08);  border-color: rgba(239,68,68,0.25);  color: #f87171; }
+  .alert-info    { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); color: #60a5fa; }
+
+  /* Progress */
+  .progress-wrap { width: 100%; }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .progress-pct   { font-size: 12px; color: var(--text-main); font-weight: 700; }
+  .progress-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-bar { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+  .progress-primary { background: var(--primary); }
+  .progress-success { background: var(--success); }
+  .progress-warning { background: var(--warning); }
+  .progress-error   { background: var(--error); }
+  .progress-indeterminate {
+    width: 40% !important;
+    animation: indeterminate 1.4s ease infinite;
+    background: var(--primary);
+  }
+  @keyframes indeterminate {
+    0%   { transform: translateX(-150%); }
+    100% { transform: translateX(350%); }
+  }
+
+  /* ===== APPROVAL ===== */
+  .approval-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .approval-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .approval-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 4px; }
+  .approval-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .approval-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+  .approval-row { display: flex; justify-content: space-between; }
+  .approval-key { font-size: 12px; color: var(--text-muted); }
+  .approval-val { font-size: 12px; color: var(--text-main); font-weight: 500; }
+  .approval-footer { padding: 14px 20px; border-top: 1px solid var(--border-subtle); display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* Status stepper */
+  .stepper { display: flex; align-items: flex-start; gap: 0; position: relative; }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--border-mid);
+  }
+  .step.done::after  { background: var(--success); }
+  .step.current::after { background: linear-gradient(to right, var(--primary), var(--border-mid)); }
+  .step-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    border: 2px solid;
+    background: var(--bg-base);
+    z-index: 1;
+    position: relative;
+  }
+  .step.done    .step-circle { border-color: var(--success); color: var(--success); background: rgba(34,197,94,0.1); }
+  .step.current .step-circle { border-color: var(--primary); color: var(--primary-light); background: rgba(79,70,229,0.15); }
+  .step.pending .step-circle { border-color: var(--border-mid); color: var(--text-muted); }
+  .step-label { font-size: 10px; color: var(--text-muted); margin-top: 6px; text-align: center; font-weight: 500; }
+  .step.done    .step-label { color: var(--success); }
+  .step.current .step-label { color: var(--primary-light); font-weight: 600; }
+
+  /* Approval history */
+  .approval-history { display: flex; flex-direction: column; gap: 0; }
+  .history-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-subtle); }
+  .history-item:last-child { border-bottom: none; }
+  .history-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #7c3aed); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .history-content { flex: 1; }
+  .history-action { font-size: 12px; color: var(--text-main); margin-bottom: 2px; }
+  .history-action strong { color: var(--primary-light); }
+  .history-time { font-size: 11px; color: var(--text-muted); }
+  .history-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 6px; border-left: 2px solid var(--border-mid); }
+
+  /* ===== DASHBOARD WIDGETS ===== */
+  .widget {
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .widget-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .widget-title { font-size: 13px; font-weight: 700; color: var(--text-main); }
+  .widget-action { font-size: 11px; color: var(--primary-light); cursor: pointer; font-weight: 600; }
+
+  /* Activity feed */
+  .activity-feed { display: flex; flex-direction: column; }
+  .activity-item { display: flex; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--border-subtle); }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .activity-text { font-size: 12px; color: var(--text-main); line-height: 1.4; }
+  .activity-text strong { color: var(--primary-light); }
+  .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  /* Notification items */
+  .notif-item { display: flex; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--border-subtle); position: relative; }
+  .notif-item.unread { background: rgba(79,70,229,0.05); }
+  .notif-item:last-child { border-bottom: none; }
+  .notif-unread-dot {
+    position: absolute;
+    left: 8px; top: 50%;
+    transform: translateY(-50%);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+  .notif-icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .notif-content { flex: 1; min-width: 0; }
+  .notif-title { font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+  .notif-desc  { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .notif-time  { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+
+  /* KPI overview grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-subtle); }
+  .kpi-cell { background: var(--bg-card); padding: 16px; text-align: center; }
+  .kpi-cell-val { font-size: 22px; font-weight: 800; color: var(--text-main); }
+  .kpi-cell-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .kpi-cell-change { font-size: 11px; font-weight: 600; margin-top: 6px; }
+  .kpi-cell-change.up   { color: var(--success); }
+  .kpi-cell-change.down { color: var(--error); }
+
+  /* ===== COLOR PALETTE ===== */
+  .color-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+  .color-swatch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    min-width: 200px;
+  }
+  .swatch-box { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; }
+  .swatch-name { font-size: 12px; font-weight: 600; color: var(--text-main); }
+  .swatch-hex  { font-size: 10px; color: var(--text-muted); font-family: monospace; }
+
+  /* ===== DIVIDER ===== */
+  .divider { border: none; border-top: 1px solid var(--border-mid); margin: 32px 0; }
+
+  /* ===== UTIL ===== */
+  .text-sm  { font-size: 12px; }
+  .text-muted { color: var(--text-muted); }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .gap-2 { gap: 8px; }
+  .gap-3 { gap: 12px; }
+  .mt-1 { margin-top: 4px; }
+  .mt-2 { margin-top: 8px; }
+  .mt-3 { margin-top: 12px; }
+  .w-full { width: 100%; }
+  .font-mono { font-family: monospace; }
+</style>
+</head>
+<body>
+
+<!-- TOC -->
+<nav class="toc">
+  <h3>Mục lục</h3>
+  <a href="#buttons">1. Buttons</a>
+  <a href="#inputs">2. Form Inputs</a>
+  <a href="#badges">3. Badges &amp; Status</a>
+  <a href="#cards">4. Cards</a>
+  <a href="#modals">5. Modals</a>
+  <a href="#tables">6. Data Table</a>
+  <a href="#navigation">7. Navigation</a>
+  <a href="#feedback">8. Feedback</a>
+  <a href="#approval">9. Approval</a>
+  <a href="#dashboard">10. Dashboard</a>
+  <a href="#colors">Bảng màu</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>FADO AssetFlow — Component Library</h1>
+    <p>Thư viện component chuẩn cho hệ thống quản lý vòng đời tài sản doanh nghiệp.</p>
+    <div class="badge">
+      <span>🎨</span>
+      <span>10 danh mục · Dark-first · Mobile-ready · Tailwind-compatible</span>
+    </div>
+  </div>
+
+  <!-- ===== 1. BUTTONS ===== -->
+  <section class="section" id="buttons">
+    <h2 class="section-title"><span class="num">1</span> Buttons</h2>
+    <p class="section-desc">5 variants, 3 sizes, đầy đủ states. Dùng class <code>btn btn-{variant} btn-{size}</code>.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Variants (btn-md)</div>
+      <div class="demo-area">
+        <button class="btn btn-primary btn-md">Primary</button>
+        <button class="btn btn-secondary btn-md">Secondary</button>
+        <button class="btn btn-accent btn-md">Accent</button>
+        <button class="btn btn-ghost btn-md">Ghost</button>
+        <button class="btn btn-destructive btn-md">Destructive</button>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Sizes (btn-primary)</div>
+      <div class="demo-area">
+        <button class="btn btn-primary btn-sm">Nhỏ (SM)</button>
+        <button class="btn btn-primary btn-md">Vừa (MD)</button>
+        <button class="btn btn-primary btn-lg">Lớn (LG)</button>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">States</div>
+      <div class="demo-area">
+        <button class="btn btn-primary btn-md">Bình thường</button>
+        <button class="btn btn-primary btn-md" disabled>Disabled</button>
+        <button class="btn btn-primary btn-md btn-loading" style="min-width:120px">Đang lưu...</button>
+        <button class="btn btn-secondary btn-md">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Icon + Text
+        </button>
+      </div>
+    </div>
+
+    <div class="demo-code">/* Tailwind classes tương đương */
+.btn-primary    → bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl
+.btn-secondary  → bg-indigo-600/15 text-indigo-300 border border-indigo-600/30
+.btn-accent     → bg-red-700 hover:bg-red-800 text-white
+.btn-ghost      → bg-transparent text-muted-foreground border border-white/10
+.btn-destructive → bg-red-500/15 text-red-400 border border-red-500/30</div>
+  </section>
+
+  <!-- ===== 2. FORM INPUTS ===== -->
+  <section class="section" id="inputs">
+    <h2 class="section-title"><span class="num">2</span> Form Inputs</h2>
+    <p class="section-desc">Text, Select, Textarea, Date, Checkbox, Radio, Toggle, Search.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Text Input — 4 states</div>
+      <div class="demo-area col" style="gap:16px">
+        <div class="form-group">
+          <label class="form-label">Mặc định</label>
+          <input class="form-input" type="text" placeholder="Nhập tên tài sản..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Focus (click vào)</label>
+          <input class="form-input" type="text" placeholder="Focus state..." autofocus />
+          <span class="form-hint">Border indigo khi focus</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lỗi</label>
+          <input class="form-input error" type="text" value="Giá trị không hợp lệ" />
+          <span class="form-hint error">⚠ Mã tài sản đã tồn tại trong hệ thống</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Thành công</label>
+          <input class="form-input success" type="text" value="AS-2024-001" />
+          <span class="form-hint success">✓ Mã hợp lệ</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Disabled</label>
+          <input class="form-input" type="text" value="Không thể sửa" disabled />
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Select &amp; Textarea</div>
+      <div class="demo-area col" style="gap:16px">
+        <div class="form-group">
+          <label class="form-label">Loại tài sản</label>
+          <select class="form-input">
+            <option value="">-- Chọn loại --</option>
+            <option>Máy tính / Laptop</option>
+            <option>Màn hình</option>
+            <option>Thiết bị mạng</option>
+            <option>Phần mềm bản quyền</option>
+            <option>Đồ nội thất</option>
+          </select>
+        </div>
+        <div class="form-group" style="max-width:420px">
+          <label class="form-label">Ghi chú</label>
+          <textarea class="form-input" rows="3" placeholder="Mô tả chi tiết tài sản..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ngày mua</label>
+          <input class="form-input" type="date" />
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Checkbox, Radio, Toggle</div>
+      <div class="demo-area col" style="gap:12px">
+        <label class="check-group">
+          <input type="checkbox" checked />
+          <span class="check-label">Bảo hành còn hiệu lực</span>
+        </label>
+        <label class="check-group">
+          <input type="checkbox" />
+          <span class="check-label">Gửi email thông báo</span>
+        </label>
+        <div style="height:8px"></div>
+        <label class="check-group">
+          <input type="radio" name="asset_type" checked />
+          <span class="check-label">Tài sản cố định</span>
+        </label>
+        <label class="check-group">
+          <input type="radio" name="asset_type" />
+          <span class="check-label">Công cụ dụng cụ</span>
+        </label>
+        <div style="height:8px"></div>
+        <div class="flex items-center gap-2">
+          <label class="toggle">
+            <input type="checkbox" checked />
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="check-label">Kích hoạt tài sản</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="toggle">
+            <input type="checkbox" />
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="check-label">Cho phép cấp phát</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Search Input</div>
+      <div class="demo-area">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="form-input" type="search" placeholder="Tìm kiếm tài sản, người dùng..." />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. BADGES ===== -->
+  <section class="section" id="badges">
+    <h2 class="section-title"><span class="num">3</span> Badges &amp; Status Chips</h2>
+    <p class="section-desc">Semantic, trạng thái tài sản, role, 3 sizes.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Semantic badges</div>
+      <div class="demo-area">
+        <span class="badge badge-success badge-dot">Thành công</span>
+        <span class="badge badge-warning badge-dot">Cảnh báo</span>
+        <span class="badge badge-error badge-dot">Lỗi</span>
+        <span class="badge badge-info badge-dot">Thông tin</span>
+        <span class="badge badge-neutral badge-dot">Trung lập</span>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Trạng thái tài sản</div>
+      <div class="demo-area">
+        <span class="badge badge-asset-available badge-dot">Sẵn Dùng</span>
+        <span class="badge badge-asset-assigned badge-dot">Đã Cấp</span>
+        <span class="badge badge-asset-maintain badge-dot">Bảo Trì</span>
+        <span class="badge badge-asset-broken badge-dot">Hỏng</span>
+        <span class="badge badge-asset-retired badge-dot">Thanh Lý</span>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Role badges</div>
+      <div class="demo-area">
+        <span class="badge badge-superadmin">Super Admin</span>
+        <span class="badge badge-admin">Admin</span>
+        <span class="badge badge-manager">Manager</span>
+        <span class="badge badge-user">User</span>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">3 sizes (badge-success)</div>
+      <div class="demo-area items-center">
+        <span class="badge badge-success badge-sm">Nhỏ (SM)</span>
+        <span class="badge badge-success badge-md">Vừa (MD)</span>
+        <span class="badge badge-success badge-lg">Lớn (LG)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. CARDS ===== -->
+  <section class="section" id="cards">
+    <h2 class="section-title"><span class="num">4</span> Cards</h2>
+    <p class="section-desc">Basic card, KPI card, Module card, Asset card, User card.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Basic Card</div>
+      <div class="demo-area">
+        <div class="card" style="width:320px">
+          <div class="card-header">
+            <span class="card-title">Thông tin tài sản</span>
+            <span class="badge badge-asset-available badge-sm badge-dot">Sẵn Dùng</span>
+          </div>
+          <div class="card-body">
+            <p class="text-sm text-muted">Máy tính xách tay Dell Inspiron 15 3000 series, RAM 16GB, SSD 512GB</p>
+            <div class="mt-2 flex gap-2">
+              <button class="btn btn-primary btn-sm">Cấp phát</button>
+              <button class="btn btn-ghost btn-sm">Chi tiết</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">KPI Cards với Sparkline CSS</div>
+      <div class="demo-area" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">Tổng Tài Sản</div>
+              <div class="kpi-value">1,247</div>
+            </div>
+            <div class="kpi-icon" style="background:rgba(79,70,229,0.15)">💼</div>
+          </div>
+          <div class="kpi-trend up">▲ 12% so với tháng trước</div>
+          <div class="sparkline">
+            <span style="height:40%"></span><span style="height:55%"></span>
+            <span style="height:45%"></span><span style="height:70%"></span>
+            <span style="height:60%"></span><span style="height:80%"></span>
+            <span style="height:75%"></span><span style="height:100%"></span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">Đang Sử Dụng</div>
+              <div class="kpi-value">982</div>
+            </div>
+            <div class="kpi-icon" style="background:rgba(34,197,94,0.12)">✅</div>
+          </div>
+          <div class="kpi-trend up">▲ 5% so với tháng trước</div>
+          <div class="sparkline">
+            <span style="height:65%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:72%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:68%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:80%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:75%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:88%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:82%;background:rgba(34,197,94,0.3)"></span>
+            <span style="height:100%;background:#22c55e"></span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div>
+              <div class="kpi-label">Cần Bảo Trì</div>
+              <div class="kpi-value">43</div>
+            </div>
+            <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">🔧</div>
+          </div>
+          <div class="kpi-trend down">▼ 3% so với tháng trước</div>
+          <div class="sparkline">
+            <span style="height:80%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:65%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:75%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:60%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:70%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:55%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:48%;background:rgba(245,158,11,0.3)"></span>
+            <span style="height:40%;background:#f59e0b"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Asset Card</div>
+      <div class="demo-area" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        <div class="asset-card">
+          <div class="asset-card-top">
+            <div class="asset-icon">💻</div>
+            <span class="badge badge-asset-assigned badge-sm badge-dot">Đã Cấp</span>
+          </div>
+          <div class="asset-name">Dell Inspiron 15</div>
+          <div class="asset-code">AS-2024-00134</div>
+          <div class="asset-meta mt-2">
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Người dùng</span>
+              <span class="asset-meta-val">Nguyễn Văn A</span>
+            </div>
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Phòng ban</span>
+              <span class="asset-meta-val">IT Infrastructure</span>
+            </div>
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Hết bảo hành</span>
+              <span class="asset-meta-val" style="color:var(--warning)">15/08/2024</span>
+            </div>
+          </div>
+        </div>
+        <div class="asset-card">
+          <div class="asset-card-top">
+            <div class="asset-icon" style="background:rgba(34,197,94,0.12)">🖥️</div>
+            <span class="badge badge-asset-available badge-sm badge-dot">Sẵn Dùng</span>
+          </div>
+          <div class="asset-name">LG UltraWide 29"</div>
+          <div class="asset-code">AS-2024-00201</div>
+          <div class="asset-meta mt-2">
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Kho</span>
+              <span class="asset-meta-val">Kho T2-P3</span>
+            </div>
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Giá trị</span>
+              <span class="asset-meta-val">12,500,000 ₫</span>
+            </div>
+            <div class="asset-meta-row">
+              <span class="asset-meta-key">Hết bảo hành</span>
+              <span class="asset-meta-val" style="color:var(--success)">20/06/2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">User Card &amp; Module Card</div>
+      <div class="demo-area" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+        <div class="user-card">
+          <div class="avatar">NV</div>
+          <div class="user-info">
+            <div class="user-name">Nguyễn Văn An</div>
+            <div class="user-role">IT Manager</div>
+            <div class="user-dept">Phòng Công nghệ Thông tin</div>
+          </div>
+          <span class="badge badge-manager badge-sm">Manager</span>
+        </div>
+        <div class="module-card">
+          <div class="module-card-icon" style="background:rgba(79,70,229,0.15)">📦</div>
+          <div class="module-card-title">Quản lý Tài Sản</div>
+          <div class="module-card-desc">Theo dõi vòng đời, cấp phát và thu hồi tài sản doanh nghiệp.</div>
+          <div class="mt-3"><span class="badge badge-info badge-sm">1,247 tài sản</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 5. MODALS ===== -->
+  <section class="section" id="modals">
+    <h2 class="section-title"><span class="num">5</span> Modals</h2>
+    <p class="section-desc">Standard (form đầy đủ), Confirmation (xác nhận xóa), Alert (cảnh báo).</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Standard Modal — Cấp Phát Tài Sản</div>
+      <div class="demo-area center">
+        <div class="modal-demo">
+          <div class="modal-header">
+            <h2 class="modal-title">Cấp Phát Tài Sản</h2>
+            <button class="modal-close">✕</button>
+          </div>
+          <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+            <div class="form-group" style="max-width:100%">
+              <label class="form-label">Tài Sản</label>
+              <select class="form-input">
+                <option>Dell Inspiron 15 — AS-2024-00134</option>
+                <option>LG UltraWide 29" — AS-2024-00201</option>
+              </select>
+            </div>
+            <div class="form-group" style="max-width:100%">
+              <label class="form-label">Người Nhận</label>
+              <input class="form-input" type="text" placeholder="Tìm tên nhân viên..." />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="form-group" style="max-width:100%">
+                <label class="form-label">Ngày Cấp</label>
+                <input class="form-input" type="date" />
+              </div>
+              <div class="form-group" style="max-width:100%">
+                <label class="form-label">Dự Kiến Hoàn Trả</label>
+                <input class="form-input" type="date" />
+              </div>
+            </div>
+            <div class="form-group" style="max-width:100%">
+              <label class="form-label">Ghi Chú</label>
+              <textarea class="form-input" rows="2" placeholder="Tình trạng tài sản khi cấp phát..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost btn-sm">Hủy</button>
+            <button class="btn btn-primary btn-sm">Xác Nhận Cấp Phát</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Confirmation Modal — Xác Nhận Xóa</div>
+      <div class="demo-area center">
+        <div class="modal-demo" style="max-width:360px">
+          <div class="modal-header">
+            <h2 class="modal-title">Xác Nhận Xóa</h2>
+            <button class="modal-close">✕</button>
+          </div>
+          <div class="modal-body" style="text-align:center;padding:24px">
+            <div class="confirm-icon" style="background:rgba(239,68,68,0.1);color:#f87171">🗑️</div>
+            <h3 style="font-size:15px;font-weight:700;margin-bottom:8px">Xóa tài sản này?</h3>
+            <p style="font-size:13px;color:var(--text-muted);line-height:1.5">
+              Tài sản <strong style="color:var(--text-main)">Dell Inspiron 15</strong> sẽ bị xóa vĩnh viễn khỏi hệ thống. Thao tác này không thể hoàn tác.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost btn-sm">Hủy</button>
+            <button class="btn btn-accent btn-sm">Xóa Tài Sản</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Alert Modal — Cảnh Báo Bảo Hành</div>
+      <div class="demo-area center">
+        <div class="modal-demo" style="max-width:380px">
+          <div class="modal-header">
+            <h2 class="modal-title">⚠ Cảnh Báo Bảo Hành</h2>
+            <button class="modal-close">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="alert-banner alert-warning">
+              <span>⚠</span>
+              <div>
+                <div class="alert-banner-title">3 tài sản sắp hết bảo hành</div>
+                <div class="alert-banner-desc">Cần gia hạn hoặc lên kế hoạch thay thế trong 30 ngày tới.</div>
+              </div>
+            </div>
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(245,158,11,0.05);border-radius:8px;border:1px solid rgba(245,158,11,0.15)">
+                <span style="font-size:12px">Dell Inspiron 15</span>
+                <span style="font-size:12px;color:var(--warning);font-weight:600">Còn 12 ngày</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(239,68,68,0.05);border-radius:8px;border:1px solid rgba(239,68,68,0.15)">
+                <span style="font-size:12px">HP ProBook 450</span>
+                <span style="font-size:12px;color:var(--error);font-weight:600">Còn 5 ngày</span>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost btn-sm">Bỏ Qua</button>
+            <button class="btn btn-primary btn-sm">Xem Danh Sách</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 6. DATA TABLE ===== -->
+  <section class="section" id="tables">
+    <h2 class="section-title"><span class="num">6</span> Data Table</h2>
+    <p class="section-desc">Header sort, row selection, actions, pagination, empty state, skeleton loader.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Table với Sort, Selection, Actions</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:40px"><input type="checkbox" style="accent-color:var(--primary)" /></th>
+              <th class="sorted">Mã Tài Sản <span class="sort-icon">▼</span></th>
+              <th>Tên Tài Sản <span class="sort-icon">⇅</span></th>
+              <th>Loại <span class="sort-icon">⇅</span></th>
+              <th>Người Dùng <span class="sort-icon">⇅</span></th>
+              <th>Trạng Thái <span class="sort-icon">⇅</span></th>
+              <th>Giá Trị <span class="sort-icon">⇅</span></th>
+              <th style="width:80px">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="selected">
+              <td><input type="checkbox" checked style="accent-color:var(--primary)" /></td>
+              <td class="font-mono" style="font-size:12px">AS-2024-001</td>
+              <td><strong>Dell Inspiron 15</strong></td>
+              <td><span class="badge badge-info badge-sm">Laptop</span></td>
+              <td>Nguyễn Văn An</td>
+              <td><span class="badge badge-asset-assigned badge-sm badge-dot">Đã Cấp</span></td>
+              <td style="font-weight:600">18,500,000 ₫</td>
+              <td>
+                <div class="td-action">
+                  <button class="td-btn td-btn-edit" title="Sửa">✏</button>
+                  <button class="td-btn td-btn-del" title="Xóa">🗑</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--primary)" /></td>
+              <td class="font-mono" style="font-size:12px">AS-2024-002</td>
+              <td><strong>LG UltraWide 29"</strong></td>
+              <td><span class="badge badge-info badge-sm">Màn Hình</span></td>
+              <td>—</td>
+              <td><span class="badge badge-asset-available badge-sm badge-dot">Sẵn Dùng</span></td>
+              <td style="font-weight:600">12,500,000 ₫</td>
+              <td>
+                <div class="td-action">
+                  <button class="td-btn td-btn-edit">✏</button>
+                  <button class="td-btn td-btn-del">🗑</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" style="accent-color:var(--primary)" /></td>
+              <td class="font-mono" style="font-size:12px">AS-2024-003</td>
+              <td><strong>HP ProBook 450 G9</strong></td>
+              <td><span class="badge badge-info badge-sm">Laptop</span></td>
+              <td>Trần Thị Bình</td>
+              <td><span class="badge badge-asset-maintain badge-sm badge-dot">Bảo Trì</span></td>
+              <td style="font-weight:600">22,000,000 ₫</td>
+              <td>
+                <div class="td-action">
+                  <button class="td-btn td-btn-edit">✏</button>
+                  <button class="td-btn td-btn-del">🗑</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border-subtle)">
+        <span style="font-size:12px;color:var(--text-muted)">Hiển thị 1–3 / 247 bản ghi · 1 đã chọn</span>
+        <div class="pagination">
+          <button class="page-btn" disabled>«</button>
+          <button class="page-btn" disabled>‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <span style="color:var(--text-muted);font-size:12px;padding:0 4px">...</span>
+          <button class="page-btn">83</button>
+          <button class="page-btn">›</button>
+          <button class="page-btn">»</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Empty State</div>
+      <div class="demo-area center" style="flex-direction:column;padding:48px">
+        <div style="font-size:40px;margin-bottom:12px;opacity:0.3">📦</div>
+        <p style="font-size:14px;color:var(--text-muted);margin-bottom:4px">Chưa có tài sản nào</p>
+        <p style="font-size:12px;color:var(--text-muted);opacity:0.6">Nhấn "+ Thêm tài sản" để bắt đầu quản lý kho tài sản</p>
+        <button class="btn btn-primary btn-sm" style="margin-top:16px">+ Thêm Tài Sản</button>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Skeleton Loader</div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mã Tài Sản</th>
+              <th>Tên Tài Sản</th>
+              <th>Loại</th>
+              <th>Trạng Thái</th>
+              <th>Giá Trị</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:140px"></div></td><td><div class="skeleton" style="width:60px"></div></td><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:100px"></div></td></tr>
+            <tr><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:120px"></div></td><td><div class="skeleton" style="width:70px"></div></td><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:90px"></div></td></tr>
+            <tr><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:160px"></div></td><td><div class="skeleton" style="width:65px"></div></td><td><div class="skeleton" style="width:80px"></div></td><td><div class="skeleton" style="width:110px"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 7. NAVIGATION ===== -->
+  <section class="section" id="navigation">
+    <h2 class="section-title"><span class="num">7</span> Navigation</h2>
+    <p class="section-desc">Sidebar items, Breadcrumb, Tabs underline, Pagination.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Sidebar Navigation Items</div>
+      <div class="demo-area col" style="max-width:240px;gap:2px">
+        <div class="nav-group-label">ĐIỀU HƯỚNG</div>
+        <a class="nav-item active" href="#"><span class="nav-icon">📊</span>Tổng Quan</a>
+        <a class="nav-item" href="#"><span class="nav-icon">📦</span>Tài Sản<span class="nav-badge">12</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">👥</span>Người Dùng</a>
+        <a class="nav-item" href="#"><span class="nav-icon">📋</span>Tác Vụ<span class="nav-badge">3</span></a>
+        <div class="nav-group-label" style="margin-top:8px">QUẢN TRỊ</div>
+        <a class="nav-item" href="#"><span class="nav-icon">⚙</span>Cấu Hình</a>
+        <a class="nav-item disabled" href="#">
+          <span class="nav-icon">🔒</span>Phân Quyền
+        </a>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Breadcrumb</div>
+      <div class="demo-area">
+        <nav class="breadcrumb">
+          <a href="#">Trang Chủ</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="#">Tài Sản</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="#">Laptop</a>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current">Dell Inspiron 15</span>
+        </nav>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Tabs (Underline style)</div>
+      <div class="demo-area col">
+        <div class="tabs">
+          <div class="tab-item active">Tất Cả</div>
+          <div class="tab-item">Đang Sử Dụng</div>
+          <div class="tab-item">Sẵn Dùng</div>
+          <div class="tab-item">Bảo Trì</div>
+          <div class="tab-item">Thanh Lý</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Pagination</div>
+      <div class="demo-area">
+        <div class="pagination">
+          <button class="page-btn" disabled>«</button>
+          <button class="page-btn" disabled>‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <span style="color:var(--text-muted);font-size:12px;padding:0 6px">...</span>
+          <button class="page-btn">24</button>
+          <button class="page-btn">›</button>
+          <button class="page-btn">»</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 8. FEEDBACK ===== -->
+  <section class="section" id="feedback">
+    <h2 class="section-title"><span class="num">8</span> Feedback</h2>
+    <p class="section-desc">Toast 4 loại, Alert banners, Progress bars, Skeleton loaders.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Toasts (fixed bottom-right trong production)</div>
+      <div class="demo-area col" style="gap:10px;align-items:flex-start">
+        <div class="toast toast-success">
+          <span class="toast-icon">✅</span>
+          <div>
+            <div class="toast-title">Cấp phát thành công</div>
+            <div class="toast-desc">Dell Inspiron 15 đã được cấp cho Nguyễn Văn An.</div>
+          </div>
+        </div>
+        <div class="toast toast-warning">
+          <span class="toast-icon">⚠</span>
+          <div>
+            <div class="toast-title">Bảo hành sắp hết</div>
+            <div class="toast-desc">3 thiết bị sẽ hết bảo hành trong 30 ngày tới.</div>
+          </div>
+        </div>
+        <div class="toast toast-error">
+          <span class="toast-icon">❌</span>
+          <div>
+            <div class="toast-title">Lỗi khi lưu</div>
+            <div class="toast-desc">Không thể kết nối đến máy chủ. Vui lòng thử lại.</div>
+          </div>
+        </div>
+        <div class="toast toast-info">
+          <span class="toast-icon">ℹ</span>
+          <div>
+            <div class="toast-title">Đồng bộ hoàn tất</div>
+            <div class="toast-desc">Dữ liệu tài sản đã được đồng bộ từ hệ thống kho.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Alert Banners</div>
+      <div class="demo-area col" style="gap:10px">
+        <div class="alert-banner alert-success">
+          <span>✅</span>
+          <div>
+            <div class="alert-banner-title">Nhập dữ liệu thành công</div>
+            <div class="alert-banner-desc">247 tài sản đã được nhập vào hệ thống từ file Excel.</div>
+          </div>
+        </div>
+        <div class="alert-banner alert-warning">
+          <span>⚠</span>
+          <div>
+            <div class="alert-banner-title">Cảnh báo tồn kho</div>
+            <div class="alert-banner-desc">Số lượng máy tính dự phòng dưới mức tối thiểu (còn 2 chiếc).</div>
+          </div>
+        </div>
+        <div class="alert-banner alert-error">
+          <span>❌</span>
+          <div>
+            <div class="alert-banner-title">Lỗi kết nối cơ sở dữ liệu</div>
+            <div class="alert-banner-desc">Hệ thống không thể kết nối đến PostgreSQL. Liên hệ quản trị viên.</div>
+          </div>
+        </div>
+        <div class="alert-banner alert-info">
+          <span>ℹ</span>
+          <div>
+            <div class="alert-banner-title">Phiên bản mới có sẵn</div>
+            <div class="alert-banner-desc">FADO AssetFlow v2.3.1 đã sẵn sàng. Làm mới trang để cập nhật.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Progress Bars</div>
+      <div class="demo-area col" style="gap:16px;width:100%;max-width:480px">
+        <div class="progress-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Tài sản đã cấp phát</span>
+            <span class="progress-pct">78%</span>
+          </div>
+          <div class="progress-track"><div class="progress-bar progress-primary" style="width:78%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Tình trạng tốt</span>
+            <span class="progress-pct">92%</span>
+          </div>
+          <div class="progress-track"><div class="progress-bar progress-success" style="width:92%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Cần bảo trì</span>
+            <span class="progress-pct">34%</span>
+          </div>
+          <div class="progress-track"><div class="progress-bar progress-warning" style="width:34%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Đã hỏng</span>
+            <span class="progress-pct">8%</span>
+          </div>
+          <div class="progress-track"><div class="progress-bar progress-error" style="width:8%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-header">
+            <span class="progress-label">Đang đồng bộ...</span>
+          </div>
+          <div class="progress-track" style="overflow:visible;position:relative">
+            <div class="progress-bar progress-indeterminate"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 9. APPROVAL ===== -->
+  <section class="section" id="approval">
+    <h2 class="section-title"><span class="num">9</span> Approval</h2>
+    <p class="section-desc">Request card, approve/reject buttons, Status stepper, lịch sử duyệt.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Approval Request Card</div>
+      <div class="demo-area" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">
+        <div class="approval-card">
+          <div class="approval-header">
+            <div>
+              <div class="approval-type">Yêu Cầu Cấp Phát</div>
+              <div class="approval-title">Laptop cho nhân viên mới</div>
+            </div>
+            <span class="badge badge-warning badge-dot">Chờ Duyệt</span>
+          </div>
+          <div class="approval-body">
+            <div class="approval-row">
+              <span class="approval-key">Người yêu cầu</span>
+              <span class="approval-val">Lê Thị Lan</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Tài sản</span>
+              <span class="approval-val">Dell Inspiron 15</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Lý do</span>
+              <span class="approval-val">Nhân viên mới — IT Dept.</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Ngày gửi</span>
+              <span class="approval-val">18/06/2026</span>
+            </div>
+          </div>
+          <div class="approval-footer">
+            <button class="btn btn-destructive btn-sm">✗ Từ Chối</button>
+            <button class="btn btn-primary btn-sm">✓ Phê Duyệt</button>
+          </div>
+        </div>
+
+        <div class="approval-card">
+          <div class="approval-header">
+            <div>
+              <div class="approval-type">Yêu Cầu Bảo Trì</div>
+              <div class="approval-title">Sửa màn hình bị vỡ</div>
+            </div>
+            <span class="badge badge-success badge-dot">Đã Duyệt</span>
+          </div>
+          <div class="approval-body">
+            <div class="approval-row">
+              <span class="approval-key">Người yêu cầu</span>
+              <span class="approval-val">Phạm Văn Đức</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Tài sản</span>
+              <span class="approval-val">LG UltraWide AS-002</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Chi phí dự kiến</span>
+              <span class="approval-val" style="color:var(--warning);font-weight:600">2,500,000 ₫</span>
+            </div>
+            <div class="approval-row">
+              <span class="approval-key">Người duyệt</span>
+              <span class="approval-val" style="color:var(--success)">Nguyễn IT Manager</span>
+            </div>
+          </div>
+          <div class="approval-footer">
+            <button class="btn btn-ghost btn-sm">Xem Chi Tiết</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Status Stepper — 5 Bước</div>
+      <div class="demo-area" style="padding:32px 24px">
+        <div class="stepper" style="width:100%">
+          <div class="step done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">Gửi Yêu Cầu</div>
+          </div>
+          <div class="step done">
+            <div class="step-circle">✓</div>
+            <div class="step-label">Trưởng Phòng</div>
+          </div>
+          <div class="step current">
+            <div class="step-circle">3</div>
+            <div class="step-label">Quản Lý IT</div>
+          </div>
+          <div class="step pending">
+            <div class="step-circle">4</div>
+            <div class="step-label">Ban Giám Đốc</div>
+          </div>
+          <div class="step pending">
+            <div class="step-circle">5</div>
+            <div class="step-label">Hoàn Tất</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Lịch Sử Duyệt</div>
+      <div class="demo-area col" style="padding:0">
+        <div class="approval-history" style="width:100%;padding:0 20px">
+          <div class="history-item">
+            <div class="history-avatar">NV</div>
+            <div class="history-content">
+              <div class="history-action"><strong>Nguyễn Văn An</strong> đã phê duyệt yêu cầu</div>
+              <div class="history-note">Tài sản trong tình trạng tốt, có thể cấp phát ngay.</div>
+              <div class="history-time">18/06/2026 · 14:32</div>
+            </div>
+            <span class="badge badge-success badge-sm">Duyệt</span>
+          </div>
+          <div class="history-item">
+            <div class="history-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">TL</div>
+            <div class="history-content">
+              <div class="history-action"><strong>Trần Thị Lan</strong> đã gửi yêu cầu</div>
+              <div class="history-note">Nhân viên mới cần laptop để bắt đầu làm việc từ 20/06.</div>
+              <div class="history-time">17/06/2026 · 09:15</div>
+            </div>
+            <span class="badge badge-info badge-sm">Gửi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. DASHBOARD WIDGETS ===== -->
+  <section class="section" id="dashboard">
+    <h2 class="section-title"><span class="num">10</span> Dashboard Widgets</h2>
+    <p class="section-desc">Activity feed, Notification items (unread state), KPI overview grid.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Activity Feed Widget</div>
+      <div class="demo-area" style="padding:0">
+        <div class="widget" style="width:100%;max-width:420px">
+          <div class="widget-header">
+            <span class="widget-title">Hoạt Động Gần Đây</span>
+            <span class="widget-action">Xem tất cả →</span>
+          </div>
+          <div class="activity-feed">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:rgba(34,197,94,0.1);color:var(--success)">✓</div>
+              <div>
+                <div class="activity-text"><strong>Nguyễn Văn An</strong> đã cấp <strong>Dell Inspiron 15</strong> cho Trần Thị Bình</div>
+                <div class="activity-time">5 phút trước</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:rgba(245,158,11,0.1);color:var(--warning)">🔧</div>
+              <div>
+                <div class="activity-text"><strong>HP ProBook 450</strong> được chuyển sang trạng thái Bảo Trì</div>
+                <div class="activity-time">32 phút trước</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:rgba(79,70,229,0.1);color:var(--primary-light)">📦</div>
+              <div>
+                <div class="activity-text">Nhập kho <strong>5 màn hình LG</strong> — Kho T2-P3</div>
+                <div class="activity-time">1 giờ trước</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:rgba(239,68,68,0.1);color:var(--error)">↩</div>
+              <div>
+                <div class="activity-text"><strong>Lê Văn Cường</strong> hoàn trả <strong>iPad Pro 12.9"</strong></div>
+                <div class="activity-time">2 giờ trước</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">Notification Items (với unread state)</div>
+      <div class="demo-area" style="padding:0">
+        <div class="widget" style="width:100%;max-width:420px">
+          <div class="widget-header">
+            <span class="widget-title">Thông Báo <span class="badge badge-error badge-sm" style="margin-left:6px">3</span></span>
+            <span class="widget-action">Đọc hết</span>
+          </div>
+          <div>
+            <div class="notif-item unread" style="padding-left:22px">
+              <div class="notif-unread-dot"></div>
+              <div class="notif-icon-wrap" style="background:rgba(239,68,68,0.1)">⚠</div>
+              <div class="notif-content">
+                <div class="notif-title">3 tài sản sắp hết bảo hành</div>
+                <div class="notif-desc">HP ProBook 450 · Dell XPS 13 · Cisco Switch 24P</div>
+                <div class="notif-time">Vừa xong</div>
+              </div>
+            </div>
+            <div class="notif-item unread" style="padding-left:22px">
+              <div class="notif-unread-dot"></div>
+              <div class="notif-icon-wrap" style="background:rgba(79,70,229,0.1)">📋</div>
+              <div class="notif-content">
+                <div class="notif-title">Yêu cầu cấp phát mới</div>
+                <div class="notif-desc">Lê Thị Lan yêu cầu cấp Laptop cho nhân viên mới</div>
+                <div class="notif-time">10 phút trước</div>
+              </div>
+            </div>
+            <div class="notif-item" style="padding-left:22px">
+              <div class="notif-icon-wrap" style="background:rgba(34,197,94,0.1)">✅</div>
+              <div class="notif-content">
+                <div class="notif-title">Phê duyệt hoàn tất</div>
+                <div class="notif-desc">Yêu cầu bảo trì LG UltraWide đã được duyệt bởi IT Manager</div>
+                <div class="notif-time">1 giờ trước</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-label">KPI Overview Grid</div>
+      <div class="demo-area" style="padding:0">
+        <div class="widget" style="width:100%">
+          <div class="widget-header">
+            <span class="widget-title">Tổng Quan Hệ Thống</span>
+            <span class="widget-action">Báo cáo chi tiết →</span>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi-cell">
+              <div class="kpi-cell-val">1,247</div>
+              <div class="kpi-cell-label">Tổng Tài Sản</div>
+              <div class="kpi-cell-change up">▲ 12%</div>
+            </div>
+            <div class="kpi-cell">
+              <div class="kpi-cell-val">982</div>
+              <div class="kpi-cell-label">Đang Sử Dụng</div>
+              <div class="kpi-cell-change up">▲ 5%</div>
+            </div>
+            <div class="kpi-cell">
+              <div class="kpi-cell-val">43</div>
+              <div class="kpi-cell-label">Cần Bảo Trì</div>
+              <div class="kpi-cell-change down">▼ 3%</div>
+            </div>
+            <div class="kpi-cell">
+              <div class="kpi-cell-val">18</div>
+              <div class="kpi-cell-label">Chờ Duyệt</div>
+              <div class="kpi-cell-change up">▲ 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COLORS ===== -->
+  <section class="section" id="colors">
+    <h2 class="section-title"><span class="num">🎨</span> Bảng Màu</h2>
+    <p class="section-desc">Palette chuẩn — chỉ dùng CSS variables và Tailwind. Không hardcode màu light.</p>
+
+    <div class="demo-card">
+      <div class="demo-label">Core Palette</div>
+      <div class="demo-area" style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start">
+        <div class="color-swatch"><div class="swatch-box" style="background:#060e1a;border:1px solid rgba(255,255,255,0.1)"></div><div><div class="swatch-name">--bg-base</div><div class="swatch-hex">#060e1a</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#0f1c2e;border:1px solid rgba(255,255,255,0.1)"></div><div><div class="swatch-name">--bg-card</div><div class="swatch-hex">#0f1c2e</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#162033;border:1px solid rgba(255,255,255,0.1)"></div><div><div class="swatch-name">--bg-input</div><div class="swatch-hex">#162033</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#4f46e5"></div><div><div class="swatch-name">--primary</div><div class="swatch-hex">#4f46e5</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#C62828"></div><div><div class="swatch-name">--accent</div><div class="swatch-hex">#C62828</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#a5b4fc"></div><div><div class="swatch-name">--primary-light</div><div class="swatch-hex">#a5b4fc</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#f1f5f9"></div><div><div class="swatch-name">--text-main</div><div class="swatch-hex">#f1f5f9</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#94a3b8"></div><div><div class="swatch-name">--text-muted</div><div class="swatch-hex">#94a3b8</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#22c55e"></div><div><div class="swatch-name">--success</div><div class="swatch-hex">#22c55e</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#f59e0b"></div><div><div class="swatch-name">--warning</div><div class="swatch-hex">#f59e0b</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ef4444"></div><div><div class="swatch-name">--error</div><div class="swatch-hex">#ef4444</div></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#3b82f6"></div><div><div class="swatch-name">--info</div><div class="swatch-hex">#3b82f6</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="height:80px"></div>
+</main>
+
+<script>
+  // TOC active link highlight on scroll
+  const sections = document.querySelectorAll('.section');
+  const links    = document.querySelectorAll('.toc a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector('.toc a[href="#' + e.target.id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

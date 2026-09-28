@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>FADO AssetFlowPro — Lưu đồ hệ thống</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  :root { color-scheme: light only; }
+  html, body { background: #fff; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #222; margin: 0; font-size: 13px; line-height: 1.6; }
+  h1 { font-size: 24px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 0 0 10px; color: #3C3489; }
+  p.meta { color: #777; margin: 0 0 6px; font-size: 12px; }
+  .section { page-break-after: always; }
+  .section:last-child { page-break-after: auto; }
+  .note { background: #F6F5FF; border-left: 3px solid #534AB7; padding: 8px 12px; margin: 10px 0; font-size: 12.5px; }
+  .warn { background: #FAEEDA; border-left: 3px solid #854F0B; padding: 8px 12px; margin: 10px 0; font-size: 12.5px; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 12.5px; }
+  th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #F1EFE8; font-weight: 600; }
+  svg { width: 100%; height: auto; display: block; margin: 8px 0; }
+  svg text { font-family: "Segoe UI", Arial, sans-serif; }
+  .th2 { font-size: 14px; font-weight: 600; }
+  .ts2 { font-size: 12px; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  .cover { text-align: center; padding-top: 120px; page-break-after: always; }
+  .cover h1 { font-size: 32px; }
+  .cover .sub { font-size: 16px; color: #555; margin-top: 8px; }
+  .cover .box { display: inline-block; margin-top: 40px; border: 1px solid #ccc; border-radius: 8px; padding: 18px 36px; text-align: left; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>FADO AssetFlowPro</h1>
+  <div class="sub">Lưu đồ kiến trúc &amp; luồng nghiệp vụ toàn hệ thống</div>
+  <div class="box">
+    <b>Hệ thống:</b> Quản lý vòng đời tài sản doanh nghiệp<br>
+    <b>Domain:</b> https://asset.fadoai.com (103.70.12.148)<br>
+    <b>Stack:</b> Next.js 13.5 · React 19 · PostgreSQL · Docker + Traefik<br>
+    <b>Tích hợp:</b> Zimbra SOAP · AWS SES · Telegram · ZKTeco FA210<br>
+    <b>Ngày lập:</b> 11/06/2026 · Nhánh: afterdeploy
+  </div>
+</div>
+
+<div class="section">
+<h2>1. Kiến trúc tổng thể hệ thống</h2>
+<p>Toàn bộ hệ thống chạy trong Docker sau Traefik. Người dùng truy cập qua <b>asset.fadoai.com</b>; máy chấm công FA210 giao tiếp 2 chiều — đẩy dữ liệu ADMS qua Traefik (cổng 80/443) và bị poller kéo dữ liệu trực tiếp qua TCP 4370.</p>
+
+<svg viewBox="0 0 680 740" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="arp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="215" y="40" width="250" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="340" y="62" text-anchor="middle" fill="#2C2C2A">Người dùng</text>
+<text class="ts2" x="340" y="80" text-anchor="middle" fill="#5F5E5A">trình duyệt · mobile/desktop</text>
+
+<line x1="340" y1="92" x2="340" y2="126" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<rect x="70" y="130" width="560" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="350" y="152" text-anchor="middle" fill="#2C2C2A">Traefik reverse proxy</text>
+<text class="ts2" x="350" y="170" text-anchor="middle" fill="#5F5E5A">asset.fadoai.com · cổng 443 / 80</text>
+
+<line x1="250" y1="182" x2="250" y2="216" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<rect x="50" y="220" width="400" height="378" rx="4" fill="none" stroke="#999" stroke-width="0.7" stroke-dasharray="4 3"/>
+<text class="ts2" x="66" y="240" fill="#5F5E5A">Next.js 13.5 · Docker · port 4028</text>
+
+<rect x="70" y="254" width="360" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="250" y="276" text-anchor="middle" fill="#3C3489">Trang UI (App Router)</text>
+<text class="ts2" x="250" y="294" text-anchor="middle" fill="#534AB7">20+ trang giao diện tiếng Việt</text>
+
+<rect x="70" y="322" width="360" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="250" y="344" text-anchor="middle" fill="#3C3489">API routes</text>
+<text class="ts2" x="250" y="362" text-anchor="middle" fill="#534AB7">80+ endpoint REST</text>
+
+<rect x="70" y="390" width="360" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="250" y="412" text-anchor="middle" fill="#3C3489">Service layer</text>
+<text class="ts2" x="250" y="430" text-anchor="middle" fill="#534AB7">60 service nghiệp vụ</text>
+
+<rect x="70" y="458" width="360" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="250" y="480" text-anchor="middle" fill="#3C3489">Thư viện lõi</text>
+<text class="ts2" x="250" y="498" text-anchor="middle" fill="#534AB7">db.ts · RBAC · Zimbra · ZKTeco</text>
+
+<rect x="70" y="526" width="170" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="155" y="548" text-anchor="middle" fill="#3C3489">SSE broadcaster</text>
+<text class="ts2" x="155" y="566" text-anchor="middle" fill="#534AB7">realtime UI</text>
+
+<rect x="260" y="526" width="170" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="345" y="548" text-anchor="middle" fill="#3C3489">ZKTeco poller</text>
+<text class="ts2" x="345" y="566" text-anchor="middle" fill="#534AB7">kéo dữ liệu 30s</text>
+
+<line x1="250" y1="598" x2="250" y2="638" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<rect x="70" y="642" width="360" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="250" y="664" text-anchor="middle" fill="#2C2C2A">PostgreSQL</text>
+<text class="ts2" x="250" y="682" text-anchor="middle" fill="#5F5E5A">self-hosted · pg Pool</text>
+
+<rect x="482" y="236" width="146" height="52" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="0.7"/>
+<text class="th2" x="555" y="258" text-anchor="middle" fill="#712B13">Máy chấm công</text>
+<text class="ts2" x="555" y="276" text-anchor="middle" fill="#993C1D">FA210 · push ADMS</text>
+
+<line x1="555" y1="236" x2="555" y2="186" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<rect x="470" y="318" width="170" height="242" rx="4" fill="none" stroke="#999" stroke-width="0.7" stroke-dasharray="4 3"/>
+<text class="ts2" x="482" y="334" fill="#5F5E5A">dịch vụ ngoài</text>
+
+<rect x="482" y="344" width="146" height="52" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="0.7"/>
+<text class="th2" x="555" y="366" text-anchor="middle" fill="#712B13">Zimbra</text>
+<text class="ts2" x="555" y="384" text-anchor="middle" fill="#993C1D">SOAP admin API</text>
+
+<rect x="482" y="416" width="146" height="52" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="0.7"/>
+<text class="th2" x="555" y="438" text-anchor="middle" fill="#712B13">AWS SES</text>
+<text class="ts2" x="555" y="456" text-anchor="middle" fill="#993C1D">email hệ thống</text>
+
+<rect x="482" y="488" width="146" height="52" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="0.7"/>
+<text class="th2" x="555" y="510" text-anchor="middle" fill="#712B13">Telegram</text>
+<text class="ts2" x="555" y="528" text-anchor="middle" fill="#993C1D">bot thông báo</text>
+
+<line x1="430" y1="416" x2="466" y2="416" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<path d="M430,552 L460,552 L460,262 L478,262" fill="none" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar)"/>
+
+<path d="M70,552 L44,552 L44,66 L211,66" fill="none" stroke="#7F77DD" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arp)"/>
+
+<text class="ts2" x="70" y="724" fill="#5F5E5A">Tím: bên trong app · Cam: hệ thống ngoài · Nét đứt tím: kênh realtime SSE về trình duyệt</text>
+</svg>
+
+<div class="note">
+<b>Tiến trình nền</b> khởi động cùng server qua <code>instrumentation.ts</code>: (1) ZKTeco poller — kéo dữ liệu chấm công mỗi 30 giây, có watchdog tự phục hồi mỗi 60 giây; (2) Scheduler nhắc gia hạn hợp đồng — chạy 9h/15h; (3) Scheduler đánh giá thử việc — chạy 9h/15h.
+</div>
+</div>
+
+<div class="section">
+<h2>2. Luồng xử lý một request chuẩn (kèm kiểm tra quyền RBAC)</h2>
+<p>Mọi thao tác trên webapp đi qua đúng một con đường: UI → API → kiểm tra quyền → service → database. Đây là pattern bắt buộc của toàn bộ 80+ endpoint.</p>
+
+<svg viewBox="0 0 680 662" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="70" y="40" width="320" height="52" rx="4" fill="#FAFAF7" stroke="#B4B2A9" stroke-width="0.7"/>
+<text class="th2" x="230" y="62" text-anchor="middle" fill="#2C2C2A">Thao tác trên UI</text>
+<text class="ts2" x="230" y="80" text-anchor="middle" fill="#5F5E5A">'use client' component</text>
+
+<line x1="230" y1="92" x2="230" y2="124" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="128" width="320" height="52" rx="4" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.7"/>
+<text class="th2" x="230" y="150" text-anchor="middle" fill="#633806">fetch API</text>
+<text class="ts2" x="230" y="168" text-anchor="middle" fill="#854F0B">header x-current-user-* (client tự khai)</text>
+
+<line x1="230" y1="180" x2="230" y2="212" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="216" width="320" height="52" rx="4" fill="#FAFAF7" stroke="#B4B2A9" stroke-width="0.7"/>
+<text class="th2" x="230" y="238" text-anchor="middle" fill="#2C2C2A">API route</text>
+<text class="ts2" x="230" y="256" text-anchor="middle" fill="#5F5E5A">checkPermission — RBAC module</text>
+
+<line x1="390" y1="242" x2="426" y2="242" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="430" y="216" width="200" height="52" rx="4" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.7"/>
+<text class="th2" x="530" y="238" text-anchor="middle" fill="#791F1F">Từ chối</text>
+<text class="ts2" x="530" y="256" text-anchor="middle" fill="#A32D2D">403 không có quyền</text>
+
+<line x1="230" y1="268" x2="230" y2="300" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="304" width="320" height="52" rx="4" fill="#FAFAF7" stroke="#B4B2A9" stroke-width="0.7"/>
+<text class="th2" x="230" y="326" text-anchor="middle" fill="#2C2C2A">Service layer</text>
+<text class="ts2" x="230" y="344" text-anchor="middle" fill="#5F5E5A">business logic · src/lib/services</text>
+
+<line x1="390" y1="330" x2="426" y2="330" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="430" y="304" width="210" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="535" y="326" text-anchor="middle" fill="#3C3489">Side-effects</text>
+<text class="ts2" x="535" y="344" text-anchor="middle" fill="#534AB7">SSE · Telegram · thông báo</text>
+
+<line x1="230" y1="356" x2="230" y2="388" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="392" width="320" height="52" rx="4" fill="#FAFAF7" stroke="#B4B2A9" stroke-width="0.7"/>
+<text class="th2" x="230" y="414" text-anchor="middle" fill="#2C2C2A">db.ts</text>
+<text class="ts2" x="230" y="432" text-anchor="middle" fill="#5F5E5A">pg Pool · query / withTransaction</text>
+
+<line x1="230" y1="444" x2="230" y2="476" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="480" width="320" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="230" y="502" text-anchor="middle" fill="#2C2C2A">PostgreSQL</text>
+<text class="ts2" x="230" y="520" text-anchor="middle" fill="#5F5E5A">bảng plural_snake_case · ID text</text>
+
+<line x1="230" y1="532" x2="230" y2="564" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar2)"/>
+
+<rect x="70" y="568" width="320" height="52" rx="4" fill="#FAFAF7" stroke="#B4B2A9" stroke-width="0.7"/>
+<text class="th2" x="230" y="590" text-anchor="middle" fill="#2C2C2A">NextResponse.json</text>
+<text class="ts2" x="230" y="608" text-anchor="middle" fill="#5F5E5A">{ success, data } về UI</text>
+</svg>
+
+<div class="warn">
+<b>⚠ Nợ kỹ thuật cần biết:</b> Quyền hiện được đọc từ header <code>x-user-permissions</code> do client tự gửi — có thể bị giả mạo. Đây là placeholder, cần thay bằng cơ chế xác thực session/token phía server. Ngoài ra còn tồn tại 2 hệ auth song song (DB+bcrypt là luồng thật; <code>authStore.ts</code> mock là legacy cần gỡ).
+</div>
+</div>
+
+<div class="section">
+<h2>3. Luồng chấm công vân tay realtime</h2>
+<p>Hai nguồn dữ liệu (máy đẩy ADMS + poller kéo TCP) cùng đổ về bảng <code>device_punches</code>, chống trùng tuyệt đối bằng <code>ON CONFLICT DO NOTHING</code>, rồi tỏa ra 3 nhánh xử lý song song.</p>
+
+<svg viewBox="0 0 680 440" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<rect x="70" y="40" width="250" height="52" rx="4" fill="#FAECE7" stroke="#993C1D" stroke-width="0.7"/>
+<text class="th2" x="195" y="62" text-anchor="middle" fill="#712B13">Máy FA210 đẩy (push)</text>
+<text class="ts2" x="195" y="80" text-anchor="middle" fill="#993C1D">POST /iclock/cdata · tức thì</text>
+
+<rect x="360" y="40" width="250" height="52" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+<text class="th2" x="485" y="62" text-anchor="middle" fill="#3C3489">ZKTeco poller kéo (pull)</text>
+<text class="ts2" x="485" y="80" text-anchor="middle" fill="#534AB7">TCP 4370 · chu kỳ 30 giây</text>
+
+<line x1="195" y1="92" x2="278" y2="146" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+<line x1="485" y1="92" x2="402" y2="146" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+
+<rect x="190" y="150" width="300" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="340" y="172" text-anchor="middle" fill="#2C2C2A">Bảng device_punches</text>
+<text class="ts2" x="340" y="190" text-anchor="middle" fill="#5F5E5A">ON CONFLICT — không bao giờ trùng</text>
+
+<line x1="340" y1="202" x2="340" y2="234" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+
+<rect x="190" y="238" width="300" height="52" rx="4" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.7"/>
+<text class="th2" x="340" y="260" text-anchor="middle" fill="#2C2C2A">Tra mapping mã → user</text>
+<text class="ts2" x="340" y="278" text-anchor="middle" fill="#5F5E5A">danh bạ mã chấm công</text>
+
+<line x1="340" y1="290" x2="135" y2="336" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+<line x1="340" y1="290" x2="340" y2="336" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+<line x1="340" y1="290" x2="545" y2="336" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#ar3)"/>
+
+<rect x="40" y="340" width="185" height="52" rx="4" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.7"/>
+<text class="th2" x="132" y="362" text-anchor="middle" fill="#085041">SSE broadcast</text>
+<text class="ts2" x="132" y="380" text-anchor="middle" fill="#0F6E56">UI cập nhật tức thì</text>
+
+<rect x="248" y="340" width="185" height="52" rx="4" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.7"/>
+<text class="th2" x="340" y="362" text-anchor="middle" fill="#085041">Thông báo</text>
+<text class="ts2" x="340" y="380" text-anchor="middle" fill="#0F6E56">Telegram · in-app</text>
+
+<rect x="455" y="340" width="185" height="52" rx="4" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.7"/>
+<text class="th2" x="547" y="362" text-anchor="middle" fill="#085041">Tự xử lý</text>
+<text class="ts2" x="547" y="380" text-anchor="middle" fill="#0F6E56">bù công · refresh stats</text>
+</svg>
+
+<div class="note">
+<b>Mã chưa map:</b> nếu mã chấm công chưa được gán cho nhân viên nào, punch vẫn được lưu an toàn vào <code>device_punches</code> — chỉ là 3 nhánh dưới không chạy. Khi admin map xong (hoặc luồng push tự map theo <code>employee_code</code>), dữ liệu cũ tự hiện ra, không cần sync lại. Poller có timeout 90 giây chống treo (bug thư viện zklib) và watchdog 60 giây tự khởi động lại khi máy offline.
+</div>
+</div>
+
+<div class="section">
+<h2>4. Tổng kết các khối nghiệp vụ</h2>
+<p>Webapp gồm <b>14 module RBAC</b> — mỗi module tương ứng một nhánh trang + API + service, phân quyền theo vai trò người dùng:</p>
+
+<table>
+<tr><th style="width:18%">Nhóm</th><th style="width:40%">Module</th><th>Trang chính</th></tr>
+<tr><td>Tài sản</td><td>Quản lý tài sản · Phần cứng · Phần mềm · Yêu cầu xóa</td><td>/asset-management · /tra-cuu/tai-san · /delete-requests</td></tr>
+<tr><td>Vận hành</td><td>Công việc (tasks) · Tickets · Đặt phòng họp</td><td>/tasks · /tickets · /room-bookings</td></tr>
+<tr><td>Nhân sự</td><td>HR (hợp đồng, hồ sơ, đánh giá) · Chấm công</td><td>/nhan-su · /tra-cuu/du-lieu-cong · /ho-so-cua-toi</td></tr>
+<tr><td>Tổ chức</td><td>Sơ đồ tổ chức · Người dùng · Thông báo chung</td><td>/organization · /users</td></tr>
+<tr><td>Hệ thống</td><td>Dashboard · Cài đặt · Lịch sử hoạt động</td><td>/dashboard · /settings · /history</td></tr>
+</table>
+
+<p><b>Quy mô codebase:</b></p>
+<ul>
+<li>19 nhóm trang giao diện (App Router) — toàn bộ tiếng Việt, mobile-first</li>
+<li>47 nhóm API · hơn 80 endpoint REST theo pattern chuẩn</li>
+<li>60 service nghiệp vụ tại <code>src/lib/services/</code></li>
+<li>97 migration database · bảng <code>plural_snake_case</code>, ID dạng text do app sinh</li>
+<li>Realtime: Server-Sent Events (SSE) — chấm công, tasks, thông báo</li>
+</ul>
+
+<p><b>Tích hợp ngoài:</b></p>
+<ul>
+<li><b>Zimbra</b> — quản lý tài khoản email qua SOAP Admin API (tạo/sửa/xóa account, domain)</li>
+<li><b>AWS SES</b> — gửi email hệ thống (đặt lại mật khẩu, nhắc hạn)</li>
+<li><b>Telegram bot</b> — thông báo cá nhân (chấm công, tasks, tickets)</li>
+<li><b>ZKTeco FA210</b> (SN 2145224860331, IP 115.79.205.119) — chấm công vân tay, hỗ trợ cả pull (TCP 4370) lẫn push (ADMS /iclock)</li>
+</ul>
+
+<p style="margin-top:24px; color:#999; font-size:11px; border-top:1px solid #ddd; padding-top:8px;">FADO AssetFlowPro — Tài liệu lưu đồ hệ thống · Lập ngày 11/06/2026 · Nguồn: nhánh afterdeploy</p>
+</div>
+
+</body>
+</html>

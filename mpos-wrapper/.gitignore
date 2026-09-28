@@ -1,0 +1,14 @@
+# Android / Gradle
+local.properties
+.gradle/
+build/
+app/build/
+*.iml
+.idea/
+captures/
+.cxx/
+
+# Keystore / log (không commit)
+*.keystore
+*.jks
+build.log

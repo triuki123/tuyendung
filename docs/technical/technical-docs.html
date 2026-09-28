@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FADO AssetFlowPro — Technical Documentation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #060e1a;
+    --card: #0f1c2e;
+    --card2: #0d1929;
+    --indigo: #4f46e5;
+    --indigo-light: #6366f1;
+    --indigo-dim: rgba(79,70,229,0.15);
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.07);
+    --border-mid: rgba(255,255,255,0.12);
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --cyan: #06b6d4;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --code-bg: #020810;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* LAYOUT */
+  .shell { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-mid) transparent;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-mark {
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--indigo);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px; color: #fff;
+    flex-shrink: 0;
+  }
+  .logo-text { line-height: 1.2; }
+  .logo-text .name { font-size: 15px; font-weight: 700; color: var(--fg); }
+  .logo-text .sub { font-size: 11px; color: var(--muted); }
+
+  .sidebar-nav { padding: 12px 12px; flex: 1; }
+  .nav-group { margin-bottom: 20px; }
+  .nav-group-label {
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 0 8px 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: 8px;
+    font-size: 13px; color: var(--muted);
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--fg); }
+  .nav-item.active { background: var(--indigo-dim); color: var(--indigo-light); }
+  .nav-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+  /* MAIN */
+  .main { flex: 1; overflow: hidden; }
+
+  /* TOPBAR */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(6,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar-title { font-size: 20px; font-weight: 700; }
+  .topbar-badges { display: flex; gap: 8px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge-indigo { background: var(--indigo-dim); color: var(--indigo-light); border: 1px solid rgba(99,102,241,0.3); }
+  .badge-green { background: rgba(16,185,129,0.1); color: var(--green); border: 1px solid rgba(16,185,129,0.25); }
+  .badge-muted { background: rgba(148,163,184,0.08); color: var(--muted); border: 1px solid var(--border); }
+
+  /* CONTENT */
+  .content { padding: 36px 40px 80px; max-width: 900px; }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 56px;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .icon-blue { background: rgba(79,70,229,0.18); }
+  .icon-green { background: rgba(16,185,129,0.15); }
+  .icon-yellow { background: rgba(245,158,11,0.15); }
+  .icon-cyan { background: rgba(6,182,212,0.15); }
+  .icon-red { background: rgba(239,68,68,0.15); }
+  .icon-purple { background: rgba(167,139,250,0.15); }
+
+  .section-title { font-size: 20px; font-weight: 700; }
+  .section-num {
+    font-size: 11px; color: var(--muted); font-weight: 600;
+    background: var(--border); padding: 2px 7px; border-radius: 6px;
+  }
+
+  h3 { font-size: 15px; font-weight: 700; margin: 28px 0 12px; color: var(--fg); }
+  h4 { font-size: 13px; font-weight: 700; margin: 20px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  p { color: var(--muted); margin-bottom: 12px; line-height: 1.7; }
+  p strong { color: var(--fg); }
+
+  /* CARD */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card-sm {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--fg); margin-bottom: 6px; }
+  .card-desc { font-size: 12px; color: var(--muted); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+
+  /* CODE */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 14px 0 20px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-mid) transparent;
+  }
+  code { font-family: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace; }
+  p code, li code {
+    background: rgba(79,70,229,0.15);
+    border: 1px solid rgba(79,70,229,0.25);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 12px;
+    color: #a5b4fc;
+    font-family: 'Cascadia Code', 'JetBrains Mono', monospace;
+  }
+
+  /* Syntax highlight tokens */
+  .t-kw { color: #c084fc; }        /* keyword */
+  .t-fn { color: #60a5fa; }        /* function */
+  .t-str { color: #34d399; }       /* string */
+  .t-num { color: #fb923c; }       /* number */
+  .t-cmt { color: #4b6075; font-style: italic; } /* comment */
+  .t-type { color: #f59e0b; }      /* type */
+  .t-prop { color: #94a3b8; }      /* property */
+  .t-sql-kw { color: #67e8f9; }    /* SQL keyword */
+  .t-sql-fn { color: #a78bfa; }    /* SQL function */
+  .t-var { color: #f1f5f9; }       /* variable */
+  .t-op { color: #f472b6; }        /* operator */
+  .t-tag { color: #ef4444; }       /* JSX tag */
+  .t-attr { color: #fbbf24; }      /* attribute */
+
+  /* ALERT BOXES */
+  .alert {
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .alert-body { flex: 1; }
+  .alert-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .alert-desc { font-size: 12px; line-height: 1.6; }
+  .alert-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); }
+  .alert-red .alert-title { color: #fca5a5; }
+  .alert-red .alert-desc { color: #f87171; }
+  .alert-yellow { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); }
+  .alert-yellow .alert-title { color: #fde68a; }
+  .alert-yellow .alert-desc { color: #fbbf24; }
+  .alert-blue { background: rgba(79,70,229,0.1); border: 1px solid rgba(79,70,229,0.3); }
+  .alert-blue .alert-title { color: #a5b4fc; }
+  .alert-blue .alert-desc { color: #818cf8; }
+  .alert-green { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); }
+  .alert-green .alert-title { color: #6ee7b7; }
+  .alert-green .alert-desc { color: #34d399; }
+
+  /* TABLE */
+  .tbl { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 12.5px; }
+  .tbl th {
+    background: rgba(255,255,255,0.04); color: var(--muted);
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+    padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .tbl td {
+    padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--fg); vertical-align: top;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* TREE */
+  .tree { font-family: 'Cascadia Code', monospace; font-size: 12.5px; line-height: 1.9; }
+  .tree-item { display: flex; align-items: baseline; gap: 8px; }
+  .tree-branch { color: var(--border-mid); }
+  .tree-dir { color: var(--indigo-light); font-weight: 600; }
+  .tree-file { color: var(--fg); }
+  .tree-note { color: var(--muted); font-size: 11px; }
+
+  /* METHOD PILLS */
+  .method {
+    display: inline-block; padding: 2px 8px; border-radius: 5px;
+    font-size: 10.5px; font-weight: 800; font-family: monospace;
+    margin-right: 6px;
+  }
+  .get { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .post { background: rgba(79,70,229,0.15); color: #818cf8; border: 1px solid rgba(79,70,229,0.3); }
+  .put { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+  .del { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+  /* ENV TABLE */
+  .env-key { color: #f59e0b; font-family: monospace; font-size: 12px; font-weight: 600; }
+  .env-req { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .req-yes { background: rgba(239,68,68,0.15); color: #f87171; }
+  .req-opt { background: rgba(148,163,184,0.1); color: var(--muted); }
+
+  /* STEPS */
+  .steps { counter-reset: step; }
+  .step {
+    display: flex; gap: 16px; margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--indigo-dim); border: 1px solid rgba(99,102,241,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: var(--indigo-light);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 700; color: var(--fg); margin-bottom: 6px; }
+  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+  /* INLINE ROW */
+  .row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 20px 18px 60px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .topbar { padding: 14px 18px; }
+    .topbar-badges { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-icon">A</div>
+      <div class="logo-text">
+        <div class="name">AssetFlowPro</div>
+        <div class="sub">Technical Documentation</div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-group">
+      <div class="nav-group-label">Tổng quan</div>
+      <a class="nav-item active" href="#architecture"><span class="nav-dot"></span>Architecture</a>
+      <a class="nav-item" href="#tech-stack"><span class="nav-dot"></span>Tech Stack</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Backend</div>
+      <a class="nav-item" href="#database"><span class="nav-dot"></span>Database Guide</a>
+      <a class="nav-item" href="#api"><span class="nav-dot"></span>API Patterns</a>
+      <a class="nav-item" href="#migrations"><span class="nav-dot"></span>Migration Guide</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">DevOps</div>
+      <a class="nav-item" href="#deployment"><span class="nav-dot"></span>Deployment Guide</a>
+      <a class="nav-item" href="#env"><span class="nav-dot"></span>Environment Vars</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Bảo mật</div>
+      <a class="nav-item" href="#security"><span class="nav-dot"></span>Security Notes</a>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Technical Documentation</div>
+    <div class="topbar-badges">
+      <span class="badge badge-indigo">Next.js 13.5</span>
+      <span class="badge badge-green">PostgreSQL</span>
+      <span class="badge badge-muted">v2026.06</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 1: ARCHITECTURE                                 -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="architecture">
+      <div class="section-header">
+        <div class="section-icon icon-blue">🏗</div>
+        <div>
+          <span class="section-num">01</span>
+          <div class="section-title">Architecture Specification</div>
+        </div>
+      </div>
+
+      <p>FADO AssetFlowPro là hệ thống quản lý vòng đời tài sản doanh nghiệp, xây dựng trên <strong>Next.js 13.5 App Router</strong>. Toàn bộ frontend, backend API và business logic nằm trong một monorepo duy nhất.</p>
+
+      <h3>App Router Structure</h3>
+      <p>Mỗi feature là một thư mục riêng dưới <code>src/app/</code>, gồm page, components cục bộ, và API routes.</p>
+
+      <pre><code><span class="t-dir">src/</span>
+├── <span class="t-dir">app/</span>
+│   ├── <span class="t-dir">(auth)/</span>                   <span class="t-cmt"># route group — không có segment</span>
+│   │   └── <span class="t-dir">login/page.tsx</span>
+│   ├── <span class="t-dir">dashboard/</span>
+│   │   └── <span class="t-file">page.tsx</span>              <span class="t-cmt"># /dashboard</span>
+│   ├── <span class="t-dir">assets/</span>
+│   │   ├── <span class="t-file">page.tsx</span>              <span class="t-cmt"># /assets — danh sách</span>
+│   │   ├── <span class="t-dir">components/</span>           <span class="t-cmt"># component cục bộ của feature</span>
+│   │   └── <span class="t-dir">[id]/page.tsx</span>         <span class="t-cmt"># /assets/:id — chi tiết</span>
+│   └── <span class="t-dir">api/</span>
+│       ├── <span class="t-dir">assets/</span>
+│       │   ├── <span class="t-file">route.ts</span>          <span class="t-cmt"># GET list, POST create</span>
+│       │   └── <span class="t-dir">[id]/route.ts</span>     <span class="t-cmt"># GET, PUT, DELETE item</span>
+│       ├── <span class="t-dir">auth/</span>
+│       │   └── <span class="t-dir">login/route.ts</span>
+│       └── <span class="t-dir">public/</span>               <span class="t-cmt"># không cần auth</span>
+├── <span class="t-dir">components/</span>               <span class="t-cmt"># shared UI components</span>
+│   ├── <span class="t-dir">ui/</span>                   <span class="t-cmt"># primitives: Button, Input, Badge…</span>
+│   └── <span class="t-file">AppLayout.tsx</span>         <span class="t-cmt"># wrapper chính (Sidebar + Topbar)</span>
+├── <span class="t-dir">hooks/</span>                    <span class="t-cmt"># useUserPermissions, useRealtimeData…</span>
+├── <span class="t-dir">context/</span>                  <span class="t-cmt"># NotificationContext, AuthContext</span>
+└── <span class="t-dir">lib/</span>
+    ├── <span class="t-file">db.ts</span>                 <span class="t-cmt"># pg Pool + helper functions</span>
+    ├── <span class="t-file">modules.ts</span>            <span class="t-cmt"># định nghĩa module + action (RBAC)</span>
+    ├── <span class="t-file">permissions.ts</span>        <span class="t-cmt"># canAccess, hasModulePermission</span>
+    ├── <span class="t-file">api-permissions.ts</span>    <span class="t-cmt"># middleware check quyền cho API</span>
+    ├── <span class="t-dir">zimbra/</span>               <span class="t-cmt"># SOAP client</span>
+    └── <span class="t-dir">services/</span>             <span class="t-cmt"># *Service.ts — business logic</span></code></pre>
+
+      <h3>Module Boundaries</h3>
+      <div class="grid-2">
+        <div class="card-sm">
+          <div class="card-title">📄 Page Layer</div>
+          <div class="card-desc"><code>app/[feature]/page.tsx</code> — Render UI, gọi API, không chứa SQL. Luôn wrap trong <code>&lt;AppLayout&gt;</code>.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">🔌 API Layer</div>
+          <div class="card-desc"><code>app/api/[feature]/route.ts</code> — Nhận request, check auth/permission, gọi service, trả JSON.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">⚙️ Service Layer</div>
+          <div class="card-desc"><code>lib/services/[name]Service.ts</code> — Business logic, SQL query. Hàm thuần, không dùng NextRequest/Response.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">🗄️ DB Layer</div>
+          <div class="card-desc"><code>lib/db.ts</code> — Pool kết nối duy nhất, helper functions. Không tạo Pool mới ở bất kỳ chỗ nào.</div>
+        </div>
+      </div>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div class="alert-body">
+          <div class="alert-title">Quy tắc import chiều dọc</div>
+          <div class="alert-desc">Page → API (qua fetch) → Service → DB. Không import ngược. Service không được import từ <code>app/</code>. DB helper không được import từ <code>lib/services/</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 1b: TECH STACK                                  -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="tech-stack">
+      <div class="section-header">
+        <div class="section-icon icon-purple">⚡</div>
+        <div>
+          <span class="section-num">01b</span>
+          <div class="section-title">Tech Stack</div>
+        </div>
+      </div>
+
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Công nghệ</th>
+            <th>Phiên bản</th>
+            <th>Ghi chú</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend Framework</td><td>Next.js App Router</td><td>13.5</td><td>React Server Components + Client Components</td></tr>
+          <tr><td>UI Library</td><td>React</td><td>19</td><td>Concurrent features, Server Actions</td></tr>
+          <tr><td>Language</td><td>TypeScript</td><td>5.x</td><td>Strict mode bật</td></tr>
+          <tr><td>Styling</td><td>Tailwind CSS + Radix/shadcn</td><td>3.4</td><td>CSS variables cho theming dark</td></tr>
+          <tr><td>Database</td><td>PostgreSQL self-hosted</td><td>15+</td><td>Kết nối qua thư viện <code>pg</code>, KHÔNG Supabase</td></tr>
+          <tr><td>Auth</td><td>bcryptjs + session cookie</td><td>—</td><td>HTTP-only cookie, verify server-side</td></tr>
+          <tr><td>Email</td><td>AWS SES + Nodemailer</td><td>—</td><td>Password reset, notification</td></tr>
+          <tr><td>Realtime</td><td>Server-Sent Events (SSE)</td><td>—</td><td><code>/api/notifications/stream</code></td></tr>
+          <tr><td>External: Email Server</td><td>Zimbra SOAP Admin API</td><td>—</td><td>Quản lý mailbox, chữ ký</td></tr>
+          <tr><td>External: Chấm công</td><td>ZKTeco ADMS HTTP</td><td>—</td><td>Port 8088, pull dữ liệu attendance</td></tr>
+          <tr><td>Deploy</td><td>Docker + Traefik</td><td>—</td><td>Port 4028, domain <code>asset.fadoai.com</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 2: DATABASE                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="database">
+      <div class="section-header">
+        <div class="section-icon icon-green">🗄</div>
+        <div>
+          <span class="section-num">02</span>
+          <div class="section-title">Database Guide</div>
+        </div>
+      </div>
+
+      <h3>Connection — pg Pool</h3>
+      <p>Toàn bộ truy cập DB đi qua <strong>một Pool duy nhất</strong> khởi tạo trong <code>src/lib/db.ts</code>. Không bao giờ tạo <code>new Pool()</code> ở file khác.</p>
+
+      <pre><code><span class="t-cmt">// src/lib/db.ts — cấu hình Pool</span>
+<span class="t-kw">import</span> { Pool } <span class="t-kw">from</span> <span class="t-str">'pg'</span>;
+
+<span class="t-kw">const</span> pool = <span class="t-kw">new</span> <span class="t-fn">Pool</span>({
+  connectionString: process.env.<span class="t-prop">DATABASE_URL</span>,
+  max: <span class="t-fn">parseInt</span>(process.env.<span class="t-prop">PG_POOL_MAX</span> ?? <span class="t-str">'30'</span>),
+  ssl: process.env.<span class="t-prop">PGSSL</span> === <span class="t-str">'true'</span> ? { rejectUnauthorized: <span class="t-kw">true</span> } : <span class="t-kw">false</span>,
+});</code></pre>
+
+      <h3>Helper Functions</h3>
+      <p>Bốn helper chính — sử dụng thay vì <code>pool.query()</code> trực tiếp để có type-safety và error logging đồng nhất.</p>
+
+      <div class="card">
+        <div class="card-title">query&lt;T&gt;(sql, params?) → Promise&lt;T[]&gt;</div>
+        <div class="card-desc">Trả mảng rows. Dùng cho SELECT nhiều kết quả.</div>
+        <pre><code><span class="t-kw">const</span> users = <span class="t-kw">await</span> <span class="t-fn">query</span><span class="t-op">&lt;</span><span class="t-type">User</span><span class="t-op">&gt;</span>(
+  <span class="t-str">`SELECT id, "fullName", email FROM users WHERE "companyId" = $1`</span>,
+  [companyId]
+);</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">queryOne&lt;T&gt;(sql, params?) → Promise&lt;T | null&gt;</div>
+        <div class="card-desc">Trả một row hoặc <code>null</code>. Dùng cho lookup theo ID / điều kiện unique.</div>
+        <pre><code><span class="t-kw">const</span> user = <span class="t-kw">await</span> <span class="t-fn">queryOne</span><span class="t-op">&lt;</span><span class="t-type">User</span><span class="t-op">&gt;</span>(
+  <span class="t-str">`SELECT * FROM users WHERE id = $1`</span>,
+  [userId]
+);
+<span class="t-kw">if</span> (!user) <span class="t-kw">throw new</span> <span class="t-fn">Error</span>(<span class="t-str">'Không tìm thấy người dùng'</span>);</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">execute(sql, params?) → Promise&lt;QueryResult&gt;</div>
+        <div class="card-desc">Cho INSERT / UPDATE / DELETE — không cần lấy rows. Trả <code>QueryResult</code> (có <code>.rowCount</code>).</div>
+        <pre><code><span class="t-kw">await</span> <span class="t-fn">execute</span>(
+  <span class="t-str">`UPDATE assets SET status = $1, "updatedAt" = NOW() WHERE id = $2`</span>,
+  [<span class="t-str">'inactive'</span>, assetId]
+);</code></pre>
+      </div>
+
+      <div class="card">
+        <div class="card-title">withTransaction&lt;T&gt;(fn) → Promise&lt;T&gt;</div>
+        <div class="card-desc">Bao bọc nhiều thao tác trong một transaction. Tự động ROLLBACK nếu có lỗi.</div>
+        <pre><code><span class="t-kw">const</span> result = <span class="t-kw">await</span> <span class="t-fn">withTransaction</span>(<span class="t-kw">async</span> (client) <span class="t-op">=&gt;</span> {
+  <span class="t-kw">await</span> client.<span class="t-fn">query</span>(<span class="t-str">`INSERT INTO asset_logs ...`</span>, [...]);
+  <span class="t-kw">await</span> client.<span class="t-fn">query</span>(<span class="t-str">`UPDATE assets SET ...`</span>, [...]);
+  <span class="t-kw">return</span> { success: <span class="t-kw">true</span> };
+});</code></pre>
+      </div>
+
+      <h3>buildInsert & buildUpdateById</h3>
+      <p>Hai helper sinh SQL tự động, tự quote camelCase columns. Không cần viết INSERT thủ công.</p>
+
+      <pre><code><span class="t-cmt">// INSERT</span>
+<span class="t-kw">const</span> { sql, values } = <span class="t-fn">buildInsert</span>(<span class="t-str">'assets'</span>, {
+  id: <span class="t-str">'ast_abc123'</span>,
+  assetName: <span class="t-str">'Laptop Dell XPS'</span>,
+  serialNumber: <span class="t-str">'SN-001'</span>,
+  companyId: <span class="t-str">'cmp_xyz'</span>,
+  createdAt: <span class="t-kw">new</span> <span class="t-type">Date</span>(),
+});
+<span class="t-kw">await</span> <span class="t-fn">execute</span>(sql, values);
+<span class="t-cmt">// → INSERT INTO assets ("id","assetName","serialNumber","companyId","createdAt")</span>
+<span class="t-cmt">//   VALUES ($1,$2,$3,$4,$5)</span>
+
+<span class="t-cmt">// UPDATE by ID</span>
+<span class="t-kw">const</span> { sql: uSql, values: uVals } = <span class="t-fn">buildUpdateById</span>(<span class="t-str">'assets'</span>, assetId, {
+  assetName: <span class="t-str">'Laptop Dell XPS 15'</span>,
+  updatedAt: <span class="t-kw">new</span> <span class="t-type">Date</span>(),
+});
+<span class="t-kw">await</span> <span class="t-fn">execute</span>(uSql, uVals);
+<span class="t-cmt">// → UPDATE assets SET "assetName"=$1,"updatedAt"=$2 WHERE id=$3</span></code></pre>
+
+      <h3>Naming Conventions</h3>
+      <table class="tbl">
+        <thead>
+          <tr><th>Đối tượng</th><th>Convention</th><th>Ví dụ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tên bảng</td><td><code>plural_snake_case</code></td><td><code>users</code>, <code>room_bookings</code>, <code>asset_logs</code></td></tr>
+          <tr><td>Primary Key</td><td><code>TEXT PRIMARY KEY</code> — app-generated</td><td><code>'usr_abc123'</code>, <code>'ast_xyz789'</code></td></tr>
+          <tr><td>Cột thường</td><td>snake_case hoặc camelCase (trộn)</td><td><code>created_at</code>, <code>fullName</code>, <code>userId</code></td></tr>
+          <tr><td>Cột camelCase trong SQL</td><td>Phải <strong>double-quote</strong></td><td><code>SELECT "fullName", "roleLabel" FROM users</code></td></tr>
+          <tr><td>Foreign Key</td><td>Tên bảng singular + Id</td><td><code>companyId</code>, <code>userId</code>, <code>assetId</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          <div class="alert-title">DATE column gotcha</div>
+          <div class="alert-desc"><code>pg</code> mặc định parse cột <code>DATE</code> thành JavaScript <code>Date</code> object → bị offset timezone. Fix: <code>db.ts</code> đã cấu hình <code>pg.types.setTypeParser(1082, val =&gt; val)</code> để trả chuỗi <code>YYYY-MM-DD</code> nguyên bản. Không override lại.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 3: API PATTERNS                                 -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="api">
+      <div class="section-header">
+        <div class="section-icon icon-cyan">🔌</div>
+        <div>
+          <span class="section-num">03</span>
+          <div class="section-title">API Documentation Patterns</div>
+        </div>
+      </div>
+
+      <h3>Route Structure</h3>
+      <table class="tbl">
+        <thead>
+          <tr><th>Pattern</th><th>File</th><th>Methods</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/api/[feature]</code></td><td><code>app/api/[feature]/route.ts</code></td><td><span class="method get">GET</span> list, <span class="method post">POST</span> create</td></tr>
+          <tr><td><code>/api/[feature]/[id]</code></td><td><code>app/api/[feature]/[id]/route.ts</code></td><td><span class="method get">GET</span> one, <span class="method put">PUT</span> update, <span class="method del">DEL</span> delete</td></tr>
+          <tr><td><code>/api/public/*</code></td><td><code>app/api/public/.../route.ts</code></td><td>Không cần auth</td></tr>
+          <tr><td><code>/api/auth/*</code></td><td><code>app/api/auth/.../route.ts</code></td><td>Login, logout, session</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Auth Check Pattern</h3>
+      <p>Mọi protected route đều đọc <code>x-current-user-id</code> header (được middleware Next.js inject từ cookie). Nếu không có → 401.</p>
+
+      <pre><code><span class="t-cmt">// Chuẩn xác auth — đầu mỗi API handler</span>
+<span class="t-kw">import</span> { <span class="t-fn">NextRequest</span>, <span class="t-fn">NextResponse</span> } <span class="t-kw">from</span> <span class="t-str">'next/server'</span>;
+
+<span class="t-kw">export async function</span> <span class="t-fn">GET</span>(request: <span class="t-type">NextRequest</span>) {
+  <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+  <span class="t-kw">if</span> (!userId) {
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Chưa đăng nhập'</span> }, { status: <span class="t-num">401</span> });
+  }
+  <span class="t-cmt">// ... tiếp tục</span>
+}</code></pre>
+
+      <h3>Permission Check Pattern</h3>
+      <pre><code><span class="t-kw">import</span> { checkPermission } <span class="t-kw">from</span> <span class="t-str">'@/lib/api-permissions'</span>;
+
+<span class="t-kw">export async function</span> <span class="t-fn">POST</span>(request: <span class="t-type">NextRequest</span>) {
+  <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+  <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Unauthorized'</span> }, { status: <span class="t-num">401</span> });
+
+  <span class="t-kw">const</span> hasPermission = <span class="t-kw">await</span> <span class="t-fn">checkPermission</span>(request, <span class="t-str">'assets'</span>, <span class="t-str">'create'</span>);
+  <span class="t-kw">if</span> (!hasPermission) {
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Không có quyền'</span> }, { status: <span class="t-num">403</span> });
+  }
+  <span class="t-cmt">// ... xử lý</span>
+}</code></pre>
+
+      <div class="divider"></div>
+
+      <h3>GET Collection — Ví dụ đầy đủ</h3>
+      <pre><code><span class="t-cmt">// app/api/assets/route.ts</span>
+<span class="t-kw">import</span> { NextRequest, NextResponse } <span class="t-kw">from</span> <span class="t-str">'next/server'</span>;
+<span class="t-kw">import</span> { getAssets } <span class="t-kw">from</span> <span class="t-str">'@/lib/services/assetService'</span>;
+
+<span class="t-kw">export async function</span> <span class="t-fn">GET</span>(request: <span class="t-type">NextRequest</span>) {
+  <span class="t-kw">try</span> {
+    <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+    <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Chưa đăng nhập'</span> }, { status: <span class="t-num">401</span> });
+
+    <span class="t-kw">const</span> { searchParams } = <span class="t-kw">new</span> URL(request.url);
+    <span class="t-kw">const</span> page    = <span class="t-fn">parseInt</span>(searchParams.<span class="t-fn">get</span>(<span class="t-str">'page'</span>) ?? <span class="t-str">'1'</span>);
+    <span class="t-kw">const</span> limit   = <span class="t-fn">parseInt</span>(searchParams.<span class="t-fn">get</span>(<span class="t-str">'limit'</span>) ?? <span class="t-str">'20'</span>);
+    <span class="t-kw">const</span> search  = searchParams.<span class="t-fn">get</span>(<span class="t-str">'search'</span>) ?? <span class="t-str">''</span>;
+
+    <span class="t-kw">const</span> { data, total } = <span class="t-kw">await</span> <span class="t-fn">getAssets</span>({ page, limit, search, userId });
+
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ success: <span class="t-kw">true</span>, data, total, page, limit });
+  } <span class="t-kw">catch</span> (err) {
+    console.<span class="t-fn">error</span>(<span class="t-str">'GET /api/assets error:'</span>, err);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Lỗi server'</span> }, { status: <span class="t-num">500</span> });
+  }
+}</code></pre>
+
+      <h3>GET by ID</h3>
+      <pre><code><span class="t-cmt">// app/api/assets/[id]/route.ts</span>
+<span class="t-kw">export async function</span> <span class="t-fn">GET</span>(
+  request: <span class="t-type">NextRequest</span>,
+  { params }: { params: { id: <span class="t-type">string</span> } }
+) {
+  <span class="t-kw">try</span> {
+    <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+    <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Unauthorized'</span> }, { status: <span class="t-num">401</span> });
+
+    <span class="t-kw">const</span> asset = <span class="t-kw">await</span> <span class="t-fn">getAssetById</span>(params.id);
+    <span class="t-kw">if</span> (!asset) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Không tìm thấy'</span> }, { status: <span class="t-num">404</span> });
+
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ success: <span class="t-kw">true</span>, data: asset });
+  } <span class="t-kw">catch</span> (err) {
+    console.<span class="t-fn">error</span>(<span class="t-str">`GET /api/assets/${params.id} error:`</span>, err);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Lỗi server'</span> }, { status: <span class="t-num">500</span> });
+  }
+}</code></pre>
+
+      <h3>POST Create</h3>
+      <pre><code><span class="t-kw">export async function</span> <span class="t-fn">POST</span>(request: <span class="t-type">NextRequest</span>) {
+  <span class="t-kw">try</span> {
+    <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+    <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Unauthorized'</span> }, { status: <span class="t-num">401</span> });
+
+    <span class="t-kw">const</span> body = <span class="t-kw">await</span> request.<span class="t-fn">json</span>();
+    <span class="t-kw">const</span> { assetName, serialNumber, categoryId } = body;
+
+    <span class="t-kw">if</span> (!assetName || !serialNumber) {
+      <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Thiếu thông tin bắt buộc'</span> }, { status: <span class="t-num">400</span> });
+    }
+
+    <span class="t-kw">const</span> asset = <span class="t-kw">await</span> <span class="t-fn">createAsset</span>({ assetName, serialNumber, categoryId, createdBy: userId });
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ success: <span class="t-kw">true</span>, data: asset }, { status: <span class="t-num">201</span> });
+  } <span class="t-kw">catch</span> (err) {
+    console.<span class="t-fn">error</span>(<span class="t-str">'POST /api/assets error:'</span>, err);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Lỗi server'</span> }, { status: <span class="t-num">500</span> });
+  }
+}</code></pre>
+
+      <h3>PUT Update & DELETE</h3>
+      <pre><code><span class="t-kw">export async function</span> <span class="t-fn">PUT</span>(
+  request: <span class="t-type">NextRequest</span>,
+  { params }: { params: { id: <span class="t-type">string</span> } }
+) {
+  <span class="t-kw">try</span> {
+    <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+    <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Unauthorized'</span> }, { status: <span class="t-num">401</span> });
+
+    <span class="t-kw">const</span> body = <span class="t-kw">await</span> request.<span class="t-fn">json</span>();
+    <span class="t-kw">const</span> updated = <span class="t-kw">await</span> <span class="t-fn">updateAsset</span>(params.id, body);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ success: <span class="t-kw">true</span>, data: updated });
+  } <span class="t-kw">catch</span> (err) {
+    console.<span class="t-fn">error</span>(<span class="t-str">`PUT /api/assets/${params.id} error:`</span>, err);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Lỗi server'</span> }, { status: <span class="t-num">500</span> });
+  }
+}
+
+<span class="t-kw">export async function</span> <span class="t-fn">DELETE</span>(
+  request: <span class="t-type">NextRequest</span>,
+  { params }: { params: { id: <span class="t-type">string</span> } }
+) {
+  <span class="t-kw">try</span> {
+    <span class="t-kw">const</span> userId = request.headers.<span class="t-fn">get</span>(<span class="t-str">'x-current-user-id'</span>);
+    <span class="t-kw">if</span> (!userId) <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Unauthorized'</span> }, { status: <span class="t-num">401</span> });
+
+    <span class="t-kw">await</span> <span class="t-fn">deleteAsset</span>(params.id);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ success: <span class="t-kw">true</span>, message: <span class="t-str">'Đã xóa'</span> });
+  } <span class="t-kw">catch</span> (err) {
+    console.<span class="t-fn">error</span>(<span class="t-str">`DELETE /api/assets/${params.id} error:`</span>, err);
+    <span class="t-kw">return</span> NextResponse.<span class="t-fn">json</span>({ error: <span class="t-str">'Lỗi server'</span> }, { status: <span class="t-num">500</span> });
+  }
+}</code></pre>
+
+      <h3>Response Format chuẩn</h3>
+      <div class="grid-2">
+        <div class="card-sm">
+          <div class="card-title">✅ Success</div>
+          <pre style="margin:8px 0 0;"><code>{ <span class="t-str">"success"</span>: <span class="t-kw">true</span>,
+  <span class="t-str">"data"</span>: ...,
+  <span class="t-str">"total"</span>: <span class="t-num">42</span>   <span class="t-cmt">// list only</span>
+}</code></pre>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">❌ Error</div>
+          <pre style="margin:8px 0 0;"><code>{ <span class="t-str">"error"</span>: <span class="t-str">"Thông báo lỗi"</span> }
+<span class="t-cmt">// HTTP status: 400/401/403/404/500</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 4: MIGRATIONS                                   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="migrations">
+      <div class="section-header">
+        <div class="section-icon icon-yellow">📦</div>
+        <div>
+          <span class="section-num">04</span>
+          <div class="section-title">Migration Guide</div>
+        </div>
+      </div>
+
+      <h3>Quy trình bắt buộc — Mỗi cột mới = 1 migration</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Xác định số thứ tự tiếp theo</div>
+            <div class="step-desc">Kiểm tra thư mục <code>migrations/</code>, lấy số lớn nhất + 1. Ví dụ: có <code>154_...</code> → tạo <code>155_...</code>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Tạo file SQL với tên chuẩn</div>
+            <div class="step-desc">Format: <code>NNN_description_snake_case.sql</code>. Ví dụ: <code>155_add_telegram_id_to_users.sql</code>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Viết SQL dùng IF NOT EXISTS</div>
+            <div class="step-desc">Đảm bảo migration idempotent — chạy lại không lỗi.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Chạy migration trên DB dev</div>
+            <div class="step-desc">Chạy bằng <code>psql</code> hoặc <code>run-migrations.js</code> trước khi test.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Template migration chuẩn</h3>
+      <pre><code><span class="t-cmt">-- Migration 155: Thêm telegram_id vào bảng users</span>
+<span class="t-sql-kw">ALTER TABLE</span> users
+  <span class="t-sql-kw">ADD COLUMN IF NOT EXISTS</span> telegram_id   <span class="t-type">TEXT</span>    <span class="t-sql-kw">UNIQUE</span>,
+  <span class="t-sql-kw">ADD COLUMN IF NOT EXISTS</span> telegram_name  <span class="t-type">TEXT</span>,
+  <span class="t-sql-kw">ADD COLUMN IF NOT EXISTS</span> telegram_linked_at <span class="t-type">TIMESTAMPTZ</span>;
+
+<span class="t-cmt">-- Index nếu cần</span>
+<span class="t-sql-kw">CREATE UNIQUE INDEX IF NOT EXISTS</span> idx_users_telegram_id
+  <span class="t-sql-kw">ON</span> users(telegram_id) <span class="t-sql-kw">WHERE</span> telegram_id <span class="t-sql-kw">IS NOT NULL</span>;</code></pre>
+
+      <h3>Tạo bảng mới</h3>
+      <pre><code><span class="t-cmt">-- Migration 156: Tạo bảng user_signatures</span>
+<span class="t-sql-kw">CREATE TABLE IF NOT EXISTS</span> user_signatures (
+  id            <span class="t-type">TEXT PRIMARY KEY</span>,
+  <span class="t-str">"userId"</span>      <span class="t-type">TEXT NOT NULL REFERENCES</span> users(id) <span class="t-sql-kw">ON DELETE CASCADE</span>,
+  template_id   <span class="t-type">TEXT NOT NULL</span>,
+  html_content  <span class="t-type">TEXT</span>,
+  is_active     <span class="t-type">BOOLEAN DEFAULT TRUE</span>,
+  created_at    <span class="t-type">TIMESTAMPTZ DEFAULT NOW()</span>,
+  updated_at    <span class="t-type">TIMESTAMPTZ DEFAULT NOW()</span>
+);</code></pre>
+
+      <h3>Migration Runner</h3>
+      <p>File <code>run-migrations.js</code> ở root theo dõi migration đã chạy trong bảng <code>schema_migrations</code>. Tự động chạy khi app khởi động (startup script).</p>
+
+      <pre><code><span class="t-cmt">// Bảng tracking</span>
+<span class="t-sql-kw">CREATE TABLE IF NOT EXISTS</span> schema_migrations (
+  filename   <span class="t-type">TEXT PRIMARY KEY</span>,
+  run_at     <span class="t-type">TIMESTAMPTZ DEFAULT NOW()</span>
+);
+<span class="t-cmt">// Runner đọc thư mục migrations/, sắp xếp numeric,</span>
+<span class="t-cmt">// bỏ qua file đã có trong schema_migrations.</span></code></pre>
+
+      <h3>reconcile.sql</h3>
+      <p>File <code>migrations/reconcile.sql</code> là script fix thủ công khi có migration trùng số thứ tự hoặc cần idempotent re-run toàn bộ schema. Chạy một lần khi setup DB mới trên server sạch.</p>
+
+      <div class="alert alert-red">
+        <span class="alert-icon">🔴</span>
+        <div class="alert-body">
+          <div class="alert-title">Migration số thứ tự trùng — vấn đề đã biết</div>
+          <div class="alert-desc">Hiện có hai file mang số <code>008</code>, <code>009</code>, <code>012</code> trong thư mục migrations. Thứ tự chạy trên DB mới là không xác định. Khi init DB lần đầu, dùng <code>reconcile.sql</code> để đảm bảo schema đúng.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 5: DEPLOYMENT                                   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="deployment">
+      <div class="section-header">
+        <div class="section-icon icon-cyan">🚀</div>
+        <div>
+          <span class="section-num">05</span>
+          <div class="section-title">Deployment Guide</div>
+        </div>
+      </div>
+
+      <h3>Docker Build Process</h3>
+      <pre><code><span class="t-cmt"># Dockerfile pattern</span>
+<span class="t-sql-kw">FROM</span> node:20-alpine <span class="t-kw">AS</span> builder
+<span class="t-sql-kw">WORKDIR</span> /app
+<span class="t-sql-kw">COPY</span> package*.json ./
+<span class="t-sql-kw">RUN</span> npm ci --production=false
+<span class="t-sql-kw">COPY</span> . .
+<span class="t-sql-kw">RUN</span> npm run build
+
+<span class="t-sql-kw">FROM</span> node:20-alpine <span class="t-kw">AS</span> runner
+<span class="t-sql-kw">WORKDIR</span> /app
+<span class="t-sql-kw">ENV</span> NODE_ENV=production
+<span class="t-sql-kw">ENV</span> PORT=4028
+<span class="t-sql-kw">COPY</span> --from=builder /app/.next/standalone ./
+<span class="t-sql-kw">COPY</span> --from=builder /app/.next/static ./.next/static
+<span class="t-sql-kw">COPY</span> --from=builder /app/public ./public
+<span class="t-sql-kw">COPY</span> --from=builder /app/migrations ./migrations
+<span class="t-sql-kw">COPY</span> --from=builder /app/run-migrations.js ./
+<span class="t-sql-kw">EXPOSE</span> 4028
+<span class="t-sql-kw">CMD</span> [<span class="t-str">"sh"</span>, <span class="t-str">"-c"</span>, <span class="t-str">"node run-migrations.js && node server.js"</span>]</code></pre>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          <div class="alert-title">Không dùng Google Fonts</div>
+          <div class="alert-desc">Server Coolify chặn <code>fonts.gstatic.com</code>. Không import <code>next/font/google</code>. Dùng <code>font-family</code> system fallback (<code>Plus Jakarta Sans</code> local hoặc system-ui).</div>
+        </div>
+      </div>
+
+      <h3>Coolify Deployment Steps</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Tạo resource mới trên Coolify</div>
+            <div class="step-desc">Chọn <strong>Docker Compose</strong> hoặc <strong>Dockerfile</strong>. Trỏ đến repo Git branch chính.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Cấu hình Environment Variables</div>
+            <div class="step-desc">Điền đầy đủ các biến môi trường trong bảng dưới. <strong>Đặc biệt:</strong> <code>NEXT_PUBLIC_APP_URL</code> phải có giá trị build-time.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Cấu hình Port và Domain</div>
+            <div class="step-desc">App port: <code>4028</code>. Domain: <code>asset.fadoai.com</code>. Traefik tự cấp SSL.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Deploy và kiểm tra migration log</div>
+            <div class="step-desc">Xem log startup — dòng đầu phải có <code>run-migrations.js</code> chạy thành công trước khi <code>node server.js</code> bắt đầu.</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Traefik Labels (docker-compose)</h3>
+      <pre><code><span class="t-cmt"># docker-compose.yml labels cho Traefik</span>
+labels:
+  - <span class="t-str">"traefik.enable=true"</span>
+  - <span class="t-str">"traefik.http.routers.assetflow.rule=Host(`asset.fadoai.com`)"</span>
+  - <span class="t-str">"traefik.http.routers.assetflow.entrypoints=websecure"</span>
+  - <span class="t-str">"traefik.http.routers.assetflow.tls.certresolver=letsencrypt"</span>
+  - <span class="t-str">"traefik.http.services.assetflow.loadbalancer.server.port=4028"</span></code></pre>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 5b: ENV VARS                                    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="env">
+      <div class="section-header">
+        <div class="section-icon icon-green">🔑</div>
+        <div>
+          <span class="section-num">05b</span>
+          <div class="section-title">Environment Variables</div>
+        </div>
+      </div>
+
+      <table class="tbl">
+        <thead>
+          <tr><th>Biến</th><th>Bắt buộc</th><th>Mô tả</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="env-key">DATABASE_URL</span></td>
+            <td><span class="env-req req-yes">BẮT BUỘC</span></td>
+            <td>postgres://user:pass@host:5432/db — hoặc dùng PGHOST/PGPORT/PGUSER riêng</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">PGSSL</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td><code>false</code> cho local, <code>true</code> cho cloud RDS</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">PG_POOL_MAX</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>Số connection tối đa (default: 30)</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">NEXT_PUBLIC_APP_URL</span></td>
+            <td><span class="env-req req-yes">BẮT BUỘC</span></td>
+            <td>https://asset.fadoai.com — phải set trước khi build</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">AWS_REGION</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>ap-southeast-1 (cho AWS SES email)</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">AWS_ACCESS_KEY_ID</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>IAM key có quyền SES SendEmail</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">AWS_SECRET_ACCESS_KEY</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>IAM secret tương ứng</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">SES_FROM_EMAIL</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>Địa chỉ gửi email (đã verify trên SES)</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">ZIMBRA_ADMIN_URL</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>https://mail.company.com:7071/service/admin/soap</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">ZIMBRA_ADMIN_USER</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>admin@company.com</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">ZIMBRA_ADMIN_PASSWORD</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>Mật khẩu admin Zimbra</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">ZIMBRA_TLS_REJECT_UNAUTHORIZED</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td><code>false</code> nếu Zimbra dùng self-signed cert</td>
+          </tr>
+          <tr>
+            <td><span class="env-key">ZIMBRA_DEFAULT_PASSWORD_SUFFIX</span></td>
+            <td><span class="env-req req-opt">tùy chọn</span></td>
+            <td>Hậu tố mật khẩu mặc định khi tạo mailbox (vd: <code>@123</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-blue">
+        <span class="alert-icon">💡</span>
+        <div class="alert-body">
+          <div class="alert-title">NEXT_PUBLIC_* phải có lúc build</div>
+          <div class="alert-desc">Các biến có prefix <code>NEXT_PUBLIC_</code> được bake vào bundle JS lúc <code>npm run build</code>. Thay đổi sau khi build không có tác dụng — phải rebuild image.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- SECTION 6: SECURITY                                     -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="section" id="security">
+      <div class="section-header">
+        <div class="section-icon icon-red">🔐</div>
+        <div>
+          <span class="section-num">06</span>
+          <div class="section-title">Security Notes & Known Tech Debt</div>
+        </div>
+      </div>
+
+      <p>Phần này ghi lại các <strong>vấn đề bảo mật đã biết</strong> trong codebase hiện tại. Không nhân rộng các pattern này — ưu tiên fix khi làm feature mới liên quan.</p>
+
+      <div class="alert alert-red">
+        <span class="alert-icon">🔴</span>
+        <div class="alert-body">
+          <div class="alert-title">CRITICAL: x-user-permissions header có thể bị giả mạo</div>
+          <div class="alert-desc">
+            <code>api-permissions.checkPermission()</code> hiện đọc quyền từ header <code>x-user-permissions</code> do <strong>client tự gửi</strong>. Bất kỳ ai cũng có thể gửi header này với quyền tùy ý. Đây là placeholder chưa có auth server-side thật. Khi viết API mới, đừng coi cơ chế này là đủ an toàn. Cần thay bằng token/session verify phía server.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-red">
+        <span class="alert-icon">🟠</span>
+        <div class="alert-body">
+          <div class="alert-title">Hai hệ auth song song — mâu thuẫn</div>
+          <div class="alert-desc">
+            <strong>Luồng đúng:</strong> <code>POST /api/auth/login</code> → DB lookup + <code>bcrypt.compare()</code> → session cookie.<br>
+            <strong>Legacy:</strong> <code>src/lib/authStore.ts</code> dùng <code>MOCK_USERS</code> so sánh <strong>password plaintext</strong> phía client.<br>
+            Cần gỡ phần mock và thống nhất về luồng bcrypt. Không viết code mới dùng authStore.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">🟡</span>
+        <div class="alert-body">
+          <div class="alert-title">Migration trùng số thứ tự</div>
+          <div class="alert-desc">
+            Tồn tại hai file mang số <code>008</code>, <code>009</code>, <code>012</code> trong thư mục <code>migrations/</code>. Thứ tự chạy khi init DB mới là không xác định (phụ thuộc filesystem sort). Rủi ro: schema không nhất quán trên server mới. Cần rename và consolidate.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-yellow">
+        <span class="alert-icon">🟡</span>
+        <div class="alert-body">
+          <div class="alert-title">RLS Policy không có giá trị bảo mật</div>
+          <div class="alert-desc">
+            Một số migration cũ tạo RLS policy với <code>USING(true)</code> — nghĩa là cho phép tất cả. Policy này không hạn chế gì và cho cảm giác an toàn giả. Access control thực sự phải thực hiện ở application layer (API route + service).
+          </div>
+        </div>
+      </div>
+
+      <h3>Hướng fix ưu tiên</h3>
+      <table class="tbl">
+        <thead>
+          <tr><th>Vấn đề</th><th>Độ ưu tiên</th><th>Hướng giải quyết</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Permission header spoofable</td>
+            <td><span style="color:#ef4444;font-weight:700;">CRITICAL</span></td>
+            <td>Verify quyền từ DB dựa trên <code>userId</code> từ session cookie — không đọc từ client header</td>
+          </tr>
+          <tr>
+            <td>Dual auth system</td>
+            <td><span style="color:#f59e0b;font-weight:700;">HIGH</span></td>
+            <td>Xóa <code>authStore.ts</code> và MOCK_USERS. Tất cả login đi qua <code>/api/auth/login</code></td>
+          </tr>
+          <tr>
+            <td>Migration số trùng</td>
+            <td><span style="color:#f59e0b;font-weight:700;">MEDIUM</span></td>
+            <td>Rename file bị trùng, cập nhật <code>schema_migrations</code> tracking table</td>
+          </tr>
+          <tr>
+            <td>RLS allow-all</td>
+            <td><span style="color:#94a3b8;font-weight:700;">LOW</span></td>
+            <td>Xóa RLS policy hoặc viết lại meaningful. Không tạo thêm USING(true).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Best Practices hiện tại cần tuân thủ</h3>
+      <div class="grid-2">
+        <div class="card-sm">
+          <div class="card-title">🔒 Không hardcode credentials</div>
+          <div class="card-desc">Mọi key, password, token phải qua <code>process.env</code>. Không commit <code>.env</code> vào repo.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">🚫 Không log dữ liệu nhạy cảm</div>
+          <div class="card-desc">Không <code>console.log(password)</code>, token, hoặc PII. API error log chỉ ghi message kỹ thuật.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">🛡️ Validate input tại API layer</div>
+          <div class="card-desc">Kiểm tra các field bắt buộc, type, length trước khi truyền xuống service. Trả 400 khi thiếu dữ liệu.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-title">🔑 Parameterized queries</div>
+          <div class="card-desc">Luôn dùng <code>$1, $2...</code> placeholder. Không nối string SQL trực tiếp → ngăn SQL injection.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <p style="text-align:center; font-size:12px; color:var(--muted); margin-top: 8px;">
+        FADO AssetFlowPro — Technical Documentation · Cập nhật 06/2026 · Bản nội bộ, không phân phối
+      </p>
+    </section>
+
+  </div>
+</div>
+</div>
+
+<script>
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('.section');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === '#' + id) {
+            item.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navigation System — FADO AssetFlowPro Design System</title>
+  <style>
+    :root {
+      --bg: #0f1624;
+      --card: #162033;
+      --card2: #1a2640;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.12);
+      --fg: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --orange: #f97316;
+      --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 14px; line-height: 1.6; }
+
+    /* Layout */
+    .page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+    .hero { text-align: center; margin-bottom: 56px; }
+    .hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; }
+    .hero h1 span { color: var(--accent2); }
+    .hero p { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto; }
+    .badge { display: inline-block; background: rgba(99,102,241,0.15); color: var(--accent2); border: 1px solid rgba(99,102,241,0.3); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.5px; }
+
+    /* Section */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .section-num { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+    .section-header h2 { font-size: 18px; font-weight: 700; }
+    .section-header p { color: var(--muted); font-size: 13px; }
+
+    /* Cards */
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .card-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 14px; }
+
+    /* Grid */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    /* Tags */
+    .tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .tag-red { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+    .tag-yellow { background: rgba(234,179,8,0.12); color: #fde047; border: 1px solid rgba(234,179,8,0.25); }
+    .tag-green { background: rgba(34,197,94,0.12); color: #86efac; border: 1px solid rgba(34,197,94,0.25); }
+    .tag-blue { background: rgba(99,102,241,0.12); color: var(--accent2); border: 1px solid rgba(99,102,241,0.25); }
+
+    /* Sidebar demo */
+    .sidebar-demo { background: var(--card2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; height: 480px; }
+    .sidebar { width: 220px; border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar-logo { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 9px; }
+    .logo-icon { width: 30px; height: 30px; border-radius: 9px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; }
+    .logo-text { font-size: 13px; font-weight: 700; }
+    .logo-sub { font-size: 10px; color: var(--muted); }
+    .sidebar-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .sidebar-group { margin-bottom: 4px; }
+    .sidebar-group-label { padding: 6px 14px 4px; font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+    .sidebar-item { display: flex; align-items: center; gap: 9px; padding: 7px 14px; cursor: pointer; border-radius: 8px; margin: 1px 6px; transition: background 0.12s; font-size: 12.5px; color: var(--muted); }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--fg); }
+    .sidebar-item.active { background: rgba(99,102,241,0.15); color: var(--accent2); }
+    .sidebar-item .icon { width: 15px; height: 15px; opacity: 0.7; flex-shrink: 0; }
+    .sidebar-item.active .icon { opacity: 1; }
+    .sidebar-badge { margin-left: auto; background: var(--accent); color: #fff; border-radius: 999px; font-size: 9px; font-weight: 700; padding: 1px 5px; }
+    .sidebar-footer { padding: 10px 12px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 9px; }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg,#6366f1,#8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .main-area { flex: 1; padding: 16px; overflow-y: auto; }
+    .topbar { display: flex; align-items: center; justify-between; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; }
+    .topbar-left { display: flex; align-items: center; gap: 8px; }
+    .breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); }
+    .breadcrumb span { color: var(--fg); font-weight: 600; }
+    .search-pill { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 11px; color: var(--muted); margin-left: auto; }
+    .kbd { background: rgba(255,255,255,0.08); border: 1px solid var(--border2); border-radius: 4px; padding: 1px 5px; font-size: 10px; font-family: monospace; color: var(--muted); }
+
+    /* Analysis items */
+    .analysis-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .analysis-item:last-child { border-bottom: none; }
+    .analysis-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+    .analysis-dot.red { background: var(--red); }
+    .analysis-dot.yellow { background: var(--yellow); }
+    .analysis-dot.green { background: var(--green); }
+    .analysis-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+    .analysis-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Group proposal */
+    .group-list { display: flex; flex-direction: column; gap: 10px; }
+    .group-item { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; }
+    .group-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+    .group-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .group-items { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .group-count { margin-left: auto; font-size: 11px; color: var(--muted); font-weight: 600; flex-shrink: 0; padding-top: 2px; }
+
+    /* Architecture layers */
+    .layer { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+    .layer-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.03); cursor: pointer; }
+    .layer-num { width: 22px; height: 22px; border-radius: 6px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+    .layer-title { font-size: 13px; font-weight: 700; }
+    .layer-sub { font-size: 11px; color: var(--muted); margin-left: auto; }
+    .layer-body { padding: 14px 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .layer-body code { background: rgba(255,255,255,0.07); border-radius: 4px; padding: 1px 5px; font-family: monospace; color: var(--accent2); font-size: 11px; }
+
+    /* Responsive table */
+    .resp-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .resp-table th { text-align: left; padding: 8px 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .resp-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .resp-table tr:last-child td { border-bottom: none; }
+    .resp-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Keyboard shortcuts */
+    .shortcut-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .shortcut-item { display: flex; align-items: center; gap: 10px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+    .shortcut-keys { display: flex; gap: 4px; flex-shrink: 0; }
+    .shortcut-desc { font-size: 12px; color: var(--muted); }
+    .shortcut-desc strong { color: var(--fg); font-weight: 600; }
+
+    /* Mobile nav demo */
+    .mobile-demo { background: var(--card2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; width: 280px; margin: 0 auto; }
+    .mobile-topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    .mobile-content { height: 160px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .mobile-placeholder { background: rgba(255,255,255,0.04); border-radius: 8px; height: 100%; }
+    .mobile-bottomnav { display: flex; border-top: 1px solid var(--border); }
+    .mobile-tab { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; gap: 3px; font-size: 9px; color: var(--muted); cursor: pointer; }
+    .mobile-tab.active { color: var(--accent2); }
+    .mobile-tab-icon { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+    .mobile-tab.active .mobile-tab-icon { background: rgba(99,102,241,0.15); }
+
+    /* Inline flex util */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mb-2 { margin-bottom: 8px; }
+    .text-sm { font-size: 12px; color: var(--muted); }
+    .text-muted { color: var(--muted); }
+    .font-600 { font-weight: 600; }
+    .font-700 { font-weight: 700; }
+    .w-full { width: 100%; }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .shortcut-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">DESIGN SYSTEM · NAVIGATION</div>
+    <h1>Navigation <span>System</span></h1>
+    <p>Kiến trúc điều hướng toàn hệ thống cho FADO AssetFlowPro — phân tích hiện trạng, đề xuất cải tiến, và chuẩn responsive đa thiết bị.</p>
+  </div>
+
+  <!-- SECTION 1: SIDEBAR DEMO -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <h2>Demo Sidebar Hiện Tại — 4 Nhóm</h2>
+        <p>Minh họa cấu trúc đang dùng để đánh giá điểm mạnh/yếu</p>
+      </div>
+    </div>
+
+    <div class="sidebar-demo">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-icon">A</div>
+          <div>
+            <div class="logo-text">AssetFlow<span style="color:var(--accent2)">Pro</span></div>
+            <div class="logo-sub">FADO AI · v2.0</div>
+          </div>
+        </div>
+        <div class="sidebar-body">
+          <div class="sidebar-group">
+            <div class="sidebar-group-label">Điều Hướng</div>
+            <div class="sidebar-item active">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.5"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.5"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.5"/></svg>
+              Dashboard
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Tra Cứu Tài Sản
+            </div>
+          </div>
+          <div class="sidebar-group">
+            <div class="sidebar-group-label">Hoạt Động</div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 8h6M5 5.5h4M5 10.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Yêu Cầu
+              <span class="sidebar-badge">5</span>
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Tasks
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 3V2M11 3V2M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Đặt Phòng
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Chấm Công
+            </div>
+          </div>
+          <div class="sidebar-group">
+            <div class="sidebar-group-label">Nhân Sự</div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><path d="M2 12c0-2.761 2.686-5 6-5s6 2.239 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+              Nguồn Nhân Lực
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Hợp Đồng
+            </div>
+          </div>
+          <div class="sidebar-group">
+            <div class="sidebar-group-label">Quản Trị</div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 3 3.5.5-2.5 2.5.5 3.5L8 10l-3 1.5.5-3.5L3 5.5 6.5 5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+              Tổ Chức
+            </div>
+            <div class="sidebar-item">
+              <svg class="icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 3.05l-1.41 1.41M3.05 11.54l1.41 1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Cài Đặt
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="avatar">NV</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Nguyễn Văn A</div>
+            <div style="font-size:10px;color:var(--muted);">Nhân viên</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="main-area" style="flex:1;display:flex;flex-direction:column;">
+        <div class="topbar" style="justify-content:space-between;">
+          <div class="breadcrumb">
+            Dashboard <span style="opacity:0.3;margin:0 2px;">/</span> <span>Tổng quan</span>
+          </div>
+          <div class="search-pill">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Tìm kiếm...
+            <span class="kbd">⌘K</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+          <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Tổng tài sản</div>
+            <div style="font-size:20px;font-weight:800;">247</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Yêu cầu mở</div>
+            <div style="font-size:20px;font-weight:800;color:var(--accent2);">12</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;">
+            <div style="font-size:10px;color:var(--muted);margin-bottom:6px;">Tasks hôm nay</div>
+            <div style="font-size:20px;font-weight:800;color:#22c55e;">8</div>
+          </div>
+        </div>
+        <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-size:12px;color:var(--muted);">Nội dung trang chính</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: ANALYSIS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <h2>Phân Tích Sidebar Hiện Tại</h2>
+        <p>Đánh giá điểm mạnh, điểm yếu và khả năng scale</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="color:var(--green);">✓ Điểm Mạnh</div>
+        <div class="analysis-item">
+          <div class="analysis-dot green"></div>
+          <div>
+            <div class="analysis-title">Phân nhóm theo domain</div>
+            <div class="analysis-desc">4 nhóm ĐIỀU HƯỚNG · HOẠT ĐỘNG · NHÂN SỰ · QUẢN TRỊ phản ánh cấu trúc nghiệp vụ rõ ràng.</div>
+          </div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-dot green"></div>
+          <div>
+            <div class="analysis-title">Trong ngưỡng nhận thức 7±2</div>
+            <div class="analysis-desc">4 nhóm + ~8–10 items tổng thể nằm trong giới hạn bộ nhớ làm việc của người dùng.</div>
+          </div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-dot green"></div>
+          <div>
+            <div class="analysis-title">Collapsible &amp; icon-only</div>
+            <div class="analysis-desc">Hỗ trợ thu gọn về 56px icon-only tăng không gian nội dung trên màn hình nhỏ.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--red);">✗ Điểm Yếu Nghiêm Trọng</div>
+        <div class="analysis-item">
+          <div class="analysis-dot red"></div>
+          <div>
+            <div class="analysis-title">Không có Search / Command Palette</div>
+            <div class="analysis-desc">Người dùng phải scan toàn sidebar thủ công. Không có cách tiếp cận nhanh bằng bàn phím.</div>
+          </div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-dot red"></div>
+          <div>
+            <div class="analysis-title">Sub-module bị ẩn hoàn toàn</div>
+            <div class="analysis-desc">Module con (ví dụ: onboarding, offboarding trong Nhân Sự) không visible trong sidebar — người dùng không biết tồn tại.</div>
+          </div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-dot yellow"></div>
+          <div>
+            <div class="analysis-title">Nhóm "ĐIỀU HƯỚNG" mơ hồ</div>
+            <div class="analysis-desc">Tên nhóm không mô tả nội dung. Nên đổi thành "TỔNG QUAN" hoặc "CHÍNH" để trực quan hơn.</div>
+          </div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-dot yellow"></div>
+          <div>
+            <div class="analysis-title">Không có Recently Visited / Favorites</div>
+            <div class="analysis-desc">Thiếu shortcut tới nơi người dùng truy cập thường xuyên. Tăng số click không cần thiết.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0;">
+      <div class="card-title" style="color:var(--orange);">⚠ Khả Năng Scale</div>
+      <div class="analysis-item">
+        <div class="analysis-dot yellow"></div>
+        <div>
+          <div class="analysis-title">Nhóm HOẠT ĐỘNG sẽ quá tải</div>
+          <div class="analysis-desc">Hiện có: Yêu Cầu, Tasks, Đặt Phòng, Chấm Công, Bù Công, Tăng Ca, Nghỉ Phép, Duyệt... → dễ vượt 10 items. Cần tách hoặc group thêm.</div>
+        </div>
+      </div>
+      <div class="analysis-item">
+        <div class="analysis-dot yellow"></div>
+        <div>
+          <div class="analysis-title">Multi-company chưa được phản ánh</div>
+          <div class="analysis-desc">Khi user thuộc nhiều công ty, sidebar không có company switcher rõ ràng. Cần App Bar riêng ở trên cùng.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PROPOSED ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <h2>Đề Xuất Kiến Trúc 5 Nhóm</h2>
+        <p>Ranh giới domain rõ hơn, scale tốt hơn, giảm cognitive load</p>
+      </div>
+    </div>
+
+    <div class="group-list">
+      <div class="group-item">
+        <div class="group-icon" style="background:rgba(99,102,241,0.15);">🏠</div>
+        <div style="flex:1;">
+          <div class="group-name">TỔNG QUAN</div>
+          <div class="group-items">Dashboard · Tra Cứu Tài Sản · Thông Báo · Lịch</div>
+        </div>
+        <div class="group-count">4 items</div>
+      </div>
+      <div class="group-item">
+        <div class="group-icon" style="background:rgba(34,197,94,0.12);">⚡</div>
+        <div style="flex:1;">
+          <div class="group-name">CÔNG VIỆC</div>
+          <div class="group-items">Ticket · Tasks · Đặt Phòng · Chấm Công · Duyệt Yêu Cầu (Bù Công, Tăng Ca, Nghỉ Phép)</div>
+        </div>
+        <div class="group-count">5 items</div>
+      </div>
+      <div class="group-item">
+        <div class="group-icon" style="background:rgba(234,179,8,0.12);">👥</div>
+        <div style="flex:1;">
+          <div class="group-name">NHÂN SỰ</div>
+          <div class="group-items">Nguồn Nhân Lực · Hợp Đồng · Biểu Mẫu HR · Onboarding/Offboarding · Hồ Sơ Cá Nhân</div>
+        </div>
+        <div class="group-count">5 items</div>
+      </div>
+      <div class="group-item">
+        <div class="group-icon" style="background:rgba(239,68,68,0.12);">📦</div>
+        <div style="flex:1;">
+          <div class="group-name">TÀI SẢN</div>
+          <div class="group-items">Quản Lý Tài Sản · Email &amp; Chữ Ký · Domain · Phần Mềm · Duyệt Xóa</div>
+        </div>
+        <div class="group-count">5 items</div>
+      </div>
+      <div class="group-item">
+        <div class="group-icon" style="background:rgba(148,163,184,0.1);">⚙️</div>
+        <div style="flex:1;">
+          <div class="group-name">HỆ THỐNG</div>
+          <div class="group-items">Tổ Chức · Người Dùng &amp; Vai Trò · Cài Đặt · Nhật Ký Hệ Thống</div>
+        </div>
+        <div class="group-count">4 items</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Tính Năng Bổ Sung Đề Xuất</div>
+      <div class="grid-3" style="margin-top:4px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--accent2);">Company Switcher</div>
+          <div class="text-sm">Dropdown ở App Bar để chuyển context giữa các công ty (multi-company). Không làm rối sidebar.</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--accent2);">Quick Actions Bar</div>
+          <div class="text-sm">Hàng icon nhỏ bên dưới logo: Tạo mới · Yêu cầu cấp tốc · Báo cáo sự cố. Tiết kiệm 2 click.</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--accent2);">Sub-items Expand In-place</div>
+          <div class="text-sm">Khi click item có con → mở rộng tại chỗ thay vì ẩn. Người dùng thấy được cấu trúc module.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: 4-LAYER ARCHITECTURE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <h2>Kiến Trúc 4 Tầng Navigation</h2>
+        <p>Từ workspace identity đến context trong từng record</p>
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-header">
+        <div class="layer-num">1</div>
+        <div class="layer-title">App Bar</div>
+        <div class="layer-sub">Workspace identity + Company Switcher</div>
+      </div>
+      <div class="layer-body">
+        Thanh ngang trên cùng (height 48px). Chứa: <code>Logo + Tên App</code> bên trái · <code>Company Switcher dropdown</code> ở giữa → chuyển context công ty khi user multi-company · <code>Search ⌘K</code> · <code>Notification Bell</code> · <code>User Menu</code> bên phải.
+        Sticky ở mọi kích cỡ màn hình. Không collapse.
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-header">
+        <div class="layer-num">2</div>
+        <div class="layer-title">Left Sidebar</div>
+        <div class="layer-sub">Module navigation, collapsible</div>
+      </div>
+      <div class="layer-body">
+        Fixed left, width <code>240px</code> đầy đủ hoặc <code>56px</code> icon-only. Chứa 5 nhóm với group label + sub-items expand in-place.
+        Toggle bằng <code>⌘\</code>. Tablet (640–1024px): mặc định icon-only + tooltip khi hover. Mobile: ẩn hoàn toàn, thay bằng Bottom Nav.
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-header">
+        <div class="layer-num">3</div>
+        <div class="layer-title">Page Nav</div>
+        <div class="layer-sub">Breadcrumb + Tab/Filter bar, context-sensitive</div>
+      </div>
+      <div class="layer-body">
+        Sticky bên dưới App Bar (khi scroll). Bên trái: <code>breadcrumb</code> Home › Module › Sub-page. Bên phải: <code>context actions</code> thay đổi theo trang (VD: trang Ticket có nút "Tạo Ticket", trang User có "Mời Người Dùng"). Tabs ngang nếu module có nhiều view (Tất cả / Đang xử lý / Đã đóng).
+      </div>
+    </div>
+
+    <div class="layer">
+      <div class="layer-header">
+        <div class="layer-num">4</div>
+        <div class="layer-title">Context Nav</div>
+        <div class="layer-sub">Detail view: back link + sub-tabs trong record</div>
+      </div>
+      <div class="layer-body">
+        Chỉ xuất hiện khi mở detail record (modal hoặc page). Gồm: <code>← Quay lại</code> link · tiêu đề record · sub-tabs nếu có (Thông tin · Lịch sử · Tài liệu đính kèm · Ghi chú). Không dùng browser back button — cung cấp back link rõ ràng trong UI.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: RESPONSIVE -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <h2>Chiến Lược Responsive</h2>
+        <p>4 breakpoint — mobile-first theo chuẩn Tailwind</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <table class="resp-table">
+        <thead>
+          <tr>
+            <th>Breakpoint</th>
+            <th>Kích Thước</th>
+            <th>Sidebar</th>
+            <th>Navigation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-red">Mobile</span></td>
+            <td style="color:var(--muted);">&lt; 640px</td>
+            <td>Ẩn hoàn toàn</td>
+            <td>Bottom Nav 5 tab + Hamburger drawer cho toàn menu</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-yellow">Tablet</span></td>
+            <td style="color:var(--muted);">640–1024px</td>
+            <td>Icon-only 56px + tooltip</td>
+            <td>App Bar đầy đủ, sidebar thu gọn, content 1 cột</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-green">Desktop</span></td>
+            <td style="color:var(--muted);">1024–1440px</td>
+            <td>240px đầy đủ (label + icon)</td>
+            <td>App Bar + Page Nav sticky, content 2–3 cột</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">XL</span></td>
+            <td style="color:var(--muted);">&gt; 1440px</td>
+            <td>240px + optional 260px</td>
+            <td>max-w-screen-2xl, padding lớn hơn, 3–4 cột content</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile Nav Demo -->
+    <div style="margin-top:20px;">
+      <div class="card-title" style="margin-bottom:14px;">Mobile Bottom Navigation (Demo)</div>
+      <div class="mobile-demo">
+        <div class="mobile-topbar">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;">A</div>
+            <span style="font-size:12px;font-weight:700;">AssetFlow<span style="color:var(--accent2);">Pro</span></span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="color:var(--muted);"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="color:var(--muted);"><path d="M8 2a4 4 0 014 4v2l1.5 2.5h-11L4 8V6a4 4 0 014-4zM6.5 12a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="mobile-content">
+          <div class="mobile-placeholder"></div>
+        </div>
+        <div class="mobile-bottomnav">
+          <div class="mobile-tab active">
+            <div class="mobile-tab-icon">🏠</div>
+            Chính
+          </div>
+          <div class="mobile-tab">
+            <div class="mobile-tab-icon">⚡</div>
+            Công Việc
+          </div>
+          <div class="mobile-tab">
+            <div class="mobile-tab-icon">🎫</div>
+            Ticket
+          </div>
+          <div class="mobile-tab">
+            <div class="mobile-tab-icon">👥</div>
+            Nhân Sự
+          </div>
+          <div class="mobile-tab">
+            <div class="mobile-tab-icon">···</div>
+            Thêm
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:10px;">Bottom Nav 5 tab · Tab "Thêm" → Hamburger drawer toàn menu</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: KEYBOARD SHORTCUTS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <h2>Keyboard Navigation Patterns</h2>
+        <p>Phím tắt chuẩn cho power users</p>
+      </div>
+    </div>
+
+    <div class="shortcut-grid">
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">⌘</span><span class="kbd">K</span>
+        </div>
+        <div class="shortcut-desc"><strong>Command Palette</strong> — Tìm kiếm fuzzy toàn module, điều hướng tức thì</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">⌘</span><span class="kbd">\</span>
+        </div>
+        <div class="shortcut-desc"><strong>Toggle Sidebar</strong> — Thu gọn/mở rộng sidebar</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">G</span><span class="kbd">H</span>
+        </div>
+        <div class="shortcut-desc"><strong>Go to Home</strong> — Nhảy tới Dashboard</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">G</span><span class="kbd">T</span>
+        </div>
+        <div class="shortcut-desc"><strong>Go to Ticket</strong> — Nhảy tới Ticket</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">G</span><span class="kbd">K</span>
+        </div>
+        <div class="shortcut-desc"><strong>Go to Tasks</strong> — Nhảy tới Tasks (K = "Kế hoạch")</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">G</span><span class="kbd">S</span>
+        </div>
+        <div class="shortcut-desc"><strong>Go to Settings</strong> — Nhảy tới Cài Đặt</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">C</span>
+        </div>
+        <div class="shortcut-desc"><strong>Create</strong> — Tạo mới theo context (Ticket, Task, Yêu Cầu...)</div>
+      </div>
+      <div class="shortcut-item">
+        <div class="shortcut-keys">
+          <span class="kbd">Esc</span>
+        </div>
+        <div class="shortcut-desc"><strong>Đóng Modal / Back</strong> — Thoát modal hoặc quay về trang trước</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Command Palette — Hành Vi Chuẩn</div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="color:var(--muted);flex-shrink:0;"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span style="font-size:12px;color:var(--muted);">Nhập tên module, action, hoặc từ khóa...</span>
+          <span class="kbd" style="margin-left:auto;">Esc</span>
+        </div>
+        <div style="padding-top:10px;display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(99,102,241,0.1);border-radius:8px;">
+            <span style="font-size:12px;">🎫</span>
+            <span style="font-size:12px;font-weight:600;">Yêu Cầu — Tạo yêu cầu mới</span>
+            <span class="kbd" style="margin-left:auto;">↵</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;">
+            <span style="font-size:12px;">📋</span>
+            <span style="font-size:12px;color:var(--muted);">Tasks — Xem danh sách</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;">
+            <span style="font-size:12px;">👥</span>
+            <span style="font-size:12px;color:var(--muted);">Nguồn Nhân Lực — Xem nhân sự</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: IMPLEMENTATION CHECKLIST -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div>
+        <h2>Checklist Triển Khai</h2>
+        <p>Ưu tiên theo impact / effort</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title" style="color:var(--red);">Ưu tiên cao — Làm ngay</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Đổi tên nhóm "ĐIỀU HƯỚNG" → "TỔNG QUAN"</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Thêm <code style="font-size:10px;background:rgba(255,255,255,0.07);padding:1px 4px;border-radius:3px;">⌘K</code> Command Palette cơ bản (fuzzy search module)</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Sub-items expand in-place cho nhóm có nhiều item</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Company Switcher tích hợp vào Topbar (đã có multi-company)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--yellow);">Ưu tiên trung — Sprint tiếp</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Tách 4 nhóm → 5 nhóm (thêm nhóm TÀI SẢN riêng)</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Bottom Navigation cho Mobile (&lt;640px)</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Keyboard shortcut <code style="font-size:10px;background:rgba(255,255,255,0.07);padding:1px 4px;border-radius:3px;">G+H/T/K/S</code> nhảy module</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+            <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+            <span style="font-size:12px;">Breadcrumb context-sensitive ở Page Nav</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0;">
+      <div class="card-title" style="color:var(--muted);">Ưu tiên thấp — Backlog</div>
+      <div class="grid-3" style="margin-top:4px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+          <span style="font-size:12px;color:var(--muted);">Recently Visited trong Command Palette</span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+          <span style="font-size:12px;color:var(--muted);">Pinned Favorites cho từng user</span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;">
+          <input type="checkbox" style="margin-top:2px;accent-color:var(--accent);" />
+          <span style="font-size:12px;color:var(--muted);">Quick Actions Bar bên dưới logo</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;padding-top:20px;border-top:1px solid var(--border);">
+    <p style="font-size:11px;color:var(--muted);">FADO AssetFlowPro · Design System · Navigation System · <span style="color:var(--accent2);">asset.fadoai.com</span></p>
+  </div>
+
+</div>
+<script src="/preview/_nav.js"></script>
+</body>
+</html>

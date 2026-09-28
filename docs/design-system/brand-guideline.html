@@ -1,0 +1,409 @@
+="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          </div>
+          <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--text-muted)" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+        </div>
+        <!-- Main content mock -->
+        <div style="flex:1;padding:16px;overflow:hidden;">
+          <!-- Topbar -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">Quản lý tài sản</div>
+              <div style="font-size:9px;color:var(--text-muted);">Danh sách toàn bộ tài sản công ty</div>
+            </div>
+            <div style="background:var(--indigo);padding:5px 12px;border-radius:8px;font-size:9px;font-weight:700;color:#fff;">+ Thêm tài sản</div>
+          </div>
+          <!-- Stats row -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:8px;color:var(--text-muted);margin-bottom:3px;">Tổng tài sản</div>
+              <div style="font-size:16px;font-weight:800;color:var(--text);">1,248</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:8px;color:var(--text-muted);margin-bottom:3px;">Đang sử dụng</div>
+              <div style="font-size:16px;font-weight:800;color:#22c55e;">986</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:8px;color:var(--text-muted);margin-bottom:3px;">Chờ phân bổ</div>
+              <div style="font-size:16px;font-weight:800;color:#f59e0b;">142</div>
+            </div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="font-size:8px;color:var(--text-muted);margin-bottom:3px;">Bảo trì</div>
+              <div style="font-size:16px;font-weight:800;color:#ef4444;">120</div>
+            </div>
+          </div>
+          <!-- Table row -->
+          <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:0;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--primary);">
+              <div style="font-size:8px;font-weight:700;color:var(--indigo-light);letter-spacing:0.1em;text-transform:uppercase;">Tên tài sản</div>
+              <div style="font-size:8px;font-weight:700;color:var(--indigo-light);letter-spacing:0.1em;text-transform:uppercase;">Loại</div>
+              <div style="font-size:8px;font-weight:700;color:var(--indigo-light);letter-spacing:0.1em;text-transform:uppercase;">Người dùng</div>
+              <div style="font-size:8px;font-weight:700;color:var(--indigo-light);letter-spacing:0.1em;text-transform:uppercase;">Trạng thái</div>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,0.03);">
+              <div style="font-size:9px;color:var(--text);">Dell Latitude 5540 · FA2024001</div>
+              <div style="font-size:9px;color:var(--text-muted);">Laptop</div>
+              <div style="font-size:9px;color:var(--text-muted);">Nguyễn V. An</div>
+              <div><span style="font-size:8px;font-weight:700;color:#86efac;background:rgba(34,197,94,0.1);padding:2px 6px;border-radius:4px;">Đang dùng</span></div>
+            </div>
+            <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:7px 12px;">
+              <div style="font-size:9px;color:var(--text);">iPhone 14 Pro · FA2024002</div>
+              <div style="font-size:9px;color:var(--text-muted);">Điện thoại</div>
+              <div style="font-size:9px;color:var(--text-muted);">Trần T. Bình</div>
+              <div><span style="font-size:8px;font-weight:700;color:#fcd34d;background:rgba(245,158,11,0.1);padding:2px 6px;border-radius:4px;">Bảo trì</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacing System -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Spacing System — Hệ thống khoảng cách</div>
+      <div class="grid-2" style="gap:16px;">
+        <div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:4px;"></div>
+            <div class="spacing-label">4px — Extra small</div>
+            <div class="spacing-token">p-1 / gap-1</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:8px;"></div>
+            <div class="spacing-label">8px — Small</div>
+            <div class="spacing-token">p-2 / gap-2</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:12px;"></div>
+            <div class="spacing-label">12px — Base</div>
+            <div class="spacing-token">p-3 / gap-3</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:16px;"></div>
+            <div class="spacing-label">16px — Medium</div>
+            <div class="spacing-token">p-4 / gap-4</div>
+          </div>
+        </div>
+        <div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:20px;"></div>
+            <div class="spacing-label">20px — Large</div>
+            <div class="spacing-token">p-5 / gap-5</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:24px;"></div>
+            <div class="spacing-label">24px — XL</div>
+            <div class="spacing-token">p-6 / gap-6</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:32px;"></div>
+            <div class="spacing-label">32px — 2XL</div>
+            <div class="spacing-token">p-8 / gap-8</div>
+          </div>
+          <div class="spacing-block">
+            <div class="spacing-visual" style="width:40px;"></div>
+            <div class="spacing-label">40px — 3XL (page padding)</div>
+            <div class="spacing-token">p-10</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Border radius -->
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;">Border Radius Standards</div>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="width:40px;height:40px;background:var(--indigo);border-radius:4px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">4px<br>Badge</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:48px;height:36px;background:var(--indigo);border-radius:8px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">8px<br>Button</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:56px;height:48px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">10px<br>Card-sm</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:64px;height:56px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">12px<br>Card</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:72px;height:64px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">16px<br>Modal</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:80px;height:72px;background:var(--card);border:1px solid var(--border);border-radius:24px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">24px<br>Modal-lg</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--indigo),var(--ring));border-radius:14px;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">14px<br>App icon</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:48px;height:48px;background:var(--indigo);border-radius:50%;margin-bottom:5px;"></div>
+          <div style="font-size:9px;color:var(--text-muted);">50%<br>Avatar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <div class="page-footer-brand">FADO AssetFlow — Brand Guidelines</div>
+      <div class="page-footer-label">Product UI Style</div>
+      <div class="page-number">08</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 11: MARKETING STYLE
+═══════════════════════════════════════ -->
+<div class="page" id="marketing">
+  <div class="page-accent-top"></div>
+  <div class="page-inner">
+    <div style="margin-bottom:24px;">
+      <div class="section-eyebrow">07 — Marketing Style</div>
+      <div class="section-title">Phong cách Marketing</div>
+      <div class="section-divider"></div>
+      <div class="section-desc">Tài liệu marketing FADO AssetFlow phải truyền tải hình ảnh enterprise chuyên nghiệp. Nhất quán từ email, slide deck đến tài liệu bán hàng.</div>
+    </div>
+
+    <!-- Email Header -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Email Header Template</div>
+      <div class="email-header">
+        <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="monogram" style="width:40px;height:40px;font-size:20px;border-radius:10px;">A</div>
+            <div>
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <span class="fado-wordmark" style="font-size:20px;">FADO</span>
+                <span class="assetflow-wordmark" style="font-size:20px;">AssetFlow</span>
+              </div>
+              <div class="tagline-text" style="font-size:8px;">Enterprise Operations Platform</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:9px;color:var(--text-muted);">asset.fadoai.com</div>
+            <div style="font-size:9px;color:var(--text-muted);">support@fadoai.com</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);position:relative;z-index:1;">
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">Thông báo: Tài sản sắp đến hạn bảo trì</div>
+          <div style="font-size:10px;color:var(--text-muted);">Gửi tới: nguyen.van.an@company.com · 18 tháng 6, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Presentation Slide -->
+    <div style="margin-bottom:20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Presentation Title Slide — 16:9</div>
+      <div class="pres-slide">
+        <div style="position:relative;z-index:1;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;">
+            <div class="monogram" style="width:32px;height:32px;font-size:16px;border-radius:8px;">A</div>
+            <div style="font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">FADO AssetFlow</div>
+          </div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:10px;">Giải pháp Quản lý Tài sản<br>Doanh nghiệp Toàn diện</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-bottom:20px;max-width:320px;">Kiểm soát toàn bộ vòng đời tài sản — từ mua sắm đến thanh lý — trên một nền tảng duy nhất.</div>
+          <div style="display:flex;gap:10px;">
+            <div style="background:var(--indigo);padding:6px 16px;border-radius:6px;font-size:9px;font-weight:700;color:#fff;">Xem Demo</div>
+            <div style="background:rgba(255,255,255,0.08);padding:6px 16px;border-radius:6px;font-size:9px;font-weight:700;color:var(--text-secondary);">Tải tài liệu</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sales material rules -->
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;">Quy tắc tài liệu bán hàng</div>
+      <div class="grid-2" style="gap:12px;">
+        <div class="card-sm">
+          <div style="font-size:9px;font-weight:700;color:var(--indigo-light);margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Slide Deck</div>
+          <ul style="font-size:10px;color:var(--text-secondary);line-height:2;list-style:none;">
+            <li>• Nền: #0B1F3B hoặc #060e1a</li>
+            <li>• Font: Montserrat ExtraBold cho tiêu đề</li>
+            <li>• Accent line: gradient indigo trên đầu slide</li>
+            <li>• Logo: góc trên trái, tối thiểu 36px</li>
+            <li>• Không quá 6 bullet points / slide</li>
+            <li>• Số trang: góc dưới phải, text-muted</li>
+          </ul>
+        </div>
+        <div class="card-sm">
+          <div style="font-size:9px;font-weight:700;color:var(--indigo-light);margin-bottom:8px;letter-spacing:0.1em;text-transform:uppercase;">Tài liệu in ấn / PDF</div>
+          <ul style="font-size:10px;color:var(--text-secondary);line-height:2;list-style:none;">
+            <li>• Header: dark navy #0B1F3B với logo trắng</li>
+            <li>• Body text: đen (#111) trên nền trắng</li>
+            <li>• Accent: indigo #4f46e5 cho headings</li>
+            <li>• Footer: logo nhỏ + URL + số trang</li>
+            <li>• Margin: 20mm tất cả các cạnh (A4)</li>
+            <li>• Không dùng ảnh nền phức tạp khi in</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <div class="page-footer-brand">FADO AssetFlow — Brand Guidelines</div>
+      <div class="page-footer-label">Marketing Style</div>
+      <div class="page-number">09</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 12: DON'TS
+═══════════════════════════════════════ -->
+<div class="page" id="donts">
+  <div class="page-accent-top"></div>
+  <div class="page-inner">
+    <div style="margin-bottom:24px;">
+      <div class="section-eyebrow">08 — Brand Don'ts</div>
+      <div class="section-title">Những điều tuyệt đối không làm</div>
+      <div class="section-divider"></div>
+      <div class="section-desc">Các vi phạm sau làm suy yếu định vị thương hiệu enterprise của FADO AssetFlow. Bất kỳ tài liệu nào vi phạm các quy tắc này phải được sửa trước khi phát hành.</div>
+    </div>
+
+    <div class="grid-2" style="gap:14px;margin-bottom:20px;">
+
+      <!-- Don't 1 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Startup quá trẻ trung</div>
+        <div style="background:linear-gradient(135deg,#667eea,#764ba2,#f093fb);border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;">
+          <div style="font-family:'Montserrat';font-weight:900;font-size:20px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.3);">🚀 FADO AssetFlow ✨</div>
+          <div style="font-size:9px;color:rgba(255,255,255,0.8);margin-top:4px;">The coolest asset tool ever! 🎯💯</div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Gradient neon nhiều màu, emoji tràn lan, ngôn ngữ hype không phù hợp với đối tượng doanh nghiệp. FADO phục vụ tổ chức, không phải startup.</div>
+      </div>
+
+      <!-- Don't 2 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Gaming / Esports aesthetics</div>
+        <div style="background:#0a0a0a;border:2px solid #00ff88;border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;box-shadow:0 0 20px rgba(0,255,136,0.3);">
+          <div style="font-family:'Montserrat';font-weight:900;font-size:18px;color:#00ff88;text-shadow:0 0 10px #00ff88;letter-spacing:0.2em;">FADO PRO</div>
+          <div style="font-size:8px;color:#ff0066;margin-top:4px;letter-spacing:0.3em;">LEVEL UP YOUR ASSETS</div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Neon glow, màu gaming (#00ff88, #ff0066), typography aggressive. Hình ảnh này làm mất lòng tin của khách hàng doanh nghiệp cấp C-Suite.</div>
+      </div>
+
+      <!-- Don't 3 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Crypto / Web3 elements</div>
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #f0c040;border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:4px;">₿ 💎 🌐</div>
+          <div style="font-family:'Montserrat';font-weight:800;font-size:16px;background:linear-gradient(90deg,#f0c040,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">AssetFlow Chain</div>
+          <div style="font-size:8px;color:#f0c040;margin-top:3px;">Decentralized Asset Management</div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Crypto emoji, gold gradient, blockchain language. FADO AssetFlow là phần mềm quản lý tài sản truyền thống — không phải Web3.</div>
+      </div>
+
+      <!-- Don't 4 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Màu mè lòe loẹt</div>
+        <div style="background:#fff;border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;">
+          <div style="font-family:'Montserrat';font-weight:800;font-size:18px;color:#ff6900;">FADO</div>
+          <div style="font-family:'Montserrat';font-weight:600;font-size:16px;color:#00cc44;">AssetFlow</div>
+          <div style="font-size:9px;color:#9933ff;margin-top:4px;">Quản lý tài sản</div>
+          <div style="display:flex;gap:4px;justify-content:center;margin-top:6px;">
+            <div style="width:16px;height:16px;border-radius:3px;background:#ff6900;"></div>
+            <div style="width:16px;height:16px;border-radius:3px;background:#00cc44;"></div>
+            <div style="width:16px;height:16px;border-radius:3px;background:#9933ff;"></div>
+            <div style="width:16px;height:16px;border-radius:3px;background:#ff3399;"></div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Nền trắng với màu chói lọi, phối nhiều màu sắc sặc sỡ không nằm trong bảng màu hệ thống. Vi phạm nhận diện thương hiệu nghiêm trọng.</div>
+      </div>
+
+      <!-- Don't 5 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Font không phải Montserrat cho brand</div>
+        <div style="background:var(--card);border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;">
+          <div style="font-family:Georgia,serif;font-weight:700;font-size:20px;color:var(--text);font-style:italic;">FADO AssetFlow</div>
+          <div style="font-family:'Comic Sans MS',cursive;font-size:12px;color:var(--text-muted);margin-top:4px;">Enterprise Operations Platform</div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Serif fonts (Georgia), display fonts (Comic Sans), hay bất kỳ font nào không phải Montserrat đều không được dùng cho brand name và headlines.</div>
+      </div>
+
+      <!-- Don't 6 -->
+      <div class="dont-box" style="padding:20px;">
+        <div class="dont-label" style="font-size:9px;">✕ KHÔNG — Light theme / Consumer-grade UI</div>
+        <div style="background:#f0f4f8;border-radius:8px;padding:14px;margin-bottom:10px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px;">
+            <div style="font-size:11px;font-weight:600;color:#2d3748;margin-bottom:6px;">📋 Asset Dashboard</div>
+            <div style="background:#ebf8ff;border-left:3px solid #63b3ed;padding:6px 8px;font-size:9px;color:#2b6cb0;border-radius:0 4px 4px 0;">
+              💡 Tip: Click the button to add your first asset!
+            </div>
+          </div>
+        </div>
+        <div style="font-size:9px;color:var(--text-muted);line-height:1.7;">Light theme với màu pastel, emoji trong UI, tooltip kiểu consumer app. FADO AssetFlow là dark enterprise — không bao giờ light-first.</div>
+      </div>
+
+    </div>
+
+    <!-- Summary rules -->
+    <div style="background:rgba(198,40,40,0.06);border:1px solid rgba(198,40,40,0.2);border-radius:12px;padding:18px;">
+      <div style="font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#fca5a5;margin-bottom:10px;">Tóm tắt — Các vi phạm nghiêm trọng nhất</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Dùng màu ngoài bảng màu chính thức</div>
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Thay đổi font weight của FADO hoặc AssetFlow</div>
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Dùng "AssetFlow" tách biệt không có "FADO"</div>
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Thiết kế light theme cho giao diện sản phẩm</div>
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Dùng emoji trong UI, tiêu đề, hay tên sản phẩm</div>
+        <div style="font-size:10px;color:var(--text-secondary);display:flex;gap:6px;align-items:flex-start;"><span style="color:#ef4444;font-weight:700;flex-shrink:0;">✕</span> Gaming/neon/crypto aesthetics trong bất kỳ tài liệu nào</div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <div class="page-footer-brand">FADO AssetFlow — Brand Guidelines</div>
+      <div class="page-footer-label">Brand Don'ts</div>
+      <div class="page-number">10</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     PAGE 13: BACK COVER
+═══════════════════════════════════════ -->
+<div class="page">
+  <div class="page-accent-top"></div>
+  <div class="page-inner" style="background:linear-gradient(160deg,#060e1a 0%,#0b1525 60%,#060e1a 100%);justify-content:center;align-items:center;text-align:center;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(79,70,229,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+
+    <div style="position:relative;z-index:1;">
+      <div class="monogram" style="width:80px;height:80px;font-size:40px;margin:0 auto 28px;box-shadow:0 0 60px rgba(79,70,229,0.4);"></div>
+
+      <div style="margin-bottom:6px;">
+        <span class="fado-wordmark" style="font-size:40px;">FADO</span>
+        <span class="assetflow-wordmark" style="font-size:40px;margin-left:12px;">AssetFlow</span>
+      </div>
+      <div class="tagline-text" style="font-size:11px;letter-spacing:0.25em;margin-bottom:40px;">Enterprise Operations Platform</div>
+
+      <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--indigo),transparent);margin:0 auto 40px;"></div>
+
+      <div style="font-size:11px;color:var(--text-muted);line-height:2;margin-bottom:32px;">
+        <div>asset.fadoai.com</div>
+        <div>support@fadoai.com</div>
+        <div>FADO AI Technology Co., Ltd.</div>
+      </div>
+
+      <div style="display:inline-flex;gap:8px;align-items:center;padding:8px 20px;border:1px solid var(--border);border-radius:20px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--indigo);"></div>
+        <span style="font-size:9px;font-weight:600;color:var(--text-muted);letter-spacing:0.1em;">Tài liệu nội bộ · Brand Guidelines v2.0 · Tháng 6/2026</span>
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--indigo);"></div>
+      </div>
+    </div>
+
+    <div class="page-footer" style="position:absolute;bottom:52px;left:56px;right:56px;">
+      <div class="page-footer-brand">© 2026 FADO AI Technology. All rights reserved.</div>
+      <div style="font-size:9px;color:var(--text-muted);">Tài liệu này thuộc sở hữu của FADO AI Technology Co., Ltd.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end print-wrapper -->
+</body>
+</html>

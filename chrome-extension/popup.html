@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <title>AssetFlow CV Collector</title>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="mark">AF</div>
+      <div><h1>Lưu ứng viên</h1><p id="source">Đang đọc trang hiện tại...</p></div>
+    </header>
+    <div id="notice" class="notice hidden"></div>
+    <section id="consent-panel" class="consent">
+      <h2>Cho phép đọc hồ sơ ứng viên?</h2>
+      <p>Extension sẽ đọc nội dung trang hiện tại để tìm họ tên, email, số điện thoại, vị trí và kỹ năng. Dữ liệu chỉ được chuyển sang AssetFlow khi bạn xác nhận mở form.</p>
+      <button id="allow-read" type="button" class="primary">Đồng ý và đọc trang</button>
+      <a href="https://assetflow.fadoai.com/chrome-extension-privacy.html" target="_blank" rel="noreferrer">Chính sách quyền riêng tư</a>
+    </section>
+    <form id="candidate-form" class="hidden">
+      <label>Họ tên <span>*</span><input id="name" required></label>
+      <div class="cols">
+        <label>Email<input id="email" type="email"></label>
+        <label>Số điện thoại<input id="phone"></label>
+      </div>
+      <label>Chức danh / vị trí<input id="title"></label>
+      <label>Ngành nghề / thư mục<input id="industry" list="industries"></label>
+      <datalist id="industries">
+        <option value="Kế toán - Kiểm toán"><option value="Công nghệ thông tin">
+        <option value="Kinh doanh - Bán hàng"><option value="Marketing - Truyền thông">
+        <option value="Nhân sự - Hành chính"><option value="Tài chính - Ngân hàng">
+        <option value="Vận hành - Kho vận"><option value="Kỹ thuật - Sản xuất">
+        <option value="Chăm sóc khách hàng">
+      </datalist>
+      <label>Kỹ năng<input id="skills" placeholder="Phân cách bằng dấu phẩy"></label>
+      <label>Ghi chú<textarea id="note" rows="3"></textarea></label>
+      <button type="submit" class="primary">Mở form trong AssetFlow</button>
+    </form>
+    <footer><button id="refresh" class="hidden" type="button">Đọc lại trang</button><button id="settings" type="button">Cài đặt</button></footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

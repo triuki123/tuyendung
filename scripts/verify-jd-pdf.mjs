@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import { PDFDocument } from 'pdf-lib';
+import { cvTestLoader } from './cv-test-loader.mjs';
+const load = cvTestLoader();
+const { parseJdFields, serializeJdFields } = load('src/lib/jdForm.ts');
+const fields = parseJdFields('');
+Object.assign(fields, { unit: 'FADO Group', location: 'HN', salary: 'Thỏa thuận', duties: 'Quản lý chi nhánh và phát triển kinh doanh.\n'.repeat(130), requirements: 'Kinh nghiệm và kỹ năng lãnh đạo.', benefits: 'Bảo hiểm, đào tạo và nghỉ phép.' });
+const description = serializeJdFields(fields).replaceAll('\n', '\r\n');
+assert.equal(parseJdFields(description).unit, 'FADO Group');
+const bytes = await load('src/lib/services/jdPdf.ts').createJdPdf({ title: 'GIÁM ĐỐC CHI NHÁNH HÀ NỘI', description, department_name: 'Kinh doanh' });
+const pdf = await PDFDocument.load(bytes);
+assert.ok(pdf.getPageCount() > 1);
+assert.equal(pdf.getTitle(), 'GIÁM ĐỐC CHI NHÁNH HÀ NỘI');
+console.log(`PASS: Vietnamese PDF generated (${pdf.getPageCount()} A4 pages), CRLF structured content parsed.`);

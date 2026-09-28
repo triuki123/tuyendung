@@ -1,0 +1,8 @@
+<resources>
+    <!-- Theme tối, không action bar — POS chạy full màn hình. Parent built-in nên không cần thêm dependency. -->
+    <style name="Theme.SolacePOS" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#060e1a</item>
+        <item name="android:navigationBarColor">#060e1a</item>
+        <item name="android:windowBackground">#060e1a</item>
+    </style>
+</resources>

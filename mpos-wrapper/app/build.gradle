@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.fado.solacepos'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.fado.solacepos"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // 2 biến thể:
+    //  - p8     : máy Kozen P8, có cầu in window.NativePrinter (in đầu in tích hợp)
+    //  - tablet : điện thoại/tablet thường, KHÔNG cầu in → webapp tự in qua trình duyệt
+    flavorDimensions "target"
+    productFlavors {
+        p8 {
+            dimension "target"
+            // applicationId mặc định com.fado.solacepos
+        }
+        tablet {
+            dimension "target"
+            applicationId "com.fado.solacepos.tablet"
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        release {
+            // Ký APK bằng keystore của bạn (xem README). Tắt minify cho đơn giản.
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.activity:activity-ktx:1.9.1'
+
+    // ── SDK in Kozen P8 ──────────────────────────────────────────────
+    // Lấy printer_v3.0.aar (hoặc jar com.pos.sdk) bỏ vào app/libs/ rồi mở dòng dưới:
+    // implementation files('libs/printer_v3.0.aar')
+    // (và bật flatDir trong settings.gradle nếu cần)
+}

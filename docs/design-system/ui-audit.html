@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI/UX Audit Report — FADO AssetFlow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #060e1a;
+  --card: #0f1c2e;
+  --primary: #0B1F3B;
+  --secondary: #18212f;
+  --muted: #1e2d42;
+  --input: #162033;
+  --fg: #f1f5f9;
+  --muted-fg: #94a3b8;
+  --secondary-fg: #cbd5e1;
+  --indigo: #4f46e5;
+  --indigo-ring: #6366f1;
+  --nav-active: #a5b4fc;
+  --accent: #C62828;
+  --border: rgba(99,102,241,.15);
+  --border-subtle: rgba(255,255,255,.06);
+  --glass: rgba(11,31,59,.85);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,.4);
+  --shadow-modal: 0 24px 80px rgba(0,0,0,.7);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--fg); font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; }
+.brand { font-family: 'Montserrat', sans-serif; }
+h1,h2,h3,h4,h5,h6 { color: var(--fg); }
+a { color: var(--nav-active); text-decoration: none; }
+code { background: var(--muted); color: var(--nav-active); padding: 2px 6px; border-radius: 4px; font-size: .85em; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.section { padding: 4rem 0; }
+.section + .section { border-top: 1px solid var(--border-subtle); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; letter-spacing: .03em; }
+.badge-indigo { background: rgba(99,102,241,.2); color: var(--nav-active); border: 1px solid rgba(99,102,241,.3); }
+.badge-green { background: rgba(16,185,129,.15); color: #34d399; border: 1px solid rgba(16,185,129,.3); }
+.badge-red { background: rgba(239,68,68,.15); color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+.badge-amber { background: rgba(245,158,11,.15); color: #fbbf24; border: 1px solid rgba(245,158,11,.3); }
+.badge-gray { background: rgba(148,163,184,.1); color: var(--muted-fg); border: 1px solid rgba(148,163,184,.2); }
+.badge-purple { background: rgba(168,85,247,.15); color: #c084fc; border: 1px solid rgba(168,85,247,.3); }
+.badge-cyan { background: rgba(6,182,212,.15); color: #22d3ee; border: 1px solid rgba(6,182,212,.3); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+@media(max-width:900px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+@media(max-width:768px) { .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; } }
+
+.btn { display: inline-flex; align-items: center; gap: .5rem; padding: .625rem 1.25rem; border-radius: var(--radius-sm); font-size: .875rem; font-weight: 600; cursor: pointer; border: none; transition: all .15s; }
+.btn-primary { background: linear-gradient(135deg,#4f46e5,#6366f1); color: #fff; }
+.btn-ghost { background: rgba(255,255,255,.05); color: var(--muted-fg); border: 1px solid var(--border-subtle); }
+
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--primary); color: var(--muted-fg); padding: .75rem 1rem; text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+td { padding: .875rem 1rem; border-bottom: 1px solid var(--border-subtle); color: var(--secondary-fg); font-size: .875rem; vertical-align: top; }
+tr:hover td { background: rgba(255,255,255,.02); }
+tr:last-child td { border-bottom: none; }
+
+/* NAV */
+.nav-header { background: var(--glass); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.logo-text { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; display: flex; align-items: baseline; gap: .25rem; }
+.logo-fado { font-weight: 800; color: var(--fg); }
+.logo-flow { font-weight: 500; color: var(--nav-active); }
+.logo-monogram { width: 34px; height: 34px; background: linear-gradient(135deg,var(--indigo),var(--nav-active)); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: 1rem; color: #fff; margin-right: .75rem; flex-shrink: 0; }
+.nav-meta { display: flex; align-items: center; gap: 1rem; }
+.nav-date { font-size: .78rem; color: var(--muted-fg); }
+.nav-tag { font-size: .72rem; font-weight: 700; background: rgba(198,40,40,.2); color: #f87171; border: 1px solid rgba(198,40,40,.3); border-radius: 20px; padding: 3px 10px; }
+
+/* HERO */
+.hero { padding: 5rem 2rem 4rem; text-align: center; background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(79,70,229,.14), transparent); border-bottom: 1px solid var(--border-subtle); }
+.hero-eyebrow { display: inline-block; margin-bottom: 1.25rem; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--nav-active); background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.25); border-radius: 20px; padding: 4px 14px; }
+.hero h1 { font-family: 'Montserrat', sans-serif; font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.15; }
+.hero h1 span { background: linear-gradient(135deg,var(--indigo),var(--nav-active)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero p { font-size: 1.1rem; color: var(--muted-fg); max-width: 580px; margin: 0 auto 2.5rem; }
+.hero-badges { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+
+/* TOC */
+.toc { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem 2rem; margin-bottom: 2rem; }
+.toc-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-fg); margin-bottom: 1rem; }
+.toc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .25rem; }
+@media(max-width:768px) { .toc-grid { grid-template-columns: 1fr 1fr; } }
+.toc-link { display: flex; align-items: center; gap: .5rem; padding: .375rem .5rem; border-radius: 6px; font-size: .82rem; color: var(--muted-fg); transition: all .15s; }
+.toc-link:hover { background: rgba(99,102,241,.08); color: var(--nav-active); }
+.toc-num { font-size: .7rem; font-weight: 700; color: var(--indigo); background: rgba(99,102,241,.15); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* STAT CARDS */
+.stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+@media(max-width:900px) { .stat-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:480px) { .stat-grid { grid-template-columns: 1fr 1fr; } }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.stat-card.s-indigo::before { background: linear-gradient(90deg,var(--indigo),var(--nav-active)); }
+.stat-card.s-green::before { background: linear-gradient(90deg,#059669,#34d399); }
+.stat-card.s-amber::before { background: linear-gradient(90deg,#d97706,#fbbf24); }
+.stat-card.s-red::before { background: linear-gradient(90deg,#dc2626,#f87171); }
+.stat-icon { font-size: 1.75rem; margin-bottom: .75rem; }
+.stat-value { font-size: 2.5rem; font-weight: 800; font-family: 'Montserrat',sans-serif; line-height: 1; margin-bottom: .375rem; }
+.stat-label { font-size: .8rem; color: var(--muted-fg); font-weight: 500; }
+.stat-sub { font-size: .72rem; color: var(--muted-fg); margin-top: .375rem; opacity: .7; }
+
+/* SECTION HEADERS */
+.section-header { margin-bottom: 2rem; }
+.section-eyebrow { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--indigo); margin-bottom: .5rem; }
+.section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: .5rem; }
+.section-desc { font-size: .9rem; color: var(--muted-fg); max-width: 600px; }
+
+/* STRENGTHS */
+.strength-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.25rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); transition: border-color .15s; }
+.strength-item:hover { border-color: rgba(52,211,153,.25); }
+.strength-check { width: 28px; height: 28px; border-radius: 50%; background: rgba(16,185,129,.15); border: 2px solid rgba(52,211,153,.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.strength-check svg { width: 13px; height: 13px; stroke: #34d399; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.strength-content h4 { font-size: .9rem; font-weight: 600; margin-bottom: .2rem; }
+.strength-content p { font-size: .8rem; color: var(--muted-fg); }
+
+/* ISSUES TABLE */
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.table-wrap table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+.issue-area { font-size: .78rem; font-weight: 600; color: var(--secondary-fg); }
+.issue-text { font-size: .85rem; color: var(--fg); font-weight: 500; margin-bottom: .35rem; }
+.issue-suggestion { font-size: .78rem; color: var(--muted-fg); line-height: 1.5; }
+.severity-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+
+/* MODULE GRID */
+.module-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+@media(max-width:1000px) { .module-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width:600px) { .module-grid { grid-template-columns: 1fr; } }
+.module-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: .75rem; transition: border-color .2s, transform .15s; }
+.module-card:hover { border-color: rgba(99,102,241,.4); transform: translateY(-2px); }
+.module-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
+.module-icon { font-size: 1.4rem; }
+.module-name { font-size: .92rem; font-weight: 700; color: var(--fg); margin-bottom: .15rem; }
+.module-path { font-family: monospace; font-size: .72rem; color: var(--indigo); background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.2); border-radius: 4px; padding: 1px 6px; display: inline-block; }
+.module-desc { font-size: .78rem; color: var(--muted-fg); line-height: 1.55; flex: 1; }
+.module-subs { display: flex; flex-wrap: wrap; gap: .375rem; }
+.module-sub-chip { font-size: .68rem; color: var(--muted-fg); background: rgba(255,255,255,.05); border: 1px solid var(--border-subtle); border-radius: 4px; padding: 2px 6px; font-family: monospace; }
+
+/* PRIORITY LIST */
+.priority-item { display: flex; gap: 1.25rem; padding: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color .15s; }
+.priority-item:hover { border-color: rgba(99,102,241,.3); }
+.priority-num { font-family: 'Montserrat',sans-serif; font-size: 2rem; font-weight: 800; color: var(--indigo); opacity: .4; line-height: 1; flex-shrink: 0; min-width: 2.5rem; }
+.priority-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: .375rem; }
+.priority-content p { font-size: .85rem; color: var(--muted-fg); margin-bottom: .75rem; line-height: 1.6; }
+.priority-meta { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+.impact-bar { display: flex; align-items: center; gap: .5rem; }
+.impact-label { font-size: .72rem; color: var(--muted-fg); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.impact-dots { display: flex; gap: 3px; }
+.impact-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.impact-dot.filled { background: var(--indigo); }
+.impact-dot.filled.high { background: #f87171; }
+.impact-dot.filled.med { background: #fbbf24; }
+
+/* ROADMAP */
+.roadmap { display: flex; flex-direction: column; gap: 0; }
+.roadmap-phase { display: flex; gap: 1.5rem; position: relative; }
+.roadmap-phase + .roadmap-phase { margin-top: 0; }
+.roadmap-left { display: flex; flex-direction: column; align-items: center; min-width: 120px; }
+.roadmap-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: .85rem; flex-shrink: 0; border: 2px solid; }
+.roadmap-line { width: 2px; flex: 1; min-height: 2rem; margin: 4px 0; }
+.roadmap-phase:last-child .roadmap-line { display: none; }
+.phase-now .roadmap-circle { background: rgba(99,102,241,.2); border-color: var(--indigo); color: var(--nav-active); }
+.phase-now .roadmap-line { background: linear-gradient(to bottom,var(--indigo),rgba(99,102,241,.1)); }
+.phase-q3 .roadmap-circle { background: rgba(245,158,11,.15); border-color: #d97706; color: #fbbf24; }
+.phase-q3 .roadmap-line { background: linear-gradient(to bottom,#d97706,rgba(245,158,11,.1)); }
+.phase-q4 .roadmap-circle { background: rgba(16,185,129,.12); border-color: #059669; color: #34d399; }
+.phase-q4 .roadmap-line { background: transparent; }
+.roadmap-content { padding: 0 0 2.5rem; flex: 1; }
+.roadmap-phase-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .375rem; margin-top: .75rem; }
+.phase-now .roadmap-phase-label { color: var(--nav-active); }
+.phase-q3 .roadmap-phase-label { color: #fbbf24; }
+.phase-q4 .roadmap-phase-label { color: #34d399; }
+.roadmap-content h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+.roadmap-tasks { display: flex; flex-direction: column; gap: .375rem; }
+.roadmap-task { display: flex; align-items: flex-start; gap: .625rem; font-size: .85rem; color: var(--secondary-fg); }
+.roadmap-task::before { content: '→'; color: var(--muted-fg); flex-shrink: 0; margin-top: .05rem; }
+
+/* CONCLUSION */
+.conclusion-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+@media(max-width:768px) { .conclusion-grid { grid-template-columns: 1fr; } }
+.score-ring { width: 140px; height: 140px; margin: 0 auto 1rem; position: relative; }
+.score-ring svg { transform: rotate(-90deg); }
+.score-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.score-value { font-family: 'Montserrat',sans-serif; font-size: 2rem; font-weight: 800; color: var(--fg); line-height: 1; }
+.score-max { font-size: .75rem; color: var(--muted-fg); }
+
+/* FOOTER */
+.footer { background: var(--primary); border-top: 1px solid var(--border); padding: 2.5rem 2rem; text-align: center; }
+.footer-logo { display: flex; align-items: center; justify-content: center; gap: .625rem; margin-bottom: .75rem; }
+.footer p { font-size: .8rem; color: var(--muted-fg); }
+.footer-divider { width: 40px; height: 2px; background: var(--border); margin: 1rem auto; }
+
+/* PRINT */
+@media print {
+  .nav-header { position: relative; }
+  body { background: #fff; color: #111; }
+  .section + .section { border-top: 1px solid #e5e7eb; }
+  .card, .table-wrap, .module-card, .strength-item, .priority-item { border: 1px solid #e5e7eb; }
+}
+
+/* UTILS */
+.mt-1 { margin-top: .25rem; }
+.mt-2 { margin-top: .5rem; }
+.mt-3 { margin-top: .75rem; }
+.mb-1 { margin-bottom: .25rem; }
+.mb-2 { margin-bottom: .5rem; }
+.mb-3 { margin-bottom: .75rem; }
+.gap-sm { gap: .75rem; }
+.text-sm { font-size: .875rem; }
+.text-xs { font-size: .78rem; }
+.text-muted { color: var(--muted-fg); }
+.font-bold { font-weight: 700; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.gap-1 { gap: .25rem; }
+.gap-2 { gap: .5rem; }
+.gap-3 { gap: .75rem; }
+.flex-wrap { flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-header">
+  <div style="display:flex;align-items:center;gap:.25rem;">
+    <div class="logo-monogram">A</div>
+    <div class="logo-text">
+      <span class="logo-fado">FADO</span>
+      <span class="logo-flow">AssetFlow</span>
+    </div>
+  </div>
+  <div class="nav-meta">
+    <span class="nav-date">Báo cáo tháng 6 / 2026</span>
+    <span class="nav-tag">INTERNAL AUDIT</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">UI/UX Audit Report</div>
+  <h1>Đánh Giá Giao Diện &amp;<br><span>Trải Nghiệm Người Dùng</span></h1>
+  <p>Phân tích toàn diện kiến trúc module, tính nhất quán thiết kế, và ưu tiên cải tiến cho hệ thống FADO AssetFlowPro.</p>
+  <div class="hero-badges">
+    <span class="badge badge-indigo">Next.js 13.5 App Router</span>
+    <span class="badge badge-green">Dark-Mode First</span>
+    <span class="badge badge-purple">RBAC 20 Modules</span>
+    <span class="badge badge-cyan">282 API Endpoints</span>
+    <span class="badge badge-amber">167 Migrations</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="section" style="padding-bottom:2rem;">
+    <div class="toc">
+      <div class="toc-title">Mục lục</div>
+      <div class="toc-grid">
+        <a href="#executive" class="toc-link"><span class="toc-num">1</span>Tóm tắt Executive</a>
+        <a href="#strengths" class="toc-link"><span class="toc-num">2</span>Điểm mạnh hệ thống</a>
+        <a href="#issues" class="toc-link"><span class="toc-num">3</span>Vấn đề UI/UX</a>
+        <a href="#modules" class="toc-link"><span class="toc-num">4</span>Module Inventory</a>
+        <a href="#priorities" class="toc-link"><span class="toc-num">5</span>Đề xuất ưu tiên</a>
+        <a href="#roadmap" class="toc-link"><span class="toc-num">6</span>Kết luận &amp; Lộ trình</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="section" id="executive">
+    <div class="section-header">
+      <div class="section-eyebrow">01 — Executive Summary</div>
+      <h2 class="section-title">Tổng Quan Hệ Thống</h2>
+      <p class="section-desc">FADO AssetFlowPro là hệ thống quản lý tài sản doanh nghiệp trưởng thành với kiến trúc vững chắc. Audit xác định 8 vấn đề cần xử lý, 2 trong số đó có mức độ cao.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card s-indigo">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value" style="color:var(--nav-active);">20</div>
+        <div class="stat-label">Module chính</div>
+        <div class="stat-sub">+ 25 module con, 7 loại action RBAC</div>
+      </div>
+      <div class="stat-card s-green">
+        <div class="stat-icon">🗺️</div>
+        <div class="stat-value" style="color:#34d399;">35+</div>
+        <div class="stat-label">Route / Trang</div>
+        <div class="stat-sub">282 API endpoints, 90+ service files</div>
+      </div>
+      <div class="stat-card s-amber">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-value" style="color:#fbbf24;">8</div>
+        <div class="stat-label">Vấn đề phát hiện</div>
+        <div class="stat-sub">2 high · 4 medium · 2 low</div>
+      </div>
+      <div class="stat-card s-red">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" style="color:#f87171;">7.4<span style="font-size:1.2rem;opacity:.6;">/10</span></div>
+        <div class="stat-label">Điểm UX tổng thể</div>
+        <div class="stat-sub">Tiềm năng đạt 9.0+ sau cải tiến</div>
+      </div>
+    </div>
+
+    <div class="grid-3 mt-3" style="margin-top:1.5rem;">
+      <div class="card">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:.625rem;">Phạm vi audit</div>
+        <div style="display:flex;flex-direction:column;gap:.5rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.85rem;">Cấu trúc điều hướng</span><span class="badge badge-amber">Cần cải thiện</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.85rem;">Design system</span><span class="badge badge-green">Tốt</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.85rem;">Tính nhất quán UI</span><span class="badge badge-amber">Trung bình</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.85rem;">Bảo mật API</span><span class="badge badge-red">Cần khẩn cấp</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:.85rem;">Responsive / Mobile</span><span class="badge badge-green">Tốt</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:.625rem;">Phân bố mức độ vấn đề</div>
+        <div style="display:flex;flex-direction:column;gap:.875rem;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;"><span>High (2)</span><span style="color:#f87171;">25%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:25%;background:linear-gradient(90deg,#dc2626,#f87171);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;"><span>Medium (4)</span><span style="color:#fbbf24;">50%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:50%;background:linear-gradient(90deg,#d97706,#fbbf24);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;"><span>Low (2)</span><span style="color:#34d399;">25%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:25%;background:linear-gradient(90deg,#059669,#34d399);border-radius:3px;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:.625rem;">Điểm số theo hạng mục</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;"><span>Kiến trúc</span><span style="color:var(--nav-active);">9/10</span></div>
+            <div style="height:4px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:90%;background:var(--indigo);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;"><span>Design System</span><span style="color:var(--nav-active);">8/10</span></div>
+            <div style="height:4px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:80%;background:var(--indigo);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;"><span>Điều hướng</span><span style="color:#fbbf24;">6/10</span></div>
+            <div style="height:4px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:60%;background:#d97706;border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;"><span>Bảo mật</span><span style="color:#f87171;">5/10</span></div>
+            <div style="height:4px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:50%;background:#dc2626;border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.25rem;"><span>Nhất quán UX</span><span style="color:#fbbf24;">7/10</span></div>
+            <div style="height:4px;background:var(--muted);border-radius:3px;overflow:hidden;"><div style="height:100%;width:70%;background:#d97706;border-radius:3px;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRENGTHS -->
+  <div class="section" id="strengths">
+    <div class="section-header">
+      <div class="section-eyebrow">02 — Điểm Mạnh</div>
+      <h2 class="section-title">Những Gì Đang Hoạt Động Tốt</h2>
+      <p class="section-desc">11 điểm mạnh cốt lõi tạo nền tảng vững chắc cho hệ thống — cần bảo tồn và không phá vỡ trong quá trình cải tiến.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Kiến trúc App Router nhất quán</h4>
+          <p>Next.js 13.5 App Router với service layer tách biệt rõ ràng — 90+ service files, mỗi file có JSDoc và return type tường minh.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>RBAC chi tiết &amp; mở rộng được</h4>
+          <p>20 module mẹ + 25 module con, 7 loại action (view/create/edit/delete/approve/export/admin). Ma trận phân quyền có thể sửa từ DB.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Design system dark-mode-first</h4>
+          <p>CSS variables nhất quán, không hardcode màu sắc, dễ theming. Tất cả component dùng <code>var(--card)</code>, <code>var(--fg)</code>, border <code>rgba</code>.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Multi-company support đầy đủ</h4>
+          <p>Company switcher trên Topbar, <code>getEffectiveContext()</code> tự suy role theo công ty hiện tại — 1 user nhiều vai trò ở nhiều công ty.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Tích hợp Zimbra SOAP sâu</h4>
+          <p>Tạo/xóa email, đẩy chữ ký HTML, quản lý tài khoản qua Admin API. Hỗ trợ TLS với tuỳ chọn bỏ qua cert check cho môi trường internal.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Realtime qua Server-Sent Events</h4>
+          <p>SSE cho attendance và notifications — nhẹ hơn WebSocket, không cần thư viện bổ sung, hoạt động tốt qua Traefik/Docker.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>167 migration idempotent</h4>
+          <p>Dùng <code>IF NOT EXISTS</code> — migration có thể chạy lại không lỗi. Quy trình chặt chẽ: cột mới = migration ngay, không để nợ kỹ thuật.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>ATS đầy đủ pipeline tuyển dụng</h4>
+          <p>Kanban @dnd-kit, trích xuất CV (pdf-parse + mammoth), kho JD, pipeline từ yêu cầu → duyệt → ứng viên → onboarding.</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Export Excel chuẩn bảng công VN</h4>
+          <p>Format DETAIL_fill với xlsx-js-style, tab Chế Độ &amp; Đãi Ngộ, phân biệt công đặc biệt (công tác / WFH / làm theo ca).</p>
+        </div>
+      </div>
+
+      <div class="strength-item">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>Telegram integration đôi chiều</h4>
+          <p>Login widget xác thực HMAC + approval bot cho workflow duyệt yêu cầu ngay trên Telegram — giảm thời gian xử lý đáng kể.</p>
+        </div>
+      </div>
+
+      <div class="strength-item" style="grid-column:span 2;">
+        <div class="strength-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="strength-content">
+          <h4>282 API endpoints — phủ sóng toàn bộ nghiệp vụ</h4>
+          <p>Pattern chuẩn với try/catch, error logging, permission check trên mọi route. Tách biệt collection route (<code>/api/x</code>) và item route (<code>/api/x/[id]</code>) nhất quán.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ISSUES -->
+  <div class="section" id="issues">
+    <div class="section-header">
+      <div class="section-eyebrow">03 — Vấn Đề UI/UX</div>
+      <h2 class="section-title">Các Vấn Đề Được Phát Hiện</h2>
+      <p class="section-desc">8 vấn đề phân theo mức độ ảnh hưởng — từ bảo mật nghiêm trọng đến cải thiện trải nghiệm nhỏ.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:110px;">Mức độ</th>
+            <th style="width:140px;">Khu vực</th>
+            <th>Vấn đề</th>
+            <th>Đề xuất xử lý</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red"><span class="severity-dot" style="background:#f87171;"></span>HIGH</span></td>
+            <td class="issue-area">API Security</td>
+            <td>
+              <div class="issue-text">Permission check có thể bị giả mạo</div>
+              <div class="issue-suggestion"><code>checkPermission()</code> đọc quyền từ header <code>x-user-permissions</code> do client tự gửi — bất kỳ ai cũng có thể spoof header này để leo thang quyền.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Thay thế bằng session/JWT verify phía server. Đọc quyền từ DB theo session token, không từ header client. Ưu tiên khẩn cấp trước khi mở public.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red"><span class="severity-dot" style="background:#f87171;"></span>HIGH</span></td>
+            <td class="issue-area">Chấm Công / IA</td>
+            <td>
+              <div class="issue-text">Tính năng cốt lõi bị chôn sâu trong Tra Cứu</div>
+              <div class="issue-suggestion">Cấu trúc <code>/tra-cuu/du-lieu-cong</code> đặt chức năng chấm công (nghiệp vụ chủ lực hàng ngày) bên trong module Tra Cứu — làm giảm tầm quan trọng và tăng độ sâu breadcrumb không cần thiết.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Tách thành top-level route <code>/cham-cong</code> với 4 tab: Checkin, Tra Cứu, Máy ZKTeco, Cấu Hình Nghỉ Phép. Giảm breadcrumb từ 3 cấp xuống 2 cấp.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber"><span class="severity-dot" style="background:#fbbf24;"></span>MEDIUM</span></td>
+            <td class="issue-area">URL Convention</td>
+            <td>
+              <div class="issue-text">URL slug không nhất quán tiếng Anh / tiếng Việt</div>
+              <div class="issue-suggestion">Mix không đồng đều: <code>/tra-cuu</code>, <code>/nguon-nhan-luc</code>, <code>/duyet-yeu-cau</code> (tiếng Việt) lẫn với <code>/asset-management</code>, <code>/tickets</code>, <code>/tasks</code> (tiếng Anh). Gây khó bookmark và không thân thiện SEO.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Chọn một quy ước duy nhất — ưu tiên tiếng Anh cho slug. Ví dụ: <code>/lookup</code>, <code>/hr</code>, <code>/approvals</code>, <code>/attendance</code>. Có thể thêm redirect 301 từ URL cũ.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber"><span class="severity-dot" style="background:#fbbf24;"></span>MEDIUM</span></td>
+            <td class="issue-area">Sidebar / IA</td>
+            <td>
+              <div class="issue-text">Module delete-requests và duyet-yeu-cau chồng lấp</div>
+              <div class="issue-suggestion">Hai điểm vào khác nhau cho nghiệp vụ tương tự: <code>/delete-requests</code> (duyệt xóa tài sản) và <code>/duyet-yeu-cau</code> (bù công, tăng ca, xóa tài sản). Người dùng tìm kiếm ở 2 chỗ.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Gộp vào <code>/approvals</code> duy nhất với tab con: Bù Công / Tăng Ca / Xóa Tài Sản / Bảng Công. Giảm cognitive load khi cần duyệt yêu cầu.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber"><span class="severity-dot" style="background:#fbbf24;"></span>MEDIUM</span></td>
+            <td class="issue-area">Code Reuse</td>
+            <td>
+              <div class="issue-text">Ticket và Task có UI tương tự nhưng component riêng biệt</div>
+              <div class="issue-suggestion">Cả hai module đều có detail modal, comment thread, attachment, follower — nhưng được implement hoàn toàn riêng rẽ. Bảo trì tốn gấp đôi chi phí khi cần thay đổi.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Tạo shared component <code>DetailPanel</code>, <code>CommentThread</code>, <code>AttachmentList</code>, <code>FollowerPicker</code> có thể nhận props cấu hình. Giảm ~40% code duplicate.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber"><span class="severity-dot" style="background:#fbbf24;"></span>MEDIUM</span></td>
+            <td class="issue-area">Onboarding Route</td>
+            <td>
+              <div class="issue-text">Hai route onboarding dễ nhầm lẫn public vs private</div>
+              <div class="issue-suggestion"><code>/nguon-nhan-luc/onboarding</code> (HR quản lý, cần đăng nhập) và <code>/onboarding/thong-tin-nhan-su-dau-vao</code> (public form điền thông tin) gần giống nhau — dễ share nhầm link cho nhân sự mới.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Đặt public form vào <code>/forms/onboarding/[token]</code> để tách bạch hoàn toàn. Public route không cần auth, private route trong <code>/hr/onboarding</code>.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray"><span class="severity-dot" style="background:var(--muted-fg);"></span>LOW</span></td>
+            <td class="issue-area">Màu Module</td>
+            <td>
+              <div class="issue-text">Modules announcements và recruitment-order dùng cùng màu</div>
+              <div class="issue-suggestion">Cả hai module dùng <code>#F97316</code> trong permission matrix — gây khó phân biệt trực quan khi admin cấu hình quyền cho nhiều module HR cùng lúc.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Gán bảng màu phân biệt: announcements → amber, recruitment → teal/cyan, offboarding → slate. Tổng cần 20 màu riêng biệt cho 20 module mẹ.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray"><span class="severity-dot" style="background:var(--muted-fg);"></span>LOW</span></td>
+            <td class="issue-area">Empty State</td>
+            <td>
+              <div class="issue-text">Mỗi trang tự implement empty state riêng</div>
+              <div class="issue-suggestion">Theo CLAUDE.md template, mỗi trang có empty state riêng — thiếu nhất quán về icon size, text style, spacing giữa các trang khác nhau trong cùng hệ thống.</div>
+            </td>
+            <td style="color:var(--secondary-fg);font-size:.82rem;">Tạo shared <code>EmptyState</code> component với props: <code>icon</code>, <code>title</code>, <code>description</code>, <code>action?: {'{label, onClick}'}</code>. Import từ <code>components/ui/EmptyState.tsx</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODULE INVENTORY -->
+  <div class="section" id="modules">
+    <div class="section-header">
+      <div class="section-eyebrow">04 — Module Inventory</div>
+      <h2 class="section-title">Toàn Bộ Module Hệ Thống</h2>
+      <p class="section-desc">20 module chính với trạng thái đánh giá — dựa trên độ hoàn thiện, vị trí điều hướng, và tính nhất quán thiết kế.</p>
+    </div>
+
+    <div class="module-grid">
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📊</div>
+            <div class="module-name">Bảng Điều Khiển</div>
+            <div class="module-path">/dashboard</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Command center 2 cột hỗ trợ cả 3 role: super_admin, manager, user. KPI cards, comms cột phải, scope theo cấp dưới cho manager.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🖥️</div>
+            <div class="module-name">Quản Lý Tài Sản</div>
+            <div class="module-path">/asset-management</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Phần cứng, phần mềm, domain, tài khoản email Zimbra. Phân công tài sản, lịch sử vòng đời, yêu cầu xóa.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/hardware</span>
+          <span class="module-sub-chip">/software</span>
+          <span class="module-sub-chip">/asset-domains</span>
+          <span class="module-sub-chip">/asset-emails</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🎫</div>
+            <div class="module-name">Ticket Hỗ Trợ</div>
+            <div class="module-path">/tickets</div>
+          </div>
+          <span class="badge badge-amber">Cần refactor</span>
+        </div>
+        <div class="module-desc">Hệ thống ticket nội bộ với luồng admin/user riêng biệt. Danh mục cấu hình, comment, attachment, SLA tracking.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/ticket-config</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">✅</div>
+            <div class="module-name">Nhiệm Vụ</div>
+            <div class="module-path">/tasks</div>
+          </div>
+          <span class="badge badge-amber">Cần refactor</span>
+        </div>
+        <div class="module-desc">Quản lý nhiệm vụ kèm analytics, subtask, attachment, comment, follower. Liên kết 2 chiều với Ticket.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/tasks-analytics</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🏠</div>
+            <div class="module-name">Đặt Phòng</div>
+            <div class="module-path">/room-bookings</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Đặt và quản lý phòng họp, lịch view, lịch sử sử dụng. Cấu hình phòng theo công ty.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">✍️</div>
+            <div class="module-name">Duyệt Yêu Cầu</div>
+            <div class="module-path">/duyet-yeu-cau</div>
+          </div>
+          <span class="badge badge-red">Cần gộp</span>
+        </div>
+        <div class="module-desc">Xét duyệt bù công, tăng ca, bảng công. Chồng lấp với /delete-requests — cần gộp thành một điểm vào duy nhất.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🗑️</div>
+            <div class="module-name">Duyệt Xóa Tài Sản</div>
+            <div class="module-path">/delete-requests</div>
+          </div>
+          <span class="badge badge-red">Cần gộp</span>
+        </div>
+        <div class="module-desc">Phê duyệt yêu cầu xóa tài sản với flow 2 bước. Nên gộp vào /approvals cùng với Duyệt Yêu Cầu.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🏢</div>
+            <div class="module-name">Tổ Chức</div>
+            <div class="module-path">/organization</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Cấu trúc tổ chức: công ty, phòng ban, chức danh, vị trí, tags. Sơ đồ tổ chức visual.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/org-companies</span>
+          <span class="module-sub-chip">/org-job-titles</span>
+          <span class="module-sub-chip">/org-positions</span>
+          <span class="module-sub-chip">/org-tags</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">👥</div>
+            <div class="module-name">Người Dùng</div>
+            <div class="module-path">/nhan-su</div>
+          </div>
+          <span class="badge badge-amber">URL cần đổi</span>
+        </div>
+        <div class="module-desc">Quản lý người dùng hệ thống, phân quyền theo role, duyệt onboarding. Hiển thị logo công ty 72px.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">⚙️</div>
+            <div class="module-name">Cài Đặt</div>
+            <div class="module-path">/settings</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Cấu hình hệ thống, cài đặt chung, thông tin công ty, tích hợp Zimbra/Email.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📋</div>
+            <div class="module-name">Lịch Sử</div>
+            <div class="module-path">/history</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Audit log toàn hệ thống — theo dõi mọi thay đổi với timestamp, user, action, target.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📝</div>
+            <div class="module-name">Biểu Mẫu</div>
+            <div class="module-path">/bieu-mau</div>
+          </div>
+          <span class="badge badge-amber">URL cần đổi</span>
+        </div>
+        <div class="module-desc">Cấu hình biểu mẫu onboarding, gửi link token cho nhân sự mới, public form. Nên di chuyển public form ra <code>/forms/[token]</code>.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🧑‍💼</div>
+            <div class="module-name">Nguồn Nhân Lực</div>
+            <div class="module-path">/nguon-nhan-luc</div>
+          </div>
+          <span class="badge badge-amber">URL cần đổi</span>
+        </div>
+        <div class="module-desc">ATS đầy đủ: tuyển dụng, onboarding, offboarding, kho CV (trích xuất PDF), kho JD, biến động nhân sự.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/hr-recruitment</span>
+          <span class="module-sub-chip">/hr-requisitions</span>
+          <span class="module-sub-chip">/hr-onboarding</span>
+          <span class="module-sub-chip">/hr-offboarding</span>
+          <span class="module-sub-chip">/hr-cv</span>
+          <span class="module-sub-chip">/hr-jd</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🕐</div>
+            <div class="module-name">Dữ Liệu Chấm Công</div>
+            <div class="module-path">/tra-cuu/du-lieu-cong</div>
+          </div>
+          <span class="badge badge-red">Cần tách route</span>
+        </div>
+        <div class="module-desc">Điểm danh ZKTeco, tra cứu công, bảng công tổng hợp, xác nhận, nghỉ phép, cấu hình máy. Bị chôn sâu trong Tra Cứu — cần lên top-level <code>/cham-cong</code>.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/checkin</span>
+          <span class="module-sub-chip">/lookup</span>
+          <span class="module-sub-chip">/machines</span>
+          <span class="module-sub-chip">/leave-config</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🔍</div>
+            <div class="module-name">Tra Cứu</div>
+            <div class="module-path">/tra-cuu</div>
+          </div>
+          <span class="badge badge-amber">URL cần đổi</span>
+        </div>
+        <div class="module-desc">Tra cứu đa loại: tài sản, đầu mối, lịch sử, văn bản, thông báo. Sau khi tách chấm công ra ngoài, module này sẽ gọn hơn.</div>
+        <div class="module-subs">
+          <span class="module-sub-chip">/tra-cuu-tai-san</span>
+          <span class="module-sub-chip">/tra-cuu-dau-moi</span>
+          <span class="module-sub-chip">/tra-cuu-van-ban</span>
+          <span class="module-sub-chip">/tra-cuu-thong-bao</span>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">✉️</div>
+            <div class="module-name">Chữ Ký Email</div>
+            <div class="module-path">/email-signature</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">5 mẫu chữ ký HTML email-safe, iframe preview, copy rich-text, đẩy lên Zimbra. Phase 2: tự động đẩy định kỳ.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📄</div>
+            <div class="module-name">Hợp Đồng &amp; Hồ Sơ</div>
+            <div class="module-path">/ho-so-cua-toi</div>
+          </div>
+          <span class="badge badge-amber">URL cần đổi</span>
+        </div>
+        <div class="module-desc">Self-service: xem hợp đồng cá nhân, gửi yêu cầu đổi hồ sơ. Watcher, đính kèm, nhắc gia hạn auto.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📢</div>
+            <div class="module-name">Thông Báo Nội Bộ</div>
+            <div class="module-path">(chưa có trang)</div>
+          </div>
+          <span class="badge badge-gray">Thiếu trang</span>
+        </div>
+        <div class="module-desc">Đăng và quản lý thông báo nội bộ. Module đã định nghĩa trong RBAC nhưng chưa có trang riêng — hiện tại nhúng trong Dashboard.</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">📁</div>
+            <div class="module-name">Quản Lý Hồ Sơ</div>
+            <div class="module-path">(admin, chưa rõ route)</div>
+          </div>
+          <span class="badge badge-gray">Cần rõ route</span>
+        </div>
+        <div class="module-desc">Hợp đồng nhân sự phía admin, gia hạn, đính kèm, watcher. Cần xác định route riêng biệt với /ho-so-cua-toi (self-service).</div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-card-header">
+          <div>
+            <div class="module-icon">🤝</div>
+            <div class="module-name">Yêu Cầu Tuyển Dụng</div>
+            <div class="module-path">/nguon-nhan-luc/yeu-cau-tuyen-dung</div>
+          </div>
+          <span class="badge badge-green">Hoàn thiện</span>
+        </div>
+        <div class="module-desc">Cổng đặt yêu cầu tuyển dụng cho phòng ban. Duyệt phân cấp admin + quyền approve, clone để tuyển lại.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRIORITIES -->
+  <div class="section" id="priorities">
+    <div class="section-header">
+      <div class="section-eyebrow">05 — Đề Xuất Ưu Tiên</div>
+      <h2 class="section-title">Cải Tiến Theo Thứ Tự Ưu Tiên</h2>
+      <p class="section-desc">6 cải tiến xếp theo tác động thực tế — từ bảo mật khẩn cấp đến tối ưu trải nghiệm dài hạn.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+
+      <div class="priority-item">
+        <div class="priority-num">01</div>
+        <div class="priority-content">
+          <h4>Thay thế permission check giả mạo được bằng session verify thực</h4>
+          <p>Đây là lỗ hổng bảo mật nghiêm trọng nhất. Bất kỳ người dùng nào cũng có thể tự set header <code>x-user-permissions</code> để leo thang quyền truy cập. Cần implement JWT hoặc server-side session store (Redis/DB), xác thực mọi request API từ token — không tin tưởng input từ client.</p>
+          <div class="priority-meta">
+            <span class="badge badge-red">Khẩn cấp</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động bảo mật</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Cao</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">02</div>
+        <div class="priority-content">
+          <h4>Tách Chấm Công thành top-level route /cham-cong</h4>
+          <p>Chấm công là nghiệp vụ hàng ngày của mọi nhân viên và quản lý — không nên chôn trong <code>/tra-cuu</code>. Tách ra <code>/cham-cong</code> với 4 tab sẽ giảm breadcrumb từ 3 cấp xuống 2 cấp, người dùng tìm thấy nhanh hơn. Đây là thay đổi IA có tác động người dùng lớn nhất.</p>
+          <div class="priority-meta">
+            <span class="badge badge-red">HIGH</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động UX</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot filled high"></div>
+                <div class="impact-dot"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Thấp</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">03</div>
+        <div class="priority-content">
+          <h4>Gộp delete-requests và duyet-yeu-cau thành /approvals</h4>
+          <p>Hai module chồng lấp gây confusion — người phê duyệt phải nhớ 2 chỗ khác nhau. Gộp thành <code>/approvals</code> với tab Bù Công / Tăng Ca / Xóa Tài Sản / Bảng Công. Thêm badge số lượng pending trên sidebar item để thay thế cả hai mục hiện tại.</p>
+          <div class="priority-meta">
+            <span class="badge badge-amber">MEDIUM</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động UX</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Thấp</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">04</div>
+        <div class="priority-content">
+          <h4>Chuẩn hóa URL slug sang tiếng Anh toàn bộ</h4>
+          <p>Định ra convention: tất cả route slug dùng tiếng Anh viết thường, dấu gạch ngang. Mapping đề xuất: <code>/tra-cuu → /lookup</code>, <code>/nguon-nhan-luc → /hr</code>, <code>/duyet-yeu-cau → /approvals</code>, <code>/nhan-su → /users</code>, <code>/bieu-mau → /forms</code>, <code>/ho-so-cua-toi → /my-profile</code>. Thêm redirect 301 để không phá bookmark cũ.</p>
+          <div class="priority-meta">
+            <span class="badge badge-amber">MEDIUM</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động DX</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot"></div>
+                <div class="impact-dot"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Trung bình</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">05</div>
+        <div class="priority-content">
+          <h4>Tạo shared DetailPanel và CommentThread component</h4>
+          <p>Ticket và Task share ~60% UI logic (header, status badge, comment thread, attachment list, follower picker, timeline). Tạo shared component trong <code>components/shared/</code> với render props hoặc composition pattern. Giảm maintenance burden khi cần thêm tính năng cho cả hai module (ví dụ: reaction, mention).</p>
+          <div class="priority-meta">
+            <span class="badge badge-amber">MEDIUM</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động DX</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot filled med"></div>
+                <div class="impact-dot"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Trung bình</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">06</div>
+        <div class="priority-content">
+          <h4>Shared EmptyState component và màu module phân biệt</h4>
+          <p>Tạo <code>EmptyState</code> component tái sử dụng với props chuẩn, thay thế các implementation riêng trên từng trang. Song song đó, gán 20 màu phân biệt cho 20 module trong permission matrix — ưu tiên nhóm HR có nhiều module dễ nhầm lẫn nhất (announcements, recruitment, onboarding, offboarding).</p>
+          <div class="priority-meta">
+            <span class="badge badge-gray">LOW</span>
+            <div class="impact-bar">
+              <span class="impact-label">Tác động UX</span>
+              <div class="impact-dots">
+                <div class="impact-dot filled"></div>
+                <div class="impact-dot filled"></div>
+                <div class="impact-dot"></div>
+                <div class="impact-dot"></div>
+                <div class="impact-dot"></div>
+              </div>
+            </div>
+            <span class="badge badge-gray">Effort: Thấp</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ROADMAP & CONCLUSION -->
+  <div class="section" id="roadmap">
+    <div class="section-header">
+      <div class="section-eyebrow">06 — Kết Luận &amp; Lộ Trình</div>
+      <h2 class="section-title">Lộ Trình Cải Tiến</h2>
+      <p class="section-desc">Phân kỳ 3 giai đoạn — từ vá lỗ hổng bảo mật khẩn cấp đến tối ưu dài hạn.</p>
+    </div>
+
+    <div class="conclusion-grid">
+      <div>
+        <div class="roadmap">
+
+          <div class="roadmap-phase phase-now">
+            <div class="roadmap-left">
+              <div class="roadmap-circle">P1</div>
+              <div class="roadmap-line"></div>
+            </div>
+            <div class="roadmap-content">
+              <div class="roadmap-phase-label">Ưu tiên ngay — Tháng 6-7 / 2026</div>
+              <h4>Bảo Mật &amp; Cấu Trúc Điều Hướng</h4>
+              <div class="roadmap-tasks">
+                <div class="roadmap-task">Implement JWT / session verify server-side cho tất cả API routes</div>
+                <div class="roadmap-task">Thống nhất hệ auth: bỏ MOCK_USERS trong authStore.ts, chỉ dùng DB + bcrypt</div>
+                <div class="roadmap-task">Tách <code>/cham-cong</code> thành top-level route</div>
+                <div class="roadmap-task">Gộp delete-requests + duyet-yeu-cau thành <code>/approvals</code></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-phase phase-q3">
+            <div class="roadmap-left">
+              <div class="roadmap-circle">P2</div>
+              <div class="roadmap-line"></div>
+            </div>
+            <div class="roadmap-content">
+              <div class="roadmap-phase-label">Quý 3 / 2026 — Nhất Quán URL &amp; Component</div>
+              <h4>Chuẩn Hóa &amp; Tái Sử Dụng Code</h4>
+              <div class="roadmap-tasks">
+                <div class="roadmap-task">Đổi tất cả URL slug sang tiếng Anh, thêm redirect 301</div>
+                <div class="roadmap-task">Tạo shared <code>DetailPanel</code>, <code>CommentThread</code>, <code>AttachmentList</code></div>
+                <div class="roadmap-task">Tách public form onboarding ra <code>/forms/[token]</code></div>
+                <div class="roadmap-task">Fix migration trùng số thứ tự (008, 009, 012)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-phase phase-q4">
+            <div class="roadmap-left">
+              <div class="roadmap-circle">P3</div>
+              <div class="roadmap-line"></div>
+            </div>
+            <div class="roadmap-content">
+              <div class="roadmap-phase-label">Quý 4 / 2026 — Hoàn Thiện UX</div>
+              <h4>Đánh Bóng &amp; Tối Ưu</h4>
+              <div class="roadmap-tasks">
+                <div class="roadmap-task">Tạo <code>EmptyState</code> shared component, áp dụng toàn hệ thống</div>
+                <div class="roadmap-task">Gán 20 màu phân biệt cho permission matrix module</div>
+                <div class="roadmap-task">Tạo trang riêng cho module Thông Báo Nội Bộ</div>
+                <div class="roadmap-task">Xác định và document rõ route cho Quản Lý Hồ Sơ admin</div>
+                <div class="roadmap-task">Audit RLS policies — thay <code>USING(true)</code> bằng policy thực</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:1rem;">Điểm UX Hiện Tại</div>
+          <div class="score-ring">
+            <svg viewBox="0 0 140 140" width="140" height="140">
+              <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(99,102,241,.15)" stroke-width="10"/>
+              <circle cx="70" cy="70" r="58" fill="none" stroke="url(#scoreGrad)" stroke-width="10"
+                stroke-dasharray="364.4" stroke-dashoffset="94.7" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#4f46e5"/>
+                  <stop offset="100%" style="stop-color:#a5b4fc"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="score-center">
+              <div class="score-value">7.4</div>
+              <div class="score-max">/ 10</div>
+            </div>
+          </div>
+          <p style="font-size:.78rem;color:var(--muted-fg);margin-top:.5rem;">Tiềm năng đạt <strong style="color:#34d399;">9.0+</strong> sau P1+P2</p>
+        </div>
+
+        <div class="card">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted-fg);margin-bottom:.875rem;">Tóm Tắt Rủi Ro</div>
+          <div style="display:flex;flex-direction:column;gap:.625rem;">
+            <div style="display:flex;align-items:flex-start;gap:.625rem;">
+              <span style="font-size:1rem;margin-top:1px;">🔴</span>
+              <div>
+                <div style="font-size:.8rem;font-weight:600;">Permission spoofing</div>
+                <div style="font-size:.72rem;color:var(--muted-fg);">Production blocker — cần fix trước khi go public</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.625rem;">
+              <span style="font-size:1rem;margin-top:1px;">🟠</span>
+              <div>
+                <div style="font-size:.8rem;font-weight:600;">Dual auth system</div>
+                <div style="font-size:.72rem;color:var(--muted-fg);">Mock users vs DB auth — loại bỏ MOCK_USERS</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.625rem;">
+              <span style="font-size:1rem;margin-top:1px;">🟡</span>
+              <div>
+                <div style="font-size:.8rem;font-weight:600;">Migration số trùng</div>
+                <div style="font-size:.72rem;color:var(--muted-fg);">008, 009, 012 trùng — thứ tự chạy không xác định</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:.625rem;">
+              <span style="font-size:1rem;margin-top:1px;">🟡</span>
+              <div>
+                <div style="font-size:.8rem;font-weight:600;">RLS policy USING(true)</div>
+                <div style="font-size:.72rem;color:var(--muted-fg);">Không có giá trị bảo mật, cần policy thực</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="background:linear-gradient(135deg,rgba(79,70,229,.12),rgba(99,102,241,.06));border-color:rgba(99,102,241,.25);">
+          <div style="font-size:.85rem;font-weight:700;margin-bottom:.625rem;color:var(--nav-active);">Kết luận</div>
+          <p style="font-size:.8rem;color:var(--secondary-fg);line-height:1.65;">FADO AssetFlowPro có nền tảng kiến trúc xuất sắc và design system nhất quán — hiếm thấy ở hệ thống quy mô này. Các vấn đề phát hiện đều có hướng xử lý rõ ràng. Ưu tiên vá lỗ hổng bảo mật trước, sau đó cải thiện IA điều hướng sẽ đưa hệ thống lên mức production-ready hoàn toàn.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="logo-monogram">A</div>
+    <div class="logo-text">
+      <span class="logo-fado">FADO</span>
+      <span class="logo-flow">AssetFlow</span>
+      <span style="font-size:.75rem;color:var(--muted-fg);margin-left:.5rem;">Pro</span>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <p>UI/UX Audit Report — Tháng 6 / 2026 &nbsp;·&nbsp; Internal Document &nbsp;·&nbsp; <code>asset.fadoai.com</code></p>
+  <p style="margin-top:.375rem;font-size:.72rem;opacity:.6;">Phân tích bởi Claude Code &nbsp;·&nbsp; Dành cho nội bộ FADO AI &nbsp;·&nbsp; Không phát hành bên ngoài</p>
+</footer>
+
+</body>
+</html>

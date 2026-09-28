@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.fado.solacepos.twa",
+      "sha256_cert_fingerprints": [
+        "C1:C5:56:96:B8:5D:C8:8E:27:6A:4F:20:FA:5C:16:32:01:67:A2:F1:41:0E:02:4B:A9:CA:E7:EF:D3:F5:05:1F"
+      ]
+    }
+  }
+]

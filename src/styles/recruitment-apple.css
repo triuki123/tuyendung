@@ -1,0 +1,237 @@
+/* Shared, lightweight Apple-inspired visual system for recruitment only. */
+.calendar-agenda-widget { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 20px 32px; background: #ffffffcf; color: #1d1d1f; border: 1px solid #dfe5ed; border-radius: 24px; padding: 22px; width: 100%; box-shadow: 0 4px 18px #25334d06; }
+.calendar-agenda-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.recruitment-apple .calendar-agenda-header h2 { color: #1d1d1f; font-size: 22px; font-weight: 650; line-height: 1.2; text-transform: capitalize; }
+.calendar-agenda-header p { color: #57575f; font-size: 12px; margin-top: 6px; }
+.calendar-agenda-add { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; color: #fff; background: #007aff; }
+.calendar-agenda-add svg { width: 22px; height: 22px; stroke-width: 2; }
+.calendar-agenda-add:hover { background: #0069dc; }
+.calendar-agenda-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; align-items: center; min-width: 0; }
+.calendar-agenda-date { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 58px; line-height: 1.1; }
+.calendar-agenda-date span { font-size: 12px; font-weight: 600; color: #707079; }
+.calendar-agenda-date strong { font-size: 24px; font-weight: 650; margin-top: 4px; color: #1d1d1f; }
+.calendar-agenda-today { background: #007aff; border-radius: 16px; height: 62px; }
+.calendar-agenda-today span, .calendar-agenda-today strong { color: #fff; }
+.calendar-agenda-summary { display: flex; align-items: center; gap: 12px; text-align: left; background: #f4f7fc; border: 1px solid #e5eaf2; border-radius: 16px; padding: 14px; color: #1d1d1f; }
+.calendar-agenda-summary > svg { width: 24px; height: 24px; flex-shrink: 0; color: #007aff; }
+.calendar-agenda-summary > span { font-size: 16px; font-weight: 650; }
+.calendar-agenda-summary small { display: block; color: #57575f; font-size: 12px; font-weight: 400; margin-top: 4px; }
+.calendar-agenda-events { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; padding-top: 18px; border-top: 1px solid #e6e6eb; }
+.calendar-agenda-event { background: #edf5ff; border: 1px solid #d9e9fb; border-radius: 16px; padding: 14px; text-align: left; color: #1d1d1f; min-width: 0; height: 100%; transition: background .15s; }
+.calendar-agenda-event:hover, .calendar-agenda-summary:hover { background: #e3efff; }
+.calendar-agenda-event.is-done { background: #f5f6f8; border-color: #e2e5eb; }
+.calendar-agenda-event.is-live { background: #edf9f3; border-color: #c8ebd9; }
+.calendar-agenda-event-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 12px; line-height: 1.5; }
+.calendar-agenda-event-top { color: #375373; }
+.calendar-agenda-event-top span:last-child { background: #dceaff; color: #005bc4; border-radius: 999px; padding: 1px 8px; }
+.calendar-agenda-event.is-live .calendar-agenda-event-top span:last-child { background: #d4efdf; color: #08754e; }
+.calendar-agenda-event.is-done .calendar-agenda-event-top span:last-child { background: #e8eaf0; color: #57575f; }
+.recruitment-apple .calendar-agenda-event h3 { color: #1d1d1f; font-size: 15px; font-weight: 650; margin: 10px 0 4px; overflow-wrap: anywhere; }
+.calendar-agenda-event p { font-size: 12px; color: #57575f; }
+.calendar-agenda-location { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; color: #57575f; }
+.calendar-agenda-location svg { width: 14px; height: 14px; flex-shrink: 0; }
+.calendar-agenda-empty { grid-column: 1 / -1; border-top: 1px solid #e6e6eb; padding-top: 16px; margin: 0; color: #57575f; font-size: 13px; line-height: 1.8; }
+.calendar-agenda-error { grid-column: 1 / -1; padding: 12px; border-radius: 12px; background: #fff0f1; color: #a72a37; font-size: 14px; }
+.calendar-agenda-more { grid-column: 1 / -1; justify-self: end; color: #005bc4; font-size: 13px; }
+@media (max-width: 1100px) { .calendar-agenda-events { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 700px) { .calendar-agenda-widget { grid-template-columns: minmax(0,1fr); } .calendar-agenda-events { grid-template-columns: minmax(0,1fr); } }
+@media (max-width: 540px) {
+  .calendar-agenda-widget { padding: 18px 16px; border-radius: 20px; gap: 16px; }
+  .calendar-agenda-header { gap: 12px; }
+  .calendar-agenda-header p { max-width: 200px; }
+  .calendar-agenda-add { width: 44px; height: 44px; }
+  .calendar-agenda-row { grid-template-columns: 48px minmax(0,1fr); gap: 12px; }
+  .calendar-agenda-date { min-height: 54px; }
+  .calendar-agenda-date span { font-size: 13px; }
+  .calendar-agenda-date strong { font-size: 25px; }
+  .calendar-agenda-today { height: 62px; }
+  .calendar-agenda-summary { padding: 14px 12px; gap: 8px; border-radius: 18px; }
+  .calendar-agenda-summary > svg { width: 23px; height: 23px; }
+  .calendar-agenda-summary > span { font-size: 17px; }
+  .calendar-agenda-event { padding: 14px; border-radius: 18px; }
+  .recruitment-apple .calendar-agenda-event h3 { font-size: 15px; }
+}
+.calendar-agenda-minimal { display: block; padding: 20px 22px; background: #ffffffcf; }
+.calendar-agenda-minimal .calendar-agenda-header { gap: 12px; }
+.recruitment-apple .calendar-agenda-minimal h2 { font-size: 18px; text-transform: none; }
+.calendar-agenda-heading-date { margin-left: 8px; font-size: 14px; font-weight: 400; color: #707079; }
+.calendar-agenda-header-actions { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.calendar-agenda-open { color: #005bc4; font-size: 12px; }
+.calendar-agenda-minimal .calendar-agenda-add { width: 36px; height: 36px; border-radius: 11px; }
+.calendar-agenda-minimal .calendar-agenda-add svg { width: 18px; height: 18px; }
+.calendar-agenda-minimal .calendar-agenda-events { display: flex; flex-wrap: wrap; gap: 0; margin-top: 16px; padding-top: 16px; }
+.calendar-agenda-minimal .calendar-agenda-event { flex: 0 1 33.333%; height: auto; background: transparent; border: 0; border-left: 2px solid #c6ddfb; border-radius: 0; padding: 2px 20px 2px 14px; }
+.calendar-agenda-minimal .calendar-agenda-event:hover { background: #f6f9ff; }
+.calendar-agenda-minimal .calendar-agenda-event.is-live { border-left-color: #2b9a6d; }
+.calendar-agenda-minimal .calendar-agenda-event.is-done { border-left-color: #cdd2dc; }
+.calendar-agenda-minimal .calendar-agenda-event-top { justify-content: flex-start; gap: 6px 10px; }
+.calendar-agenda-minimal .calendar-agenda-event-top span:last-child { background: none; padding: 0; font-size: 11px; }
+.calendar-agenda-minimal .calendar-agenda-event.is-live .calendar-agenda-event-top span:last-child { background: none; color: #08754e; }
+.calendar-agenda-minimal .calendar-agenda-event.is-done .calendar-agenda-event-top span:last-child { background: none; color: #57575f; }
+.calendar-agenda-minimal .calendar-agenda-empty { margin-top: 16px; }
+.calendar-agenda-minimal .calendar-agenda-more { display: block; margin: 14px 0 0 auto; }
+@media (max-width: 900px) { .calendar-agenda-minimal .calendar-agenda-event { flex-basis: 50%; margin-block: 6px; } }
+@media (max-width: 540px) {
+  .calendar-agenda-minimal { padding: 16px; }
+  .calendar-agenda-minimal .calendar-agenda-event { flex-basis: 100%; padding: 4px 12px; }
+  .calendar-agenda-minimal .calendar-agenda-events { gap: 12px; }
+  .calendar-agenda-header-actions { gap: 10px; }
+  .calendar-agenda-minimal .calendar-agenda-header { align-items: flex-start; }
+}
+.recruitment-shell.recruitment-apple {
+  --background: #f4f6fa;
+  --card: #fff;
+  --foreground: #1d1d1f;
+  --muted-foreground: #57575f;
+  --surface-2: #f5f6fa;
+  --line: #d9d9e0;
+  --line-subtle: #e6e6eb;
+  --hover: #f0f3f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  background: radial-gradient(ellipse at 12% 0%, #dceaff80, transparent 42%), radial-gradient(ellipse at 95% 12%, #e9e1f850, transparent 35%), #f4f6fa;
+  min-height: 100dvh;
+  letter-spacing: -.012em;
+}
+.recruitment-apple .recruitment-header {
+  margin: 12px 16px 0;
+  top: 12px;
+  border: 1px solid rgba(255,255,255,.95);
+  border-radius: 26px;
+  background: rgba(255,255,255,.78);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 1px #23344d08, 0 12px 36px #23344d0c;
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+}
+.recruitment-apple .recruitment-toolbar { gap: 16px; padding: 12px 20px; }
+.recruitment-apple .recruitment-brand { letter-spacing: -.025em; font-size: 18px; font-weight: 750; color: #1d1d1f; }
+.recruitment-apple .recruitment-nav { gap: 4px; }
+.recruitment-apple .recruitment-nav a { border-radius: 999px; min-height: 44px; font-size: 13px; font-weight: 600; color: #535862; transition: background-color .16s, color .16s; }
+.recruitment-apple .recruitment-nav a:hover { background: #ffffffa0; color: #007aff; }
+.recruitment-apple .recruitment-header nav a[aria-current="page"] {
+  color: #005bc4 !important;
+  background: linear-gradient(180deg,#ffffffeb,#e6f0ffdb) !important;
+  border-color: #ffffff !important;
+  box-shadow: inset 0 1px 0 #fff, 0 2px 8px #172d4a10 !important;
+}
+.recruitment-apple .recruitment-header nav a[aria-current="page"]::after { display: none; }
+.recruitment-apple .recruitment-create { border-radius: 999px; background: #007aff; font-size: 14px; font-weight: 700; box-shadow: 0 2px 6px #007aff26; }
+.recruitment-avatar { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(145deg,#f0f4fc,#dfe5f0); border: 1px solid #ffffff; box-shadow: 0 2px 6px #23344d08; color: #4b5263; font-size: 13px; font-weight: 600; }
+.recruitment-apple .jd-create-button {
+  min-height: 46px;
+  padding: 10px 18px 10px 12px;
+  border: 1px solid #006be0;
+  border-radius: 15px;
+  background: #007aff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: inset 0 1px 0 #ffffff35, 0 3px 8px #007aff20;
+}
+.recruitment-apple .jd-create-button:hover { background: #0069dc; }
+.jd-create-button-icon { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: #ffffff22; }
+.recruitment-apple .jd-status-tab { color: #50505a; background: #f5f5f7; border-color: #d9d9e0; }
+.recruitment-apple .jd-status-tab[aria-pressed="true"] { background: linear-gradient(110deg,#007aff,#6b65df) !important; color: #fff !important; border-color: transparent; box-shadow: 0 4px 12px #007aff25; }
+.jd-pool { max-width: 1480px; margin-inline: auto; }
+.jd-page-heading { padding-bottom: 8px; }
+.jd-search-toolbar { padding: 14px; border: 1px solid #e2e3e9; border-radius: 16px; background: #ffffff90; }
+.jd-list-row { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(0,1fr) minmax(270px,.85fr); grid-template-rows: auto auto; gap: 8px 24px; align-items: start; padding: 24px; min-height: 154px; }
+.jd-row-title h2 { flex: 1 1 200px; font-size: 16px; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; }
+.jd-row-title h2 button { width: 100%; }
+.recruitment-apple .jd-row-title select { min-height: 32px; padding: 4px 10px; font-size: 12px; border-radius: 10px; background: #f7f7fa; }
+.jd-row-title { grid-column: 1; grid-row: 1; }
+.jd-row-unit { grid-column: 1; grid-row: 2; line-height: 1.6; }
+.jd-row-details { grid-column: 2; grid-row: 1 / 3; border-left: 1px solid #e2e3e9; padding: 0 0 0 24px; gap: 18px; align-self: stretch; }
+.jd-row-details dt { color: #707079; font-size: 12px; }
+.jd-row-details dd { font-weight: 600; font-size: 14px; }
+.jd-row-actions { grid-column: 3; grid-row: 1 / 3; border-left: 1px solid #e2e3e9; padding: 0 0 0 24px; align-self: stretch; }
+.jd-row-actions > span { display: block; margin-bottom: 16px; }
+.jd-row-actions button { min-height: 40px; }
+.jd-row-actions button:last-child { min-width: 40px; }
+.jd-pool .jd-card:has(input[type="checkbox"]:checked) { border-color: #80b8ff; background: #fafdff !important; box-shadow: 0 0 0 1px #80b8ff30; }
+.jd-row-actions button:first-child { border: 1px solid #d6e7ff; background: #edf4ff; padding: 8px 12px; }
+@media (max-width: 900px) {
+  .jd-list-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+  .jd-row-actions { grid-column: 1 / 3; grid-row: 3; border-left: 0; border-top: 1px solid #e2e3e9; padding: 16px 0 0; margin-top: 8px; }
+  .jd-row-actions > span { margin-bottom: 10px; }
+}
+@media (max-width: 540px) {
+  .jd-list-row { display: flex; flex-direction: column; align-items: stretch; gap: 14px; }
+  .jd-row-details { border-left: 0; border-top: 1px solid #e2e3e9; padding: 14px 0 0; }
+  .jd-list-row { padding: 18px; }
+  .jd-row-title h2 { flex-basis: 160px; }
+  .jd-search-toolbar { padding: 10px; gap: 8px; }
+  .jd-search-toolbar > .relative { flex-basis: 100%; }
+  .jd-search-toolbar > div:last-child { margin-left: auto; }
+  .jd-page-heading .jd-create-button { align-self: flex-start; }
+}
+.recruitment-apple main { padding-top: 36px; padding-bottom: 48px; }
+.recruitment-apple main h1 { font-size: clamp(24px, 2.2vw, 32px); line-height: 1.25; letter-spacing: -.035em; font-weight: 650; }
+.recruitment-apple main h2 { letter-spacing: -.02em; }
+.recruitment-apple .text-muted-foreground { color: #57575f; }
+.recruitment-apple .text-2xs { font-size: 12px; line-height: 1.5; }
+.recruitment-apple .rounded-2xl.border,
+.recruitment-apple .rounded-3xl.border {
+  border-radius: 24px;
+  border-color: #dfe5ed;
+  box-shadow: 0 4px 18px #25334d06, inset 0 1px 0 #ffffff;
+}
+.recruitment-apple .rounded-2xl.border:hover { box-shadow: 0 6px 24px #25334d0b; }
+.recruitment-apple :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  background-color: #f6f8fb;
+  color: #1d1d1f;
+  border-color: #dce2eb;
+  border-radius: 12px;
+  font-size: 14px;
+  box-shadow: none;
+}
+.recruitment-apple :is(input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), select) { min-height: 40px; }
+.recruitment-apple textarea { line-height: 1.65; }
+.recruitment-apple ::placeholder { color: #707079; opacity: 1; }
+.recruitment-apple :is(input,textarea,select):focus { background: #fff; outline: 3px solid #007aff30; outline-offset: 1px; }
+.recruitment-apple :is(button,a):focus-visible { outline: 3px solid #007aff70; outline-offset: 3px; }
+.recruitment-apple main button { touch-action: manipulation; }
+.recruitment-apple main button[aria-pressed="true"] { font-weight: 650; }
+.recruitment-apple main :is(h1,h2,h3) { text-wrap: balance; }
+.recruitment-apple main p { line-height: 1.65; }
+.recruitment-apple main [role="dialog"] { background: #fff; box-shadow: 0 24px 80px #10254028; }
+.recruitment-apple .jd-card { background: #ffffffed !important; }
+.recruitment-apple .jd-search-toolbar { background: #ffffffb8; border-color: #dfe5ed; box-shadow: inset 0 1px 0 #fff; }
+.recruitment-apple .jd-status-tab { min-height: 36px; padding-inline: 14px; background: #ffffff80; }
+.recruitment-apple .jd-row-title h2 { font-size: 16px; }
+.recruitment-apple .jd-row-actions button { border-radius: 12px; }
+.recruitment-apple button { transition: background-color .15s, color .15s, border-color .15s; }
+.recruitment-apple button:disabled { cursor: not-allowed; }
+.recruitment-apple :is(.btn-indigo,.btn-accent) { background: #007aff; color: #fff; border-radius: 12px; min-height: 40px; box-shadow: none; }
+.recruitment-apple :is(.btn-indigo,.btn-accent):hover:not(:disabled) { background: #0069dc; }
+.recruitment-apple .btn-ghost { border-radius: 10px; }
+.recruitment-apple .group:hover .group-hover\:text-white { color: #0069dc; }
+.recruitment-apple :is(.text-emerald-300,.text-emerald-400,.text-green-300,.text-green-400) { color: #08754e !important; }
+.recruitment-apple :is(.text-amber-200,.text-amber-300,.text-amber-400) { color: #8a5600 !important; }
+.recruitment-apple :is(.text-red-300,.text-red-400,.text-rose-300,.text-rose-400) { color: #c52635 !important; }
+.recruitment-apple [role="dialog"] { border-radius: 24px; }
+.recruitment-apple table { border-collapse: separate; border-spacing: 0; }
+.recruitment-apple th { background: #f5f6f8; font-weight: 600; color: #57575f; }
+.recruitment-apple :is(td,th) { padding: 12px; }
+.recruitment-apple tbody tr:hover { background: #f5f9ff; }
+.recruitment-skip-link { position: fixed; left: 24px; top: -100px; z-index: 100; background: white; padding: 12px; border-radius: 10px; }
+.recruitment-skip-link:focus { top: 20px; }
+@media (max-width: 1100px) {
+  .recruitment-apple .recruitment-toolbar { flex-wrap: wrap; gap: 8px; }
+  .recruitment-apple .recruitment-brand { margin-right: auto; }
+  .recruitment-apple .recruitment-nav { order: 4; flex-basis: 100%; padding: 2px 0; }
+}
+@media (max-width: 640px) {
+  .recruitment-apple .recruitment-header { margin: 8px 8px 0; top: 8px; border-radius: 18px; }
+  .recruitment-apple .recruitment-toolbar { padding: 10px; }
+  .recruitment-apple .recruitment-nav a { min-height: 44px; }
+  .recruitment-apple main { padding: 22px 12px; }
+  .recruitment-apple [role="dialog"] { border-radius: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recruitment-apple *, .recruitment-apple *::before, .recruitment-apple *::after { animation: none !important; transition: none !important; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .recruitment-apple .recruitment-header { background: #fff; backdrop-filter: none; border-color: #b9bbc5; }
+}

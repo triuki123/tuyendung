@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FADO AssetFlowPro — Solution Overview</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #060e1a;
+    --card: #0f1c2e;
+    --card2: #132030;
+    --indigo: #4f46e5;
+    --indigo-light: #6366f1;
+    --indigo-dim: rgba(79,70,229,0.15);
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --green: #10b981;
+    --amber: #f59e0b;
+    --rose: #f43f5e;
+    --cyan: #06b6d4;
+    --violet: #8b5cf6;
+    --sky: #0ea5e9;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #0a1628 0%, #0f1c2e 50%, #0d1830 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 48px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(79,70,229,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    background: var(--indigo);
+    border-radius: 16px;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+    box-shadow: 0 0 40px rgba(79,70,229,0.5);
+  }
+  .site-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--fg);
+    letter-spacing: -0.5px;
+  }
+  .site-header h1 span { color: var(--indigo-light); }
+  .site-header .tagline {
+    color: var(--muted);
+    font-size: 15px;
+    margin-top: 8px;
+  }
+  .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .badge-indigo { background: rgba(79,70,229,0.15); border-color: rgba(99,102,241,0.4); color: #a5b4fc; }
+  .badge-green  { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #6ee7b7; }
+  .badge-amber  { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
+  .badge-cyan   { background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.3); color: #67e8f9; }
+  .badge-violet { background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.3); color: #c4b5fd; }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px 60px;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-top: 56px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .section-header p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* ── MODULES GRID ── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .module-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+  .module-card:hover { border-color: var(--border2); }
+  .module-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .module-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .module-name { font-size: 13px; font-weight: 700; color: var(--fg); }
+  .module-path { font-size: 10px; color: var(--indigo-light); font-family: monospace; }
+  .module-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .module-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── ARCH DIAGRAM ── */
+  .arch-diagram {
+    display: grid;
+    grid-template-rows: auto auto auto auto auto;
+    gap: 0;
+    position: relative;
+  }
+  .arch-tier {
+    display: grid;
+    align-items: stretch;
+    position: relative;
+  }
+  .arch-tier-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    writing-mode: initial;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .arch-tier-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .arch-boxes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .arch-box {
+    flex: 1;
+    min-width: 140px;
+    background: var(--card2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .arch-box .box-icon { font-size: 20px; margin-bottom: 6px; }
+  .arch-box .box-title { font-size: 12px; font-weight: 700; color: var(--fg); }
+  .arch-box .box-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .arch-connector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    position: relative;
+  }
+  .arch-connector::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--border2), var(--indigo-dim));
+  }
+  .arch-connector .arrow-label {
+    position: relative;
+    z-index: 1;
+    background: var(--bg);
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--muted);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .arch-connector-bi::after {
+    content: '⇅';
+    position: absolute;
+    left: calc(50% + 8px);
+    font-size: 12px;
+    color: var(--indigo-light);
+  }
+
+  /* ── WORKFLOW ── */
+  .workflow-flow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .wf-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+    position: relative;
+  }
+  .wf-dot {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 2px solid;
+    background: var(--card);
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  .wf-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg);
+    text-align: center;
+    margin-top: 8px;
+    max-width: 100px;
+  }
+  .wf-sub {
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 3px;
+    max-width: 100px;
+  }
+  .wf-arrow {
+    flex: 1;
+    height: 2px;
+    min-width: 24px;
+    background: linear-gradient(to right, var(--border2), var(--indigo-dim));
+    align-self: center;
+    position: relative;
+    top: -30px;
+    flex-shrink: 0;
+  }
+  .wf-arrow::after {
+    content: '›';
+    position: absolute;
+    right: -4px;
+    top: -9px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  /* ── INTEGRATIONS ── */
+  .integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .int-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .int-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .int-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .int-name { font-size: 13px; font-weight: 700; color: var(--fg); }
+  .int-type { font-size: 10px; color: var(--muted); }
+  .int-items { list-style: none; }
+  .int-items li {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .int-items li:last-child { border-bottom: none; }
+  .int-items li::before { content: '›'; color: var(--indigo-light); flex-shrink: 0; }
+
+  /* ── SECURITY ── */
+  .security-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .sec-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .sec-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .sec-title { font-size: 13px; font-weight: 700; color: var(--fg); }
+  .sec-items { list-style: none; }
+  .sec-items li {
+    font-size: 11px;
+    color: var(--muted);
+    padding: 4px 0;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .sec-items li span.dot { color: var(--green); flex-shrink: 0; margin-top: 2px; }
+
+  /* ── RBAC TABLE ── */
+  .rbac-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .rbac-table th {
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border2);
+    background: var(--card2);
+  }
+  .rbac-table th:first-child { text-align: left; }
+  .rbac-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .rbac-table td:first-child { color: var(--fg); font-weight: 600; }
+  .rbac-table tr:last-child td { border-bottom: none; }
+  .rbac-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .check { color: var(--green); font-size: 14px; }
+  .partial { color: var(--amber); font-size: 13px; }
+  .cross { color: rgba(255,255,255,0.15); font-size: 14px; }
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PERM MATRIX ── */
+  .perm-matrix {
+    overflow-x: auto;
+  }
+  .perm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .perm-table th, .perm-table td {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .perm-table th {
+    background: var(--card2);
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .perm-table th:first-child { text-align: left; min-width: 160px; }
+  .perm-table td:first-child { text-align: left; color: var(--fg); font-weight: 600; }
+  .perm-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── DEPLOY ── */
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) {
+    .deploy-grid { grid-template-columns: 1fr; }
+  }
+  .deploy-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .deploy-block h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fg);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .deploy-block h3 .di { font-size: 16px; }
+  .code-block {
+    background: #060e1a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: #7dd3fc;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .code-block .cm { color: #475569; }
+  .code-block .ck { color: #a5b4fc; }
+  .code-block .cv { color: #86efac; }
+  .code-block .cs { color: #fcd34d; }
+
+  .req-list {
+    list-style: none;
+  }
+  .req-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .req-list li:last-child { border-bottom: none; }
+  .req-list li strong { color: var(--fg); }
+  .req-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* ── STAT STRIP ── */
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .stat-tile {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-val { font-size: 22px; font-weight: 800; color: var(--fg); }
+  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .site-footer strong { color: var(--indigo-light); }
+
+  /* color helpers */
+  .bg-indigo { background: rgba(79,70,229,0.18); }
+  .bg-green  { background: rgba(16,185,129,0.15); }
+  .bg-amber  { background: rgba(245,158,11,0.15); }
+  .bg-rose   { background: rgba(244,63,94,0.15); }
+  .bg-cyan   { background: rgba(6,182,212,0.15); }
+  .bg-violet { background: rgba(139,92,246,0.15); }
+  .bg-sky    { background: rgba(14,165,233,0.15); }
+  .c-indigo { color: #a5b4fc; }
+  .c-green  { color: #6ee7b7; }
+  .c-amber  { color: #fcd34d; }
+  .c-rose   { color: #fda4af; }
+  .c-cyan   { color: #67e8f9; }
+  .c-violet { color: #c4b5fd; }
+  .c-sky    { color: #7dd3fc; }
+  .border-indigo { border-color: rgba(99,102,241,0.3); }
+  .border-green  { border-color: rgba(16,185,129,0.3); }
+  .border-amber  { border-color: rgba(245,158,11,0.3); }
+  .border-cyan   { border-color: rgba(6,182,212,0.3); }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 32px;
+  }
+  .toc h3 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 4px;
+    list-style: none;
+  }
+  .toc-list li a {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    transition: color 0.15s;
+  }
+  .toc-list li a:hover { color: var(--indigo-light); }
+  .toc-list li a::before { content: '→'; color: var(--indigo-light); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header class="site-header">
+  <div class="logo-mark">A</div>
+  <h1>FADO <span>AssetFlowPro</span></h1>
+  <p class="tagline">Hệ thống quản lý vòng đời tài sản doanh nghiệp — Solution Overview</p>
+  <div class="badge-row">
+    <span class="badge badge-indigo">Next.js 13.5</span>
+    <span class="badge badge-indigo">React 19</span>
+    <span class="badge badge-indigo">TypeScript 5</span>
+    <span class="badge badge-green">PostgreSQL</span>
+    <span class="badge badge-amber">Docker + Traefik</span>
+    <span class="badge badge-cyan">Zimbra SOAP</span>
+    <span class="badge badge-violet">ZKTeco ADMS</span>
+    <span class="badge badge-cyan">AWS SES</span>
+    <span class="badge badge-violet">Telegram Bot</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h3>Mục lục</h3>
+    <ul class="toc-list">
+      <li><a href="#modules">Modules Hệ Thống (20)</a></li>
+      <li><a href="#architecture">Architecture Overview</a></li>
+      <li><a href="#workflows">Business Workflows</a></li>
+      <li><a href="#integrations">Integration Architecture</a></li>
+      <li><a href="#security">Security Model</a></li>
+      <li><a href="#permissions">Permission Model</a></li>
+      <li><a href="#deployment">Deployment</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════ MODULES ════ -->
+  <section class="section" id="modules">
+    <div class="section-header">
+      <div class="section-icon bg-indigo"><span class="c-indigo">⊞</span></div>
+      <div>
+        <h2>Modules Hệ Thống</h2>
+        <p>20 modules chức năng | 225+ API endpoints | 73 services | 18 modules RBAC</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-strip">
+      <div class="stat-tile"><div class="stat-val c-indigo">20</div><div class="stat-lbl">Modules</div></div>
+      <div class="stat-tile"><div class="stat-val c-green">225+</div><div class="stat-lbl">API Endpoints</div></div>
+      <div class="stat-tile"><div class="stat-val c-amber">73</div><div class="stat-lbl">Services</div></div>
+      <div class="stat-tile"><div class="stat-val c-cyan">154+</div><div class="stat-lbl">DB Migrations</div></div>
+      <div class="stat-tile"><div class="stat-val c-violet">7</div><div class="stat-lbl">Schedulers</div></div>
+      <div class="stat-tile"><div class="stat-val c-sky">18</div><div class="stat-lbl">RBAC Modules</div></div>
+      <div class="stat-tile"><div class="stat-val" style="color:#f43f5e">4</div><div class="stat-lbl">External APIs</div></div>
+      <div class="stat-tile"><div class="stat-val" style="color:#a78bfa">4028</div><div class="stat-lbl">App Port</div></div>
+    </div>
+
+    <div class="modules-grid">
+      <!-- 1 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-indigo">📊</div>
+          <div>
+            <div class="module-name">Bảng Điều Khiển</div>
+            <div class="module-path">/dashboard</div>
+          </div>
+        </div>
+        <div class="module-desc">Command center 2 cột. Hỗ trợ cả 3 role: super_admin, manager, user với scope dữ liệu khác nhau.</div>
+        <div class="module-tags"><span class="tag">stats</span><span class="tag">comms</span><span class="tag">multi-role</span></div>
+      </div>
+      <!-- 2 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-amber">🖥️</div>
+          <div>
+            <div class="module-name">Quản Lý Tài Sản</div>
+            <div class="module-path">/asset-management</div>
+          </div>
+        </div>
+        <div class="module-desc">Phần cứng, phần mềm, domain, email Zimbra. Vòng đời: cấp phát → sử dụng → thu hồi → thanh lý.</div>
+        <div class="module-tags"><span class="tag">hardware</span><span class="tag">software</span><span class="tag">domains</span><span class="tag">emails</span></div>
+      </div>
+      <!-- 3 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-rose">🎫</div>
+          <div>
+            <div class="module-name">Ticket Hỗ Trợ</div>
+            <div class="module-path">/tickets</div>
+          </div>
+        </div>
+        <div class="module-desc">Hệ thống ticket nội bộ. Luồng admin/user riêng biệt. Cấu hình danh mục, ưu tiên, SLA.</div>
+        <div class="module-tags"><span class="tag">ticket-config</span><span class="tag">SLA</span><span class="tag">categories</span></div>
+      </div>
+      <!-- 4 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-green">✅</div>
+          <div>
+            <div class="module-name">Nhiệm Vụ</div>
+            <div class="module-path">/tasks</div>
+          </div>
+        </div>
+        <div class="module-desc">Quản lý task: subtask, attachment, comment, follower, analytics. Liên kết 2 chiều với Ticket.</div>
+        <div class="module-tags"><span class="tag">subtask</span><span class="tag">analytics</span><span class="tag">ticket-link</span></div>
+      </div>
+      <!-- 5 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-cyan">🗓️</div>
+          <div>
+            <div class="module-name">Đặt Phòng</div>
+            <div class="module-path">/room-bookings</div>
+          </div>
+        </div>
+        <div class="module-desc">Đặt và quản lý phòng họp, xem lịch, lịch sử sử dụng theo khoảng thời gian.</div>
+        <div class="module-tags"><span class="tag">calendar</span><span class="tag">history</span><span class="tag">conflict-check</span></div>
+      </div>
+      <!-- 6 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-violet">⚖️</div>
+          <div>
+            <div class="module-name">Duyệt Yêu Cầu</div>
+            <div class="module-path">/duyet-yeu-cau</div>
+          </div>
+        </div>
+        <div class="module-desc">Xét duyệt bù công, tăng ca, bảng công và yêu cầu xóa tài sản. Phê duyệt đa cấp.</div>
+        <div class="module-tags"><span class="tag">bù công</span><span class="tag">tăng ca</span><span class="tag">approval</span></div>
+      </div>
+      <!-- 7 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-rose">🗑️</div>
+          <div>
+            <div class="module-name">Duyệt Xóa Tài Sản</div>
+            <div class="module-path">/delete-requests</div>
+          </div>
+        </div>
+        <div class="module-desc">Phê duyệt yêu cầu xóa tài sản với flow 2 bước: đề xuất → phê duyệt admin.</div>
+        <div class="module-tags"><span class="tag">2-step flow</span><span class="tag">audit</span></div>
+      </div>
+      <!-- 8 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-sky">🏢</div>
+          <div>
+            <div class="module-name">Tổ Chức</div>
+            <div class="module-path">/organization</div>
+          </div>
+        </div>
+        <div class="module-desc">Cấu trúc: công ty, phòng ban, chức danh, vị trí, tags, sơ đồ org-chart.</div>
+        <div class="module-tags"><span class="tag">org-chart</span><span class="tag">multi-company</span><span class="tag">tags</span></div>
+      </div>
+      <!-- 9 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-indigo">👥</div>
+          <div>
+            <div class="module-name">Người Dùng</div>
+            <div class="module-path">/nhan-su</div>
+          </div>
+        </div>
+        <div class="module-desc">Quản lý tài khoản, phân quyền RBAC, duyệt onboarding, avatar, multi-company membership.</div>
+        <div class="module-tags"><span class="tag">RBAC</span><span class="tag">onboarding</span><span class="tag">multi-company</span></div>
+      </div>
+      <!-- 10 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-amber">⚙️</div>
+          <div>
+            <div class="module-name">Cài Đặt</div>
+            <div class="module-path">/settings</div>
+          </div>
+        </div>
+        <div class="module-desc">Cấu hình hệ thống, tham số chung, thông tin công ty, cài đặt email/Zimbra.</div>
+        <div class="module-tags"><span class="tag">system config</span><span class="tag">company info</span></div>
+      </div>
+      <!-- 11 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-cyan">📋</div>
+          <div>
+            <div class="module-name">Lịch Sử</div>
+            <div class="module-path">/history</div>
+          </div>
+        </div>
+        <div class="module-desc">Audit log toàn hệ thống: ai làm gì, khi nào, dữ liệu trước/sau thay đổi.</div>
+        <div class="module-tags"><span class="tag">audit log</span><span class="tag">immutable</span></div>
+      </div>
+      <!-- 12 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-violet">📢</div>
+          <div>
+            <div class="module-name">Thông Báo - Truyền Thông</div>
+            <div class="module-path">module</div>
+          </div>
+        </div>
+        <div class="module-desc">Đăng và quản lý thông báo nội bộ, SSE realtime, notification bell, đẩy Telegram.</div>
+        <div class="module-tags"><span class="tag">SSE</span><span class="tag">realtime</span><span class="tag">Telegram</span></div>
+      </div>
+      <!-- 13 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-green">📄</div>
+          <div>
+            <div class="module-name">Hợp Đồng &amp; Hồ Sơ</div>
+            <div class="module-path">/ho-so-cua-toi</div>
+          </div>
+        </div>
+        <div class="module-desc">Quản lý hợp đồng nhân sự, đính kèm, watcher, nhắc gia hạn tự động qua email.</div>
+        <div class="module-tags"><span class="tag">contracts</span><span class="tag">auto-remind</span><span class="tag">self-service</span></div>
+      </div>
+      <!-- 14 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-amber">📝</div>
+          <div>
+            <div class="module-name">Biểu Mẫu</div>
+            <div class="module-path">/bieu-mau</div>
+          </div>
+        </div>
+        <div class="module-desc">Cấu hình form onboarding, gửi link token công khai cho nhân sự mới điền thông tin.</div>
+        <div class="module-tags"><span class="tag">public token</span><span class="tag">onboarding form</span></div>
+      </div>
+      <!-- 15 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-sky">🧑‍💼</div>
+          <div>
+            <div class="module-name">Nguồn Nhân Lực</div>
+            <div class="module-path">/nguon-nhan-luc</div>
+          </div>
+        </div>
+        <div class="module-desc">Tuyển dụng, onboarding, offboarding, kho CV (ATS), kho JD, biến động nhân sự.</div>
+        <div class="module-tags"><span class="tag">ATS</span><span class="tag">offboarding</span><span class="tag">workforce</span></div>
+      </div>
+      <!-- 16 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-violet">🔍</div>
+          <div>
+            <div class="module-name">Yêu Cầu Tuyển Dụng</div>
+            <div class="module-path">/nguon-nhan-luc/yeu-cau-tuyen-dung</div>
+          </div>
+        </div>
+        <div class="module-desc">Cổng đặt yêu cầu tuyển dụng. Phê duyệt phân cấp. Clone để tuyển lại, đóng = ẩn.</div>
+        <div class="module-tags"><span class="tag">approval</span><span class="tag">clone</span><span class="tag">dept-request</span></div>
+      </div>
+      <!-- 17 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-green">⏱️</div>
+          <div>
+            <div class="module-name">Dữ Liệu Chấm Công</div>
+            <div class="module-path">/tra-cuu/du-lieu-cong</div>
+          </div>
+        </div>
+        <div class="module-desc">Điểm danh, tra cứu bảng công, xác nhận, nghỉ phép, ZKTeco machine config, xuất Excel.</div>
+        <div class="module-tags"><span class="tag">ZKTeco</span><span class="tag">ADMS</span><span class="tag">Excel export</span><span class="tag">accrual</span></div>
+      </div>
+      <!-- 18 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-cyan">🔎</div>
+          <div>
+            <div class="module-name">Tra Cứu</div>
+            <div class="module-path">/tra-cuu</div>
+          </div>
+        </div>
+        <div class="module-desc">Tra cứu tài sản cá nhân/công ty, đầu mối, lịch sử, văn bản, thông báo. Scope theo role.</div>
+        <div class="module-tags"><span class="tag">asset lookup</span><span class="tag">role-scope</span><span class="tag">contacts</span></div>
+      </div>
+      <!-- 19 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-indigo">✉️</div>
+          <div>
+            <div class="module-name">Chữ Ký Email</div>
+            <div class="module-path">/email-signature</div>
+          </div>
+        </div>
+        <div class="module-desc">Tạo chữ ký HTML table-based, 5 mẫu thương hiệu, iframe preview, đẩy lên Zimbra server.</div>
+        <div class="module-tags"><span class="tag">Zimbra push</span><span class="tag">HTML email</span><span class="tag">brand</span></div>
+      </div>
+      <!-- 20 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-icon bg-amber">👤</div>
+          <div>
+            <div class="module-name">Hợp Đồng Cá Nhân</div>
+            <div class="module-path">/ho-so-cua-toi</div>
+          </div>
+        </div>
+        <div class="module-desc">Self-service: nhân viên tự xem hợp đồng, gửi yêu cầu đổi hồ sơ cá nhân.</div>
+        <div class="module-tags"><span class="tag">self-service</span><span class="tag">request</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ ARCHITECTURE ════ -->
+  <section class="section" id="architecture">
+    <div class="section-header">
+      <div class="section-icon bg-cyan"><span class="c-cyan">⬡</span></div>
+      <div>
+        <h2>Architecture Overview</h2>
+        <p>Monolith Next.js App Router — server components, API routes, SSE, Docker deployment</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="arch-diagram">
+
+        <!-- Client -->
+        <div class="arch-tier">
+          <div class="arch-tier-label">🌐 Client Layer</div>
+          <div class="arch-boxes">
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">🖥️</div>
+              <div class="box-title c-indigo">Browser / SPA</div>
+              <div class="box-sub">React 19 · Tailwind · Radix UI</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">📱</div>
+              <div class="box-title c-indigo">Telegram Bot</div>
+              <div class="box-sub">Approval webhook · Login widget</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-connector arch-connector-bi">
+          <span class="arrow-label">HTTPS / SSE / WebSocket</span>
+        </div>
+
+        <!-- Gateway -->
+        <div class="arch-tier">
+          <div class="arch-tier-label">🔀 Gateway &amp; Reverse Proxy</div>
+          <div class="arch-boxes">
+            <div class="arch-box" style="border-color:rgba(6,182,212,0.3);">
+              <div class="box-icon">🚦</div>
+              <div class="box-title c-cyan">Traefik</div>
+              <div class="box-sub">asset.fadoai.com · TLS termination</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-connector arch-connector-bi">
+          <span class="arrow-label">Docker network · port 4028</span>
+        </div>
+
+        <!-- App -->
+        <div class="arch-tier">
+          <div class="arch-tier-label">⚡ Application Layer</div>
+          <div class="arch-boxes">
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">⚛️</div>
+              <div class="box-title c-indigo">Next.js 13.5</div>
+              <div class="box-sub">App Router · RSC · TypeScript 5</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">🔌</div>
+              <div class="box-title c-indigo">API Routes</div>
+              <div class="box-sub">225+ endpoints · REST · SSE</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">🧩</div>
+              <div class="box-title c-indigo">Service Layer</div>
+              <div class="box-sub">73 *Service.ts · business logic</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(99,102,241,0.3);">
+              <div class="box-icon">⏰</div>
+              <div class="box-title c-indigo">Schedulers</div>
+              <div class="box-sub">7 cron jobs · accrual · remind</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-connector arch-connector-bi">
+          <span class="arrow-label">pg Pool · SQL queries · withTransaction</span>
+        </div>
+
+        <!-- DB -->
+        <div class="arch-tier">
+          <div class="arch-tier-label">🗄️ Data Layer</div>
+          <div class="arch-boxes">
+            <div class="arch-box" style="border-color:rgba(16,185,129,0.3);">
+              <div class="box-icon">🐘</div>
+              <div class="box-title c-green">PostgreSQL</div>
+              <div class="box-sub">Self-hosted · 154+ migrations</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-connector">
+          <span class="arrow-label">HTTP / SOAP / SMTP / Webhook</span>
+        </div>
+
+        <!-- Externals -->
+        <div class="arch-tier">
+          <div class="arch-tier-label">🔗 External Integrations</div>
+          <div class="arch-boxes">
+            <div class="arch-box" style="border-color:rgba(6,182,212,0.3);">
+              <div class="box-icon">📧</div>
+              <div class="box-title c-cyan">Zimbra</div>
+              <div class="box-sub">SOAP Admin API · email accounts · signature</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(245,158,11,0.3);">
+              <div class="box-icon">🕐</div>
+              <div class="box-title c-amber">ZKTeco ADMS</div>
+              <div class="box-sub">HTTP polling · check-in/out sync · port 8088</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(16,185,129,0.3);">
+              <div class="box-icon">📬</div>
+              <div class="box-title c-green">AWS SES</div>
+              <div class="box-sub">Transactional email · Nodemailer</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(139,92,246,0.3);">
+              <div class="box-icon">✈️</div>
+              <div class="box-title c-violet">Telegram</div>
+              <div class="box-sub">Bot webhook · approval · login widget</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ WORKFLOWS ════ -->
+  <section class="section" id="workflows">
+    <div class="section-header">
+      <div class="section-icon bg-green"><span class="c-green">⟶</span></div>
+      <div>
+        <h2>Business Workflows</h2>
+        <p>4 luồng nghiệp vụ chính của hệ thống</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <!-- WF 1: Onboarding -->
+      <div class="card">
+        <div class="card-title">🧑‍💼 Onboarding Nhân Viên</div>
+        <div class="card-sub">Từ yêu cầu tuyển dụng đến nhân viên chính thức</div>
+        <div class="workflow-flow">
+          <div class="wf-step">
+            <div class="wf-dot bg-indigo" style="border-color:rgba(99,102,241,0.5)"><span class="c-indigo">📋</span></div>
+            <div class="wf-label">Yêu cầu tuyển dụng</div>
+            <div class="wf-sub">Phòng ban đặt JD</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-amber" style="border-color:rgba(245,158,11,0.5)"><span class="c-amber">✔️</span></div>
+            <div class="wf-label">Phê duyệt</div>
+            <div class="wf-sub">Admin xét duyệt</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-cyan" style="border-color:rgba(6,182,212,0.5)"><span class="c-cyan">📝</span></div>
+            <div class="wf-label">Biểu mẫu</div>
+            <div class="wf-sub">Token link gửi NV</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-violet" style="border-color:rgba(139,92,246,0.5)"><span class="c-violet">👤</span></div>
+            <div class="wf-label">Tạo tài khoản</div>
+            <div class="wf-sub">Duyệt → active</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-green" style="border-color:rgba(16,185,129,0.5)"><span class="c-green">✅</span></div>
+            <div class="wf-label">Nhân viên chính thức</div>
+            <div class="wf-sub">Email + Zimbra</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WF 2: Approval -->
+      <div class="card">
+        <div class="card-title">⚖️ Phê Duyệt Đa Cấp</div>
+        <div class="card-sub">Ticket · Nghỉ phép · Tăng ca · Bù công</div>
+        <div class="workflow-flow">
+          <div class="wf-step">
+            <div class="wf-dot bg-sky" style="border-color:rgba(14,165,233,0.5)"><span class="c-sky">👤</span></div>
+            <div class="wf-label">User tạo YC</div>
+            <div class="wf-sub">Chọn loại, lý do</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-amber" style="border-color:rgba(245,158,11,0.5)"><span class="c-amber">👔</span></div>
+            <div class="wf-label">Manager duyệt</div>
+            <div class="wf-sub">Thông báo SSE</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-violet" style="border-color:rgba(139,92,246,0.5)"><span class="c-violet">✈️</span></div>
+            <div class="wf-label">Telegram notify</div>
+            <div class="wf-sub">Duyệt ngay trên bot</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-indigo" style="border-color:rgba(99,102,241,0.5)"><span class="c-indigo">🔑</span></div>
+            <div class="wf-label">Admin xét (nếu cần)</div>
+            <div class="wf-sub">Cấp 2</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-green" style="border-color:rgba(16,185,129,0.5)"><span class="c-green">✅</span></div>
+            <div class="wf-label">Approved</div>
+            <div class="wf-sub">Lưu audit log</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WF 3: Asset -->
+      <div class="card">
+        <div class="card-title">🖥️ Quản Lý Vòng Đời Tài Sản</div>
+        <div class="card-sub">Từ nhập kho đến thanh lý</div>
+        <div class="workflow-flow">
+          <div class="wf-step">
+            <div class="wf-dot bg-cyan" style="border-color:rgba(6,182,212,0.5)"><span class="c-cyan">📦</span></div>
+            <div class="wf-label">Nhập kho</div>
+            <div class="wf-sub">Tạo tài sản, serial</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-indigo" style="border-color:rgba(99,102,241,0.5)"><span class="c-indigo">🔄</span></div>
+            <div class="wf-label">Cấp phát</div>
+            <div class="wf-sub">Gán người dùng</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-green" style="border-color:rgba(16,185,129,0.5)"><span class="c-green">▶️</span></div>
+            <div class="wf-label">Đang sử dụng</div>
+            <div class="wf-sub">Tra cứu, báo cáo</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-amber" style="border-color:rgba(245,158,11,0.5)"><span class="c-amber">↩️</span></div>
+            <div class="wf-label">Thu hồi</div>
+            <div class="wf-sub">Yêu cầu + duyệt</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-rose" style="border-color:rgba(244,63,94,0.5)"><span class="c-rose">🗑️</span></div>
+            <div class="wf-label">Thanh lý</div>
+            <div class="wf-sub">Flow xóa 2 bước</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WF 4: Attendance -->
+      <div class="card">
+        <div class="card-title">⏱️ Chấm Công ZKTeco</div>
+        <div class="card-sub">Từ quẹt thẻ đến xuất bảng công</div>
+        <div class="workflow-flow">
+          <div class="wf-step">
+            <div class="wf-dot bg-amber" style="border-color:rgba(245,158,11,0.5)"><span class="c-amber">🕐</span></div>
+            <div class="wf-label">ZKTeco quẹt</div>
+            <div class="wf-sub">Check-in/out device</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-cyan" style="border-color:rgba(6,182,212,0.5)"><span class="c-cyan">🔄</span></div>
+            <div class="wf-label">ADMS sync</div>
+            <div class="wf-sub">HTTP poll port 8088</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-indigo" style="border-color:rgba(99,102,241,0.5)"><span class="c-indigo">🗄️</span></div>
+            <div class="wf-label">Lưu DB</div>
+            <div class="wf-sub">Tính giờ làm, OT</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-violet" style="border-color:rgba(139,92,246,0.5)"><span class="c-violet">📊</span></div>
+            <div class="wf-label">Tổng hợp</div>
+            <div class="wf-sub">Bảng công tháng</div>
+          </div>
+          <div class="wf-arrow"></div>
+          <div class="wf-step">
+            <div class="wf-dot bg-green" style="border-color:rgba(16,185,129,0.5)"><span class="c-green">📥</span></div>
+            <div class="wf-label">Xuất Excel</div>
+            <div class="wf-sub">DETAIL_fill format</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════ INTEGRATIONS ════ -->
+  <section class="section" id="integrations">
+    <div class="section-header">
+      <div class="section-icon bg-violet"><span class="c-violet">🔗</span></div>
+      <div>
+        <h2>Integration Architecture</h2>
+        <p>4 hệ thống ngoài kết nối sâu vào nghiệp vụ</p>
+      </div>
+    </div>
+    <div class="integrations-grid">
+
+      <!-- Zimbra -->
+      <div class="int-card" style="border-color:rgba(6,182,212,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-cyan" style="border:1px solid rgba(6,182,212,0.3);border-radius:10px"><span class="c-cyan">📧</span></div>
+          <div>
+            <div class="int-name">Zimbra Mail Server</div>
+            <div class="int-type">SOAP Admin API · server-side only</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>Tạo / xóa / đình chỉ email account</li>
+          <li>Đặt password, alias, quota</li>
+          <li>Đẩy HTML chữ ký email lên server</li>
+          <li>Xác thực qua admin token SOAP</li>
+          <li>TLS tuỳ chỉnh (ZIMBRA_TLS_REJECT_UNAUTHORIZED)</li>
+          <li>Default suffix password: @123</li>
+        </ul>
+      </div>
+
+      <!-- ZKTeco -->
+      <div class="int-card" style="border-color:rgba(245,158,11,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-amber" style="border:1px solid rgba(245,158,11,0.3);border-radius:10px"><span class="c-amber">🕐</span></div>
+          <div>
+            <div class="int-name">ZKTeco / ADMS</div>
+            <div class="int-type">HTTP polling · attendance machines</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>Kết nối máy chấm công qua HTTP port 8088</li>
+          <li>Sync dữ liệu check-in/out định kỳ</li>
+          <li>Mapping user ID máy ↔ user DB</li>
+          <li>Tính giờ vào/ra theo rule (T2–T7)</li>
+          <li>Xử lý vắng, trễ, tăng ca tự động</li>
+          <li>Cấu hình nhiều máy qua admin UI</li>
+        </ul>
+      </div>
+
+      <!-- AWS SES -->
+      <div class="int-card" style="border-color:rgba(16,185,129,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-green" style="border:1px solid rgba(16,185,129,0.3);border-radius:10px"><span class="c-green">📬</span></div>
+          <div>
+            <div class="int-name">AWS SES + Nodemailer</div>
+            <div class="int-type">Transactional email · SMTP relay</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>Gửi email đặt lại mật khẩu</li>
+          <li>Thông báo onboarding link</li>
+          <li>Nhắc gia hạn hợp đồng tự động</li>
+          <li>Cấu hình qua AWS IAM credentials</li>
+          <li>FROM address: SES_FROM_EMAIL env</li>
+          <li>Fallback: Nodemailer SMTP trực tiếp</li>
+        </ul>
+      </div>
+
+      <!-- Telegram -->
+      <div class="int-card" style="border-color:rgba(139,92,246,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-violet" style="border:1px solid rgba(139,92,246,0.3);border-radius:10px"><span class="c-violet">✈️</span></div>
+          <div>
+            <div class="int-name">Telegram Bot</div>
+            <div class="int-type">Webhook · approval · login</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>Nhận thông báo yêu cầu chờ duyệt</li>
+          <li>Duyệt/từ chối ngay trên Telegram</li>
+          <li>Login widget HMAC verify song song email</li>
+          <li>Webhook → gọi nội bộ API có sẵn</li>
+          <li>telegram_id lưu DB (migration 146)</li>
+          <li>Cần /setdomain + NEXT_PUBLIC env</li>
+        </ul>
+      </div>
+
+      <!-- PostgreSQL -->
+      <div class="int-card" style="border-color:rgba(99,102,241,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-indigo" style="border:1px solid rgba(99,102,241,0.3);border-radius:10px"><span class="c-indigo">🐘</span></div>
+          <div>
+            <div class="int-name">PostgreSQL</div>
+            <div class="int-type">Self-hosted · pg Pool · migrations</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>Truy cập qua db.ts helper: query/queryOne/execute</li>
+          <li>withTransaction cho atomic operations</li>
+          <li>Pool max: PG_POOL_MAX (default 30)</li>
+          <li>154+ migration files, thứ tự numeric sort</li>
+          <li>Tên cột camelCase cần double-quote trong SQL</li>
+          <li>DATE columns: setTypeParser OID 1082 fix</li>
+        </ul>
+      </div>
+
+      <!-- SSE -->
+      <div class="int-card" style="border-color:rgba(14,165,233,0.2)">
+        <div class="int-header">
+          <div class="int-icon bg-sky" style="border:1px solid rgba(14,165,233,0.3);border-radius:10px"><span class="c-sky">📡</span></div>
+          <div>
+            <div class="int-name">Server-Sent Events</div>
+            <div class="int-type">Realtime · notification bell · live data</div>
+          </div>
+        </div>
+        <ul class="int-items">
+          <li>SSE stream từ API route Next.js</li>
+          <li>Notification bell realtime</li>
+          <li>Push khi ticket/task/approval thay đổi</li>
+          <li>Client dùng EventSource API</li>
+          <li>NotificationContext quản lý state</li>
+          <li>Không cần WebSocket server riêng</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════ SECURITY ════ -->
+  <section class="section" id="security">
+    <div class="section-header">
+      <div class="section-icon bg-rose"><span class="c-rose">🔒</span></div>
+      <div>
+        <h2>Security Model</h2>
+        <p>Authentication · Authorization · API security · Data protection</p>
+      </div>
+    </div>
+    <div class="security-grid">
+
+      <div class="sec-card">
+        <div class="sec-header">
+          <div class="sec-icon bg-indigo"><span class="c-indigo">🔑</span></div>
+          <div class="sec-title">Authentication</div>
+        </div>
+        <ul class="sec-items">
+          <li><span class="dot">●</span> Password hashing: bcryptjs (cost factor 10+)</li>
+          <li><span class="dot">●</span> Login: POST /api/auth/login → DB verify</li>
+          <li><span class="dot">●</span> Session cookie HTTP-only (server-side)</li>
+          <li><span class="dot">●</span> Telegram Login: HMAC-SHA256 verify</li>
+          <li><span class="dot" style="color:var(--amber)">●</span> LEGACY: authStore.ts mock users (cần xóa)</li>
+          <li><span class="dot" style="color:var(--amber)">●</span> Hai hệ auth song song — cần thống nhất</li>
+        </ul>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-header">
+          <div class="sec-icon bg-amber"><span class="c-amber">🛡️</span></div>
+          <div class="sec-title">Authorization (RBAC)</div>
+        </div>
+        <ul class="sec-items">
+          <li><span class="dot">●</span> 4 roles: super_admin, admin, manager, user</li>
+          <li><span class="dot">●</span> Per-module: view/create/edit/delete/approve/export</li>
+          <li><span class="dot">●</span> Module child kế thừa quyền module cha</li>
+          <li><span class="dot">●</span> Always-visible modules (không cần quyền)</li>
+          <li><span class="dot" style="color:var(--rose)">●</span> ⚠️ x-user-permissions header spoofable (kỹ thuật nợ)</li>
+          <li><span class="dot" style="color:var(--rose)">●</span> Cần thay bằng server-side token verify</li>
+        </ul>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-header">
+          <div class="sec-icon bg-cyan"><span class="c-cyan">🔐</span></div>
+          <div class="sec-title">API Security</div>
+        </div>
+        <ul class="sec-items">
+          <li><span class="dot">●</span> Permission check tại API route (server-side)</li>
+          <li><span class="dot">●</span> api-permissions.ts middleware chặn trước DB call</li>
+          <li><span class="dot">●</span> Input validation trước khi INSERT/UPDATE</li>
+          <li><span class="dot">●</span> Parameterized SQL queries (chống injection)</li>
+          <li><span class="dot">●</span> Error message không lộ stack trace ra client</li>
+          <li><span class="dot">●</span> HTTPS qua Traefik TLS termination</li>
+        </ul>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-header">
+          <div class="sec-icon bg-green"><span class="c-green">🛡️</span></div>
+          <div class="sec-title">Data Protection</div>
+        </div>
+        <ul class="sec-items">
+          <li><span class="dot">●</span> Không hardcode credentials — env variables</li>
+          <li><span class="dot">●</span> Không log password / data nhạy cảm</li>
+          <li><span class="dot">●</span> Zimbra credentials server-side only</li>
+          <li><span class="dot">●</span> DB connection string qua DATABASE_URL env</li>
+          <li><span class="dot">●</span> PGSSL tuỳ chỉnh (self-signed cert support)</li>
+          <li><span class="dot" style="color:var(--amber)">●</span> RLS policy hiện là USING(true) — cần strengthen</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════ PERMISSIONS ════ -->
+  <section class="section" id="permissions">
+    <div class="section-header">
+      <div class="section-icon bg-violet"><span class="c-violet">⊠</span></div>
+      <div>
+        <h2>Permission Model</h2>
+        <p>RBAC 4 roles · per-module actions · inheritance · always-visible</p>
+      </div>
+    </div>
+
+    <!-- Role descriptions -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+      <div class="card" style="text-align:center;border-color:rgba(244,63,94,0.2)">
+        <div style="font-size:20px;margin-bottom:6px">👑</div>
+        <div style="font-size:12px;font-weight:700;color:#fda4af">super_admin</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Toàn quyền hệ thống. Xuyên công ty. Không bị chặn bởi bất kỳ permission check nào.</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(99,102,241,0.2)">
+        <div style="font-size:20px;margin-bottom:6px">🔑</div>
+        <div style="font-size:12px;font-weight:700;color:#a5b4fc">admin</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Quản trị toàn công ty. Phê duyệt cấp cao. Cấu hình hệ thống trong phạm vi công ty.</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(245,158,11,0.2)">
+        <div style="font-size:20px;margin-bottom:6px">👔</div>
+        <div style="font-size:12px;font-weight:700;color:#fcd34d">manager</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Quản lý nhóm/phòng ban. Xem + duyệt scope cấp dưới trực tiếp. Báo cáo giới hạn.</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(16,185,129,0.2)">
+        <div style="font-size:20px;margin-bottom:6px">👤</div>
+        <div style="font-size:12px;font-weight:700;color:#6ee7b7">user</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Nhân viên thường. Self-service: xem tài sản/hợp đồng của mình, tạo yêu cầu.</div>
+      </div>
+    </div>
+
+    <!-- Permission Matrix -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">Ma Trận Quyền Theo Module</div>
+      <div class="perm-matrix">
+        <table class="perm-table">
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>view</th>
+              <th>create</th>
+              <th>edit</th>
+              <th>delete</th>
+              <th>approve</th>
+              <th>export</th>
+              <th>notify</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bảng Điều Khiển</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+            </tr>
+            <tr>
+              <td>Quản Lý Tài Sản</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+            </tr>
+            <tr>
+              <td>Ticket Hỗ Trợ</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Nhiệm Vụ</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Nguồn Nhân Lực</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+            </tr>
+            <tr>
+              <td>Chấm Công</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+            </tr>
+            <tr>
+              <td>Duyệt Yêu Cầu</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Tổ Chức</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+            </tr>
+            <tr>
+              <td>Người Dùng</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Cài Đặt</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+            </tr>
+            <tr>
+              <td>Lịch Sử (Audit)</td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+            </tr>
+            <tr>
+              <td>Chữ Ký Email</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="partial">◑</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+              <td><span class="cross">–</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:16px;font-size:11px;color:var(--muted)">
+        <span><span class="check">✓</span> Tất cả roles có quyền</span>
+        <span><span class="partial">◑</span> Tuỳ role / cấu hình</span>
+        <span><span class="cross">–</span> Không áp dụng</span>
+      </div>
+    </div>
+
+    <!-- Inheritance note -->
+    <div class="card" style="margin-top:12px;border-color:rgba(99,102,241,0.15)">
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div style="font-size:20px;flex-shrink:0">ℹ️</div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--fg);margin-bottom:4px">Kế Thừa Quyền Module</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.7">
+            Module con (ví dụ: <code style="background:rgba(255,255,255,0.05);padding:1px 5px;border-radius:3px">hr-recruitment-dashboard</code>) kế thừa permission từ module cha (<code style="background:rgba(255,255,255,0.05);padding:1px 5px;border-radius:3px">nguon-nhan-luc</code>) nếu không có override riêng.
+            Quyền mẫu được lưu trong DB và có thể sửa/xóa trực tiếp qua admin UI (migration 116–117).
+            <strong style="color:var(--indigo-light)">Always-visible modules</strong>: Dashboard, Hồ Sơ Cá Nhân — không cần cấu hình quyền, mọi user đã đăng nhập đều thấy.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ DEPLOYMENT ════ -->
+  <section class="section" id="deployment">
+    <div class="section-header">
+      <div class="section-icon bg-amber"><span class="c-amber">🚀</span></div>
+      <div>
+        <h2>Deployment</h2>
+        <p>Self-hosted Docker · Traefik · asset.fadoai.com · port 4028</p>
+      </div>
+    </div>
+
+    <div class="deploy-grid">
+
+      <div class="deploy-block">
+        <h3><span class="di">🐳</span> Docker Compose Stack</h3>
+        <div class="code-block">
+<span class="cm"># docker-compose.yml (simplified)</span>
+<span class="ck">services:</span>
+  <span class="ck">app:</span>
+    <span class="ck">image:</span> <span class="cv">fado/assetflowpro:latest</span>
+    <span class="ck">ports:</span> <span class="cs">["4028:4028"]</span>
+    <span class="ck">environment:</span>
+      <span class="ck">DATABASE_URL:</span> <span class="cs">postgres://...</span>
+      <span class="ck">NEXT_PUBLIC_APP_URL:</span> <span class="cs">https://asset.fadoai.com</span>
+      <span class="ck">AWS_REGION:</span> <span class="cs">ap-southeast-1</span>
+      <span class="ck">ZIMBRA_ADMIN_URL:</span> <span class="cs">https://mail.company.vn:7071</span>
+    <span class="ck">labels:</span>
+      <span class="cm"># Traefik routing labels</span>
+      <span class="cs">- "traefik.enable=true"</span>
+      <span class="cs">- "traefik.http.routers.app.rule=Host(`asset.fadoai.com`)"</span>
+
+  <span class="ck">traefik:</span>
+    <span class="ck">image:</span> <span class="cv">traefik:v2.10</span>
+    <span class="ck">ports:</span> <span class="cs">["80:80","443:443"]</span>
+    <span class="cm"># TLS termination + Let's Encrypt</span>
+
+  <span class="ck">postgres:</span>
+    <span class="ck">image:</span> <span class="cv">postgres:15</span>
+    <span class="ck">volumes:</span> <span class="cs">["pgdata:/var/lib/postgresql/data"]</span>
+        </div>
+      </div>
+
+      <div class="deploy-block">
+        <h3><span class="di">🔧</span> Environment Variables</h3>
+        <div class="code-block">
+<span class="cm"># Database (required)</span>
+<span class="ck">DATABASE_URL</span>=<span class="cv">postgres://user:pass@host:5432/db</span>
+<span class="ck">PG_POOL_MAX</span>=<span class="cs">30</span>
+<span class="ck">PGSSL</span>=<span class="cs">false</span>
+
+<span class="cm"># App</span>
+<span class="ck">NEXT_PUBLIC_APP_URL</span>=<span class="cv">https://asset.fadoai.com</span>
+
+<span class="cm"># Email (optional)</span>
+<span class="ck">AWS_REGION</span>=<span class="cv">ap-southeast-1</span>
+<span class="ck">AWS_ACCESS_KEY_ID</span>=<span class="cs">AKIA...</span>
+<span class="ck">AWS_SECRET_ACCESS_KEY</span>=<span class="cs">...</span>
+<span class="ck">SES_FROM_EMAIL</span>=<span class="cv">noreply@fadoai.com</span>
+
+<span class="cm"># Zimbra (server-side only)</span>
+<span class="ck">ZIMBRA_ADMIN_URL</span>=<span class="cv">https://mail.company.vn:7071</span>
+<span class="ck">ZIMBRA_ADMIN_USER</span>=<span class="cs">admin</span>
+<span class="ck">ZIMBRA_ADMIN_PASSWORD</span>=<span class="cs">***</span>
+<span class="ck">ZIMBRA_TLS_REJECT_UNAUTHORIZED</span>=<span class="cs">false</span>
+<span class="ck">ZIMBRA_DEFAULT_PASSWORD_SUFFIX</span>=<span class="cs">@123</span>
+        </div>
+      </div>
+
+      <div class="deploy-block">
+        <h3><span class="di">📋</span> Yêu Cầu Hạ Tầng</h3>
+        <ul class="req-list">
+          <li><span class="req-icon">🐘</span><div><strong>PostgreSQL 14+</strong> — self-hosted hoặc managed (Supabase không dùng, chỉ pg Pool)</div></li>
+          <li><span class="req-icon">📧</span><div><strong>SMTP / AWS SES</strong> — optional, cần cho password reset và nhắc hợp đồng</div></li>
+          <li><span class="req-icon">🔀</span><div><strong>Traefik / Nginx</strong> — reverse proxy, TLS termination, domain routing</div></li>
+          <li><span class="req-icon">🐳</span><div><strong>Docker Engine 24+</strong> — container runtime, Docker Compose v2</div></li>
+          <li><span class="req-icon">📧</span><div><strong>Zimbra</strong> — optional, cần nếu dùng quản lý email account và chữ ký</div></li>
+          <li><span class="req-icon">🕐</span><div><strong>ZKTeco ADMS</strong> — optional, cần nếu dùng chấm công máy vật lý</div></li>
+          <li><span class="req-icon">✈️</span><div><strong>Telegram Bot Token</strong> — optional, cần nếu dùng duyệt qua Telegram</div></li>
+          <li><span class="req-icon">🌐</span><div><strong>Domain + TLS cert</strong> — asset.fadoai.com, Let's Encrypt via Traefik</div></li>
+        </ul>
+      </div>
+
+      <div class="deploy-block">
+        <h3><span class="di">⚡</span> Build &amp; Deploy</h3>
+        <div class="code-block">
+<span class="cm"># Build Next.js production</span>
+<span class="ck">npm</span> <span class="cv">run build</span>
+
+<span class="cm"># Chạy migration</span>
+<span class="ck">node</span> <span class="cv">scripts/run-migrations.js</span>
+
+<span class="cm"># Dev server port 4028</span>
+<span class="ck">npm</span> <span class="cv">run dev</span>
+
+<span class="cm"># Lint + type-check</span>
+<span class="ck">npm</span> <span class="cv">run lint</span>
+<span class="ck">npm</span> <span class="cv">run type-check</span>
+
+<span class="cm"># Deploy via Coolify (current)</span>
+<span class="cm"># Git push → Coolify auto-build</span>
+<span class="cm"># Branch: main → production</span>
+
+<span class="cm"># ⚠️ Không dùng Google Fonts</span>
+<span class="cm"># Coolify chặn fonts.gstatic.com</span>
+<span class="cm"># Dùng font-family fallback CSS thay thế</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tech Stack summary -->
+    <div class="card" style="margin-top:16px">
+      <div class="card-title" style="margin-bottom:16px">Tech Stack Chi Tiết</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Frontend</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">Next.js 13.5 App Router<br>React 19<br>TypeScript 5<br>Tailwind CSS 3.4<br>Radix UI / shadcn</div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Backend</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">Next.js API Routes<br>Node.js runtime<br>pg (node-postgres)<br>bcryptjs auth<br>Nodemailer + SES</div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Database</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">PostgreSQL 15<br>154+ migrations<br>pg Pool (max 30)<br>Numeric sort migrations<br>setTypeParser DATE fix</div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Infrastructure</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">Docker + Compose<br>Traefik reverse proxy<br>Coolify CI/CD<br>Port 4028<br>asset.fadoai.com</div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Integrations</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">Zimbra SOAP Admin API<br>ZKTeco ADMS (8088)<br>AWS SES (email)<br>Telegram Bot<br>SSE (realtime)</div>
+        </div>
+        <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Libraries</div>
+          <div style="font-size:11px;color:var(--fg);line-height:2">@dnd-kit (Kanban ATS)<br>xlsx-js-style (Excel)<br>pdf-parse + mammoth<br>lucide-react (icons)<br>date-fns (dates)</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <strong>FADO AssetFlowPro</strong> — Solution Overview · Generated 2026-06-19 ·
+  Stack: Next.js 13.5 · React 19 · PostgreSQL · Docker · Traefik ·
+  Deploy: <strong>asset.fadoai.com</strong> · Port <strong>4028</strong>
+</footer>
+
+<script src="/preview/_nav.js"></script>
+</body>
+</html>

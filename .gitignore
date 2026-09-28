@@ -1,0 +1,78 @@
+# Node modules
+node_modules/
+package-lock.json
+
+# Next.js build output
+.next/
+.next-recruitment-dev/
+/logs/
+out/
+
+# Production build
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Vercel deployment
+.vercel/
+
+# Optional: if using TypeScript
+*.tsbuildinfo
+
+# Optional: if using testing tools
+coverage/
+jest-test-results.json
+
+# Optional: if using IDEs
+.vscode/
+.idea/
+
+# Optional: if using TurboRepo or monorepo
+turbo/
+
+# Backup and archive files
+*.tar.gz
+*.zip
+*.rar
+*.7z
+/cv-collector-extension/release/
+backup*/
+backups/
+.cache/
+logs/
+*_backup*
+# Environment files (contain secrets — never commit)
+.env
+.env.local
+!.env.local.example
+
+# Tep dinh kem task luu cuc bo (khong commit)
+/uploads/
+
+# Báo cáo tạm sinh tại runtime — không commit
+public/reports/
+
+# Playwright visual regression (artifact lỗi — KHÔNG commit; ảnh golden ở tests/ thì CÓ commit)
+/test-results/
+/playwright-report/
+/blob-report/
+playwright/.cache/
+/tests/visual/.auth/
+.codex-local-dev.log
+
+# Local secrets and runtime files
+.env*
+!.env.example
+!.env.local.example
+*.bak
+*.log
+*.pid
+.claude/settings.local.json

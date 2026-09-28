@@ -1,0 +1,96 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: assetflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-assetflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-assetflow}
+      POSTGRES_DB: ${POSTGRES_DB:-assetflow}
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      # SQL files here run once, in filename order, on first init only.
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-assetflow} -d ${POSTGRES_DB:-assetflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Baked into the build (NEXT_PUBLIC_* is inlined at build time).
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:4028}
+    container_name: assetflow-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4028
+      TZ: Asia/Ho_Chi_Minh
+      DATABASE_URL: postgres://${POSTGRES_USER:-assetflow}:${POSTGRES_PASSWORD:-assetflow}@db:5432/${POSTGRES_DB:-assetflow}
+      # Email (AWS SES) — optional, fill in to enable password-reset mail.
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      SES_FROM_EMAIL: ${SES_FROM_EMAIL:-}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://assetflow.fadoai.com}
+      ZIMBRA_ADMIN_URL: ${ZIMBRA_ADMIN_URL}
+      ZIMBRA_ADMIN_USER: ${ZIMBRA_ADMIN_USER}
+      ZIMBRA_ADMIN_PASSWORD: ${ZIMBRA_ADMIN_PASSWORD}
+      ZIMBRA_TLS_REJECT_UNAUTHORIZED: ${ZIMBRA_TLS_REJECT_UNAUTHORIZED}
+      ZIMBRA_DEFAULT_PASSWORD_SUFFIX: ${ZIMBRA_DEFAULT_PASSWORD_SUFFIX}
+      # Thu muc luu tep dinh kem task (mount volume ben duoi de giu qua moi rebuild).
+      TASK_UPLOAD_DIR: /app/uploads/tasks
+      # Ep moi du lieu push ADMS ve 1 machine_id co dinh (he thong 1 may) → khop
+      # mapping/lich su cu, khoi gan lai. Co nhieu may thi bo dong nay.
+      ADMS_MACHINE_ID: ${ADMS_MACHINE_ID:-zkteco_ronald_jack_1}
+    volumes:
+      - app-uploads:/app/uploads
+      # Avatar nhân viên — phải mount volume, nếu không sẽ mất sạch khi redeploy
+      - app-avatars:/app/public/avatars
+    labels:
+      - "traefik.enable=true"
+      # Router chính: webapp qua HTTPS theo tên miền
+      - "traefik.http.routers.asset.rule=Host(`assetflow.fadoai.com`) || Host(`asset.fadoai.com`)"
+      - "traefik.http.routers.asset.entrypoints=websecure"
+      - "traefik.http.routers.asset.service=asset"
+      - "traefik.http.routers.asset.tls.certresolver=leresolver"
+      - "traefik.http.services.asset.loadbalancer.server.port=4028"
+      # ── ADMS cho máy chấm công chỉ nhập IP (dùng cổng 80/443 đã mở, KHÔNG cần mở cổng mới) ──
+      # CHỈ mở đúng path /api/attendance/adms — không phơi phần còn lại của app.
+      # Priority cao để THẮNG router redirect HTTP→HTTPS (nếu redirect ở mức router).
+      # /iclock cũng phải match — firmware ZKTeco/Ronald Jack mặc định đẩy về /iclock/cdata
+      # (Next.js rewrite /iclock/cdata → /api/attendance/adms)
+      # (1) Qua HTTP cổng 80 — cho máy chỉ HTTP:
+      - "traefik.http.routers.adms_http.rule=PathPrefix(`/api/attendance/adms`) || PathPrefix(`/iclock`)"
+      - "traefik.http.routers.adms_http.entrypoints=web"
+      - "traefik.http.routers.adms_http.service=asset"
+      - "traefik.http.routers.adms_http.priority=1000"
+      # (2) Qua HTTPS cổng 443 — cho máy hỗ trợ HTTPS (bỏ qua cert):
+      - "traefik.http.routers.adms_https.rule=PathPrefix(`/api/attendance/adms`) || PathPrefix(`/iclock`)"
+      - "traefik.http.routers.adms_https.entrypoints=websecure"
+      - "traefik.http.routers.adms_https.tls=true"
+      - "traefik.http.routers.adms_https.service=asset"
+      - "traefik.http.routers.adms_https.priority=1000"
+      # (3) Qua cổng riêng 8088 (entrypoint "adms") — cho máy đời cũ chỉ HTTP (FA120...)
+      # khi cổng 80 bị redirect HTTPS ở mức entrypoint. Yêu cầu Traefik khai báo
+      # entrypoint adms :8088 trong static config + mở firewall 8088.
+      # Label vô hại nếu entrypoint chưa tồn tại — Traefik chỉ log warning.
+      - "traefik.http.routers.adms_port.rule=PathPrefix(`/api/attendance/adms`) || PathPrefix(`/iclock`)"
+      - "traefik.http.routers.adms_port.entrypoints=adms"
+      - "traefik.http.routers.adms_port.service=asset"
+
+volumes:
+  db-data:
+  app-uploads:
+  app-avatars:

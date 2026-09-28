@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FADO AssetFlow — Product Brochure & Sales Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #060e1a;
+    --card: #0f1c2e;
+    --indigo: #4f46e5;
+    --indigo-light: #6366f1;
+    --indigo-pale: #818cf8;
+    --accent: #C62828;
+    --accent-light: #ef4444;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(255,255,255,0.08);
+    --card2: #162033;
+    --green: #10b981;
+    --amber: #f59e0b;
+  }
+
+  body {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: var(--fg);
+    line-height: 1.6;
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: white; }
+    .page { page-break-after: always; box-shadow: none !important; margin: 0 !important; }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+  }
+
+  /* ─── LAYOUT ─── */
+  .page {
+    width: 297mm;
+    min-height: 210mm;
+    margin: 0 auto 40px;
+    background: var(--bg);
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-portrait {
+    width: 210mm;
+    min-height: 297mm;
+  }
+
+  /* ─────────────────────────────────────────────────
+     PHẦN 1: PRODUCT BROCHURE
+  ───────────────────────────────────────────────── */
+
+  /* Cover */
+  .cover {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 210mm;
+  }
+
+  .cover-left {
+    background: var(--bg);
+    padding: 48px 40px 48px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-right {
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a1040 50%, #0d0720 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Geometric hero */
+  .geo-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .geo-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(79,70,229,0.25);
+  }
+  .geo-ring:nth-child(1) { width: 380px; height: 380px; animation: spin 40s linear infinite; }
+  .geo-ring:nth-child(2) { width: 280px; height: 280px; border-color: rgba(99,102,241,0.35); animation: spin 25s linear infinite reverse; }
+  .geo-ring:nth-child(3) { width: 180px; height: 180px; border-color: rgba(129,140,248,0.5); animation: spin 15s linear infinite; }
+
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .geo-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--indigo);
+  }
+
+  .geo-center {
+    width: 80px; height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--indigo), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 900; color: white;
+    box-shadow: 0 0 40px rgba(79,70,229,0.6), 0 0 80px rgba(79,70,229,0.3);
+    position: relative; z-index: 3;
+    letter-spacing: -2px;
+  }
+
+  .geo-orbiting {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--indigo-pale);
+    box-shadow: 0 0 8px var(--indigo);
+  }
+
+  .geo-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(79,70,229,0.4), transparent);
+    height: 1px;
+  }
+
+  .corner-accent {
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: linear-gradient(225deg, rgba(198,40,40,0.4), transparent);
+  }
+
+  /* Logo */
+  .logo-mark {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--indigo), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: white;
+    letter-spacing: -1px;
+  }
+  .logo-text { font-size: 18px; font-weight: 800; color: var(--fg); letter-spacing: -0.5px; }
+  .logo-sub { font-size: 9px; font-weight: 600; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  .cover-headline {
+    font-size: 42px; font-weight: 900; line-height: 1.1;
+    color: var(--fg); letter-spacing: -2px;
+  }
+  .cover-headline span { color: var(--indigo-pale); }
+
+  .cover-tagline {
+    font-size: 11px; font-weight: 700; color: var(--accent-light);
+    letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  .cover-desc {
+    font-size: 13px; font-weight: 400; color: var(--muted);
+    line-height: 1.7; margin-top: 16px; max-width: 320px;
+  }
+
+  .cover-badges {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px;
+  }
+  .badge {
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    border: 1px solid rgba(79,70,229,0.4);
+    color: var(--indigo-pale); background: rgba(79,70,229,0.1);
+  }
+  .badge.accent { border-color: rgba(198,40,40,0.4); color: #f87171; background: rgba(198,40,40,0.1); }
+
+  .cover-cta {
+    display: inline-flex; align-items: center; gap-8px;
+    background: var(--indigo); color: white;
+    padding: 12px 28px; border-radius: 12px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+    text-decoration: none; margin-top: 32px; width: fit-content;
+  }
+
+  .cover-bottom-bar {
+    display: flex; align-items: center; gap: 20px;
+  }
+  .stat-pill { font-size: 11px; color: var(--muted); }
+  .stat-pill strong { font-size: 20px; font-weight: 800; color: var(--fg); display: block; line-height: 1; }
+
+  /* ─── PROBLEM SECTION ─── */
+  .section-problem {
+    background: var(--card);
+    padding: 40px 52px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    min-height: 210mm;
+  }
+
+  .section-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent-light); margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 30px; font-weight: 800; line-height: 1.2;
+    color: var(--fg); letter-spacing: -1px;
+  }
+
+  .section-title span { color: var(--indigo-pale); }
+
+  .section-body {
+    font-size: 13px; font-weight: 400; color: var(--muted);
+    line-height: 1.8; margin-top: 16px;
+  }
+
+  .pain-list { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .pain-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: rgba(198,40,40,0.06); border: 1px solid rgba(198,40,40,0.2);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .pain-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .pain-text { font-size: 12px; color: var(--fg); font-weight: 500; }
+  .pain-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  .solution-visual {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+
+  .sol-card {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+    transition: all 0.2s;
+  }
+
+  .sol-card-icon { font-size: 22px; margin-bottom: 8px; }
+  .sol-card-title { font-size: 11px; font-weight: 700; color: var(--fg); }
+  .sol-card-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  .sol-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(79,70,229,0.15), rgba(79,70,229,0.05));
+    border-color: rgba(79,70,229,0.3);
+  }
+
+  /* ─── MODULES SECTION ─── */
+  .section-modules {
+    padding: 40px 52px;
+    min-height: 210mm;
+    background: var(--bg);
+  }
+
+  .modules-header { text-align: center; margin-bottom: 32px; }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .mod-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mod-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--indigo), var(--indigo-pale));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .mod-card:nth-child(odd)::before { opacity: 1; }
+
+  .mod-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 12px;
+    background: rgba(79,70,229,0.1);
+  }
+
+  .mod-name { font-size: 13px; font-weight: 700; color: var(--fg); margin-bottom: 6px; }
+  .mod-desc { font-size: 10px; color: var(--muted); line-height: 1.5; }
+  .mod-benefit {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 9px; font-weight: 600; color: var(--indigo-pale);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* ─── BENEFITS ─── */
+  .section-benefits {
+    padding: 40px 52px;
+    background: linear-gradient(135deg, #060e1a 0%, #0d1b3e 100%);
+    min-height: 210mm;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .benefits-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 32px;
+  }
+
+  .benefit-card {
+    background: rgba(15,28,46,0.8);
+    border: 1px solid rgba(79,70,229,0.2);
+    border-radius: 16px; padding: 28px;
+    position: relative; overflow: hidden;
+  }
+
+  .benefit-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(79,70,229,0.06);
+  }
+
+  .benefit-number {
+    font-size: 48px; font-weight: 900; color: rgba(79,70,229,0.15);
+    line-height: 1; margin-bottom: 8px; letter-spacing: -3px;
+  }
+
+  .benefit-title { font-size: 16px; font-weight: 800; color: var(--fg); margin-bottom: 8px; }
+  .benefit-desc { font-size: 11px; color: var(--muted); line-height: 1.7; }
+
+  .benefit-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+  .benefit-tag {
+    padding: 3px 8px; border-radius: 6px;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.5px;
+    background: rgba(79,70,229,0.15); color: var(--indigo-pale);
+  }
+
+  .cta-bar {
+    margin-top: 40px;
+    background: linear-gradient(135deg, rgba(79,70,229,0.2), rgba(124,58,237,0.2));
+    border: 1px solid rgba(79,70,229,0.3);
+    border-radius: 16px; padding: 24px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .cta-bar-text h3 { font-size: 18px; font-weight: 800; color: var(--fg); }
+  .cta-bar-text p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .cta-btn {
+    background: var(--indigo); color: white;
+    padding: 12px 32px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; white-space: nowrap;
+    text-decoration: none;
+  }
+
+  /* ─────────────────────────────────────────────────
+     PHẦN 2: ONE-PAGE SALES SHEET
+  ───────────────────────────────────────────────── */
+  .sales-sheet {
+    background: var(--bg);
+    min-height: 297mm;
+    width: 210mm;
+    padding: 44px 40px;
+  }
+
+  .sales-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 20px; border-bottom: 2px solid var(--indigo);
+    margin-bottom: 24px;
+  }
+
+  .sales-logo { display: flex; align-items: center; gap: 10px; }
+
+  .executive-box {
+    background: linear-gradient(135deg, rgba(79,70,229,0.12), rgba(79,70,229,0.04));
+    border: 1px solid rgba(79,70,229,0.25); border-radius: 12px; padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .exec-title { font-size: 9px; font-weight: 700; letter-spacing: 3px; color: var(--indigo-pale); text-transform: uppercase; margin-bottom: 10px; }
+  .exec-line { font-size: 12px; color: var(--fg); line-height: 1.7; display: flex; gap: 10px; }
+  .exec-dot { color: var(--indigo-pale); font-weight: 900; flex-shrink: 0; }
+
+  /* Feature matrix table */
+  .feat-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 24px;
+    font-size: 10px;
+  }
+
+  .feat-table th {
+    background: var(--card2); color: var(--muted);
+    font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+
+  .feat-table td {
+    padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--fg); vertical-align: top;
+    font-size: 10px;
+  }
+
+  .feat-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .module-group-header td {
+    background: rgba(79,70,229,0.08) !important;
+    color: var(--indigo-pale); font-weight: 700; font-size: 10px;
+    border-top: 1px solid rgba(79,70,229,0.2);
+    padding: 6px 10px;
+  }
+
+  .sub-feature { color: var(--muted); font-size: 9px; margin-top: 2px; }
+
+  /* ROI section */
+  .roi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+  .roi-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; text-align: center;
+  }
+  .roi-num { font-size: 28px; font-weight: 900; color: var(--green); line-height: 1; }
+  .roi-unit { font-size: 10px; color: var(--muted); }
+  .roi-label { font-size: 10px; color: var(--fg); font-weight: 600; margin-top: 6px; }
+
+  /* Timeline */
+  .timeline { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-bottom: 24px; position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px; right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--indigo), var(--indigo-pale), rgba(79,70,229,0.3));
+  }
+
+  .tl-step { text-align: center; position: relative; padding-top: 8px; }
+  .tl-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--indigo); margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: white;
+    position: relative; z-index: 2;
+    box-shadow: 0 0 0 4px rgba(79,70,229,0.2);
+  }
+  .tl-phase { font-size: 9px; font-weight: 700; color: var(--indigo-pale); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .tl-title { font-size: 11px; font-weight: 700; color: var(--fg); }
+  .tl-duration { font-size: 9px; color: var(--muted); margin-top: 3px; }
+
+  /* Contact */
+  .contact-bar {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .contact-item { display: flex; align-items: center; gap: 8px; }
+  .contact-icon { font-size: 16px; }
+  .contact-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .contact-value { font-size: 11px; font-weight: 600; color: var(--fg); }
+
+  /* ─────────────────────────────────────────────────
+     PHẦN 3: FEATURE MATRIX
+  ───────────────────────────────────────────────── */
+  .matrix-page {
+    background: var(--bg);
+    min-height: 297mm;
+    width: 210mm;
+    padding: 36px 32px;
+  }
+
+  .matrix-header {
+    margin-bottom: 20px;
+  }
+
+  .matrix-title { font-size: 22px; font-weight: 900; color: var(--fg); letter-spacing: -1px; }
+  .matrix-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  .matrix-legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 9px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .matrix-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+  .matrix-table th {
+    padding: 8px 10px; font-size: 9px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; text-align: center;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0; background: var(--card2);
+  }
+  .matrix-table th:first-child { text-align: left; }
+
+  .matrix-table td {
+    padding: 6px 10px; text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 10px;
+  }
+  .matrix-table td:first-child { text-align: left; }
+  .matrix-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .group-row td {
+    background: rgba(79,70,229,0.07) !important;
+    color: var(--indigo-pale); font-weight: 700; font-size: 10px;
+    padding: 7px 10px;
+  }
+
+  .group-row td:first-child {
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .group-icon { font-size: 14px; }
+
+  .check-full { color: var(--green); font-size: 14px; font-weight: 700; }
+  .check-partial { color: var(--amber); font-size: 12px; }
+  .check-none { color: rgba(255,255,255,0.15); font-size: 14px; }
+  .check-admin { color: var(--indigo-pale); font-size: 14px; font-weight: 700; }
+
+  .role-user { color: var(--green); }
+  .role-manager { color: var(--amber); }
+  .role-admin { color: var(--indigo-pale); }
+  .role-super { color: #f472b6; }
+
+  .feature-name { font-size: 10px; color: var(--fg); font-weight: 500; }
+  .feature-sub { font-size: 8px; color: var(--muted); }
+
+  .page-footer {
+    position: absolute; bottom: 16px; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    font-size: 8px; color: rgba(148,163,184,0.4);
+    letter-spacing: 1px;
+  }
+
+  /* Decorative elements */
+  .deco-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,70,229,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,70,229,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .print-nav {
+    position: fixed; bottom: 24px; right: 24px; z-index: 999;
+    display: flex; gap: 10px;
+  }
+  .print-btn {
+    background: var(--indigo); color: white; border: none;
+    padding: 12px 24px; border-radius: 10px;
+    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer; box-shadow: 0 8px 30px rgba(79,70,229,0.4);
+  }
+  .print-btn:hover { background: var(--indigo-light); }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV BUTTON (no-print) ─── -->
+<div class="print-nav no-print">
+  <button class="print-btn" onclick="window.print()">In / Xuat PDF</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 1 — TRANG 1/4: COVER
+══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="deco-grid"></div>
+  <div class="cover">
+
+    <!-- LEFT -->
+    <div class="cover-left">
+      <div class="logo-mark">
+        <div class="logo-icon">AF</div>
+        <div>
+          <div class="logo-text">FADO AssetFlow</div>
+          <div class="logo-sub">Enterprise Operations Platform</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cover-tagline">Nền Tảng Vận Hành Doanh Nghiệp</div>
+        <div class="cover-headline">
+          Một Nền<br>Tảng.<br><span>Toàn Bộ</span><br>Vận Hành.
+        </div>
+        <div class="cover-desc">
+          FADO AssetFlow tập trung hóa quản lý tài sản, nhân sự, công việc, phê duyệt và quy trình nội bộ — loại bỏ sự phân tán phần mềm, kết nối toàn tổ chức trong một giao diện duy nhất.
+        </div>
+        <div class="cover-badges">
+          <span class="badge">Tài Sản</span>
+          <span class="badge">Nhân Sự</span>
+          <span class="badge">Công Việc</span>
+          <span class="badge">Chấm Công</span>
+          <span class="badge">Tuyển Dụng</span>
+          <span class="badge accent">Made in Vietnam</span>
+        </div>
+      </div>
+
+      <div class="cover-bottom-bar">
+        <div class="stat-pill"><strong>20+</strong>Modules</div>
+        <div style="width:1px;height:36px;background:rgba(255,255,255,0.1)"></div>
+        <div class="stat-pill"><strong>4</strong>Nhóm phân quyền</div>
+        <div style="width:1px;height:36px;background:rgba(255,255,255,0.1)"></div>
+        <div class="stat-pill"><strong>225+</strong>API endpoints</div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Geometric Hero -->
+    <div class="cover-right">
+      <div class="corner-accent"></div>
+      <div class="geo-wrap">
+        <!-- Rings -->
+        <div class="geo-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+        <div class="geo-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+        <div class="geo-ring" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+
+        <!-- Lines -->
+        <div class="geo-line" style="width:280px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(30deg)"></div>
+        <div class="geo-line" style="width:280px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg)"></div>
+        <div class="geo-line" style="width:280px;top:50%;left:50%;transform:translate(-50%,-50%) rotate(150deg)"></div>
+
+        <!-- Center -->
+        <div class="geo-center" style="z-index:5">AF</div>
+
+        <!-- Orbiting dots -->
+        <div class="geo-orbiting" style="top:28%;left:50%;transform:translate(-50%,-50%)"></div>
+        <div class="geo-orbiting" style="top:72%;left:50%;transform:translate(-50%,-50%)"></div>
+        <div class="geo-orbiting" style="top:50%;left:28%;transform:translate(-50%,-50%)"></div>
+        <div class="geo-orbiting" style="top:50%;left:72%;transform:translate(-50%,-50%)"></div>
+
+        <!-- Module labels floating -->
+        <div style="position:absolute;top:18%;left:55%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.8);letter-spacing:1px;">TÀI SẢN</div>
+        <div style="position:absolute;top:38%;left:72%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.7);letter-spacing:1px;">NHÂN SỰ</div>
+        <div style="position:absolute;top:60%;left:68%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.7);letter-spacing:1px;">CÔNG VIỆC</div>
+        <div style="position:absolute;top:76%;left:42%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.6);letter-spacing:1px;">CHẤM CÔNG</div>
+        <div style="position:absolute;top:60%;left:18%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.6);letter-spacing:1px;">TUYỂN DỤNG</div>
+        <div style="position:absolute;top:38%;left:12%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.7);letter-spacing:1px;">TICKET</div>
+        <div style="position:absolute;top:20%;left:30%;font-size:9px;font-weight:700;color:rgba(129,140,248,0.7);letter-spacing:1px;">DUYỆT</div>
+      </div>
+
+      <!-- Bottom stamp -->
+      <div style="position:absolute;bottom:28px;right:28px;text-align:right;">
+        <div style="font-size:9px;color:rgba(148,163,184,0.4);letter-spacing:2px;text-transform:uppercase;">Phiên Bản</div>
+        <div style="font-size:18px;font-weight:900;color:rgba(79,70,229,0.5);letter-spacing:-1px;">2026</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Enterprise Operations Platform</span>
+    <span>CONFIDENTIAL · Dành cho đối tác & khách hàng doanh nghiệp</span>
+    <span>Trang 1</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 1 — TRANG 2/4: PROBLEM + SOLUTION
+══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-problem">
+
+    <!-- LEFT: Problem -->
+    <div>
+      <div class="section-label">Vấn Đề</div>
+      <div class="section-title">
+        Doanh Nghiệp Việt Đang Dùng <span>Quá Nhiều Phần Mềm</span> Rời Rạc
+      </div>
+      <div class="section-body">
+        Hầu hết doanh nghiệp Việt Nam hiện đang vận hành với 5–12 phần mềm không kết nối với nhau, dẫn đến dữ liệu phân tán, quy trình trùng lặp và khó kiểm soát toàn cảnh.
+      </div>
+
+      <div class="pain-list">
+        <div class="pain-item">
+          <div class="pain-icon">📊</div>
+          <div>
+            <div class="pain-text">Dữ liệu phân tán, không nhất quán</div>
+            <div class="pain-sub">Tài sản ở một nơi, nhân sự ở nơi khác, công việc ở chỗ khác — không ai có bức tranh toàn cảnh.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">🔄</div>
+          <div>
+            <div class="pain-text">Quy trình phê duyệt thủ công, chậm chạp</div>
+            <div class="pain-sub">Email xin duyệt qua lại, không có audit trail, dễ thất lạc và không truy xuất được.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">💸</div>
+          <div>
+            <div class="pain-text">Chi phí bản quyền nhiều phần mềm chồng chéo</div>
+            <div class="pain-sub">Mỗi phòng ban dùng một tool khác nhau, license phí tích lũy nhưng hiệu quả không tăng.</div>
+          </div>
+        </div>
+        <div class="pain-item">
+          <div class="pain-icon">🔐</div>
+          <div>
+            <div class="pain-text">Phân quyền không đồng bộ, rủi ro bảo mật</div>
+            <div class="pain-sub">Không có RBAC tập trung, khó kiểm soát ai được xem gì và làm gì trong từng hệ thống.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Solution -->
+    <div>
+      <div class="section-label">Giải Pháp</div>
+      <div class="section-title">
+        <span>FADO AssetFlow</span> — Một Nền Tảng Duy Nhất
+      </div>
+      <div class="section-body">
+        Thay thế toàn bộ mảnh ghép phần mềm rời rạc bằng một platform tích hợp — thiết kế riêng cho doanh nghiệp Việt Nam, triển khai nhanh, vận hành ngay.
+      </div>
+
+      <div class="solution-visual" style="margin-top:24px;">
+        <div class="sol-card featured">
+          <div class="sol-card-icon">🎯</div>
+          <div class="sol-card-title">Command Center Duy Nhất</div>
+          <div class="sol-card-sub">Dashboard tập trung cho mọi vai trò — từ nhân viên đến Super Admin — với dữ liệu real-time và thông báo tức thì.</div>
+        </div>
+        <div class="sol-card">
+          <div class="sol-card-icon">🏗️</div>
+          <div class="sol-card-title">RBAC 4 Cấp</div>
+          <div class="sol-card-sub">User → Manager → Admin → Super Admin với phân quyền module chi tiết.</div>
+        </div>
+        <div class="sol-card">
+          <div class="sol-card-icon">🔗</div>
+          <div class="sol-card-title">Tích Hợp Zimbra</div>
+          <div class="sol-card-sub">Email server Zimbra kết nối trực tiếp qua SOAP Admin API, quản lý email & chữ ký tập trung.</div>
+        </div>
+        <div class="sol-card">
+          <div class="sol-card-icon">📡</div>
+          <div class="sol-card-title">Realtime SSE</div>
+          <div class="sol-card-sub">Server-Sent Events cho thông báo và cập nhật dữ liệu tức thì, không cần refresh.</div>
+        </div>
+        <div class="sol-card">
+          <div class="sol-card-icon">🐳</div>
+          <div class="sol-card-title">Docker Deploy</div>
+          <div class="sol-card-sub">Triển khai Docker + Traefik, tự host hoàn toàn, dữ liệu nằm trong hạ tầng của bạn.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Enterprise Operations Platform</span>
+    <span>CONFIDENTIAL</span>
+    <span>Trang 2</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 1 — TRANG 3/4: MODULES OVERVIEW
+══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-modules">
+    <div class="modules-header">
+      <div class="section-label" style="text-align:center">Các Module</div>
+      <div class="section-title" style="text-align:center;font-size:26px;">Hệ Sinh Thái Module <span>Hoàn Chỉnh</span></div>
+      <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px;">20+ modules tích hợp sâu, hoạt động thống nhất trong một nền tảng</div>
+    </div>
+
+    <div class="modules-grid">
+
+      <div class="mod-card">
+        <div class="mod-icon">📊</div>
+        <div class="mod-name">Bảng Điều Khiển</div>
+        <div class="mod-desc">Command center 2 cột với KPI tổng quan, nhiệm vụ gần đến hạn, ticket mở, thông báo nội bộ và biểu đồ hoạt động.</div>
+        <div class="mod-benefit">→ Toàn cảnh vận hành trong 1 màn hình</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">🖥️</div>
+        <div class="mod-name">Quản Lý Tài Sản</div>
+        <div class="mod-desc">Phần cứng, phần mềm, tên miền, tài khoản email Zimbra — vòng đời tài sản đầy đủ với lịch sử, phân công và cảnh báo hết hạn.</div>
+        <div class="mod-benefit">→ Không mất tài sản, không bỏ lỡ gia hạn</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">🎫</div>
+        <div class="mod-name">Ticket Hỗ Trợ</div>
+        <div class="mod-desc">Hệ thống ticket nội bộ với luồng admin/user riêng biệt, phân loại danh mục, ưu tiên, trạng thái và lịch sử xử lý.</div>
+        <div class="mod-benefit">→ Hỗ trợ nội bộ có hệ thống, có truy xuất</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">✅</div>
+        <div class="mod-name">Nhiệm Vụ</div>
+        <div class="mod-desc">Quản lý công việc với subtask, attachment, comment, follower, analytics tiến độ và liên kết 2 chiều với ticket hỗ trợ.</div>
+        <div class="mod-benefit">→ Công việc rõ ràng, trách nhiệm minh bạch</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">🏢</div>
+        <div class="mod-name">Đặt Phòng Họp</div>
+        <div class="mod-desc">Đặt và quản lý phòng họp với lịch sử sử dụng, kiểm tra conflict thời gian và thông báo tự động cho người tham gia.</div>
+        <div class="mod-benefit">→ Không tranh giành phòng, lịch minh bạch</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">✍️</div>
+        <div class="mod-name">Duyệt Yêu Cầu</div>
+        <div class="mod-desc">Xét duyệt bù công, tăng ca, bảng công và yêu cầu xóa tài sản — flow phê duyệt 2 bước với audit trail đầy đủ.</div>
+        <div class="mod-benefit">→ Phê duyệt nhanh, có dấu vết rõ ràng</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">🏛️</div>
+        <div class="mod-name">Tổ Chức</div>
+        <div class="mod-desc">Cấu trúc tổ chức đa cấp: công ty, phòng ban, chức danh, vị trí, tags và sơ đồ org chart trực quan.</div>
+        <div class="mod-benefit">→ Tổ chức được định nghĩa rõ ràng, dễ mở rộng</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">👥</div>
+        <div class="mod-name">Nguồn Nhân Lực</div>
+        <div class="mod-desc">ATS tuyển dụng, kho CV (trích xuất AI), onboarding/offboarding checklist, biến động nhân sự và dashboard HR analytics.</div>
+        <div class="mod-benefit">→ HR end-to-end trong một module</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">⏱️</div>
+        <div class="mod-name">Chấm Công & Nghỉ Phép</div>
+        <div class="mod-desc">Điểm danh ZKTeco, tra cứu công, bảng công tổng hợp, quỹ phép năm, accrual tự động và xuất Excel chuẩn mẫu.</div>
+        <div class="mod-benefit">→ Bảng công chính xác, tự động hóa cao</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">✉️</div>
+        <div class="mod-name">Chữ Ký Email</div>
+        <div class="mod-desc">Tạo chữ ký email chuẩn thương hiệu với 5 template, preview live và đẩy tự động lên Zimbra cho toàn tổ chức.</div>
+        <div class="mod-benefit">→ Thương hiệu nhất quán trong mọi email</div>
+      </div>
+
+      <div class="mod-card">
+        <div class="mod-icon">🔍</div>
+        <div class="mod-name">Tra Cứu & Audit Log</div>
+        <div class="mod-desc">Tra cứu tài sản, đầu mối, văn bản, thông báo và lịch sử thay đổi toàn hệ thống với filter và export.</div>
+        <div class="mod-benefit">→ Truy xuất mọi thay đổi, minh bạch hoàn toàn</div>
+      </div>
+
+      <div class="mod-card" style="border-color:rgba(79,70,229,0.3);background:rgba(79,70,229,0.05)">
+        <div class="mod-icon">🔐</div>
+        <div class="mod-name">Phân Quyền RBAC</div>
+        <div class="mod-desc">Ma trận phân quyền module mẹ/con, fallback kế thừa, multi-company với 1 user nhiều vai trò và Telegram login/approval.</div>
+        <div class="mod-benefit">→ Bảo mật đúng người, đúng quyền, đúng cấp</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Enterprise Operations Platform</span>
+    <span>CONFIDENTIAL</span>
+    <span>Trang 3</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 1 — TRANG 4/4: BENEFITS + CTA
+══════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-benefits">
+
+    <div>
+      <div class="section-label" style="text-align:center">Giá Trị Cốt Lõi</div>
+      <div class="section-title" style="text-align:center;font-size:26px;">
+        4 Trụ Cột <span>Giá Trị</span> Doanh Nghiệp
+      </div>
+    </div>
+
+    <div class="benefits-grid">
+
+      <div class="benefit-card">
+        <div class="benefit-number">01</div>
+        <div class="benefit-title">🎯 Tập Trung Hóa</div>
+        <div class="benefit-desc">
+          Một điểm truy cập duy nhất cho tất cả vận hành — từ tài sản, nhân sự, đến quy trình phê duyệt. Lãnh đạo có toàn cảnh, nhân viên có đúng công cụ cần.
+        </div>
+        <div class="benefit-tags">
+          <span class="benefit-tag">Một đăng nhập</span>
+          <span class="benefit-tag">Dữ liệu nhất quán</span>
+          <span class="benefit-tag">Dashboard real-time</span>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-number">02</div>
+        <div class="benefit-title">📈 Mở Rộng Linh Hoạt</div>
+        <div class="benefit-desc">
+          Thiết kế multi-company, phân cấp phòng ban và RBAC động cho phép mở rộng từ 10 đến 10,000 nhân viên mà không cần thay đổi kiến trúc.
+        </div>
+        <div class="benefit-tags">
+          <span class="benefit-tag">Multi-company</span>
+          <span class="benefit-tag">Module bật/tắt</span>
+          <span class="benefit-tag">Self-hosted</span>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-number">03</div>
+        <div class="benefit-title">🔗 Tích Hợp Sâu</div>
+        <div class="benefit-desc">
+          Tích hợp ZKTeco chấm công, Zimbra email server, Telegram approval và 225+ API endpoint — kết nối với hệ sinh thái hiện có của doanh nghiệp.
+        </div>
+        <div class="benefit-tags">
+          <span class="benefit-tag">ZKTeco</span>
+          <span class="benefit-tag">Zimbra SOAP</span>
+          <span class="benefit-tag">Telegram Bot</span>
+        </div>
+      </div>
+
+      <div class="benefit-card">
+        <div class="benefit-number">04</div>
+        <div class="benefit-title">🛡️ Kiểm Soát & Bảo Mật</div>
+        <div class="benefit-desc">
+          Self-hosted hoàn toàn — dữ liệu nằm trong hạ tầng của bạn. Audit log toàn hệ thống, phân quyền RBAC chi tiết đến từng action trong từng module.
+        </div>
+        <div class="benefit-tags">
+          <span class="benefit-tag">Audit log đầy đủ</span>
+          <span class="benefit-tag">RBAC chi tiết</span>
+          <span class="benefit-tag">Data sovereignty</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-bar">
+      <div class="cta-bar-text">
+        <h3>Sẵn sàng xem demo thực tế?</h3>
+        <p>Đội ngũ FADO sẵn sàng trình diễn platform trên dữ liệu thực của doanh nghiệp bạn — không mất phí, không cam kết.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-shrink:0;">
+        <div style="text-align:right;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Liên hệ ngay</div>
+          <div style="font-size:13px;font-weight:700;color:var(--fg);">asset.fadoai.com</div>
+        </div>
+        <a class="cta-btn">Đặt Lịch Demo →</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Enterprise Operations Platform</span>
+    <span>CONFIDENTIAL</span>
+    <span>Trang 4</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 2: ONE-PAGE SALES SHEET
+══════════════════════════════════════════════════ -->
+<div class="page page-portrait">
+  <div class="sales-sheet">
+
+    <!-- Header -->
+    <div class="sales-header">
+      <div class="sales-logo">
+        <div class="logo-icon">AF</div>
+        <div>
+          <div class="logo-text" style="font-size:15px;">FADO AssetFlow</div>
+          <div class="logo-sub">Enterprise Operations Platform</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">Sales Sheet · Confidential</div>
+        <div style="font-size:11px;font-weight:700;color:var(--indigo-pale);margin-top:2px;">Phiên Bản 2026</div>
+      </div>
+    </div>
+
+    <!-- Executive Summary -->
+    <div class="executive-box">
+      <div class="exec-title">Tóm Tắt Điều Hành</div>
+      <div class="exec-line"><span class="exec-dot">▸</span> FADO AssetFlow là nền tảng quản trị vận hành doanh nghiệp tập trung — thay thế 5–12 phần mềm rời rạc bằng một hệ thống duy nhất, tích hợp toàn bộ vòng đời tài sản, nhân sự, công việc và quy trình phê duyệt.</div>
+      <div class="exec-line" style="margin-top:6px;"><span class="exec-dot">▸</span> Thiết kế đặc thù cho doanh nghiệp Việt Nam: giao diện tiếng Việt, tích hợp Zimbra email, ZKTeco chấm công, phân quyền 4 cấp và tự host hoàn toàn để đảm bảo chủ quyền dữ liệu.</div>
+      <div class="exec-line" style="margin-top:6px;"><span class="exec-dot">▸</span> Triển khai Docker + Traefik trong 4 tuần, vận hành ngay từ ngày đầu với 20+ module sẵn sàng và 225+ API endpoint mở cho tích hợp hệ thống hiện có.</div>
+    </div>
+
+    <!-- Feature Matrix Table -->
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Module & Tính Năng Chính</div>
+    <table class="feat-table">
+      <thead>
+        <tr>
+          <th style="width:28%">Module</th>
+          <th style="width:36%">Tính Năng Chính</th>
+          <th style="width:36%">Lợi Ích Doanh Nghiệp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="module-group-header"><td colspan="3">📊 Vận Hành & Quản Lý</td></tr>
+        <tr>
+          <td><strong>Bảng Điều Khiển</strong></td>
+          <td>Dashboard 2 cột, KPI real-time, 3 vai trò riêng biệt</td>
+          <td>Lãnh đạo thấy toàn cảnh trong 1 màn hình</td>
+        </tr>
+        <tr>
+          <td><strong>Quản Lý Tài Sản</strong></td>
+          <td>HW/SW/Domain/Email, vòng đời, phân công, cảnh báo</td>
+          <td>Không mất tài sản, không bỏ lỡ hết hạn</td>
+        </tr>
+        <tr>
+          <td><strong>Duyệt Yêu Cầu</strong></td>
+          <td>Bù công, tăng ca, bảng công, xóa tài sản — flow 2 bước</td>
+          <td>Phê duyệt nhanh, có audit trail đầy đủ</td>
+        </tr>
+        <tr>
+          <td><strong>Đặt Phòng Họp</strong></td>
+          <td>Đặt phòng, kiểm tra conflict, lịch sử sử dụng</td>
+          <td>Không tranh giành phòng, lịch minh bạch</td>
+        </tr>
+
+        <tr class="module-group-header"><td colspan="3">👥 Nhân Sự & Tuyển Dụng</td></tr>
+        <tr>
+          <td><strong>Nguồn Nhân Lực</strong></td>
+          <td>ATS, kho CV (AI extract), onboarding/offboarding</td>
+          <td>HR end-to-end, không để lọt quy trình</td>
+        </tr>
+        <tr>
+          <td><strong>Chấm Công & Nghỉ Phép</strong></td>
+          <td>ZKTeco, bảng công, quỹ phép, xuất Excel chuẩn</td>
+          <td>Bảng công chính xác, tự động hóa hoàn toàn</td>
+        </tr>
+        <tr>
+          <td><strong>Hợp Đồng & Hồ Sơ</strong></td>
+          <td>Hợp đồng nhân sự, nhắc gia hạn, watcher</td>
+          <td>Không bỏ lỡ gia hạn hợp đồng quan trọng</td>
+        </tr>
+        <tr>
+          <td><strong>Biểu Mẫu Onboarding</strong></td>
+          <td>Public form token, gửi link, cấu hình linh hoạt</td>
+          <td>Nhân sự mới điền thông tin từ xa, không giấy tờ</td>
+        </tr>
+
+        <tr class="module-group-header"><td colspan="3">🔧 Công Cụ & Tích Hợp</td></tr>
+        <tr>
+          <td><strong>Ticket Hỗ Trợ</strong></td>
+          <td>Ticket nội bộ, luồng admin/user, danh mục cấu hình</td>
+          <td>Hỗ trợ nội bộ có hệ thống, có thể truy xuất</td>
+        </tr>
+        <tr>
+          <td><strong>Nhiệm Vụ</strong></td>
+          <td>Subtask, attachment, comment, follower, analytics</td>
+          <td>Công việc rõ ràng, trách nhiệm minh bạch</td>
+        </tr>
+        <tr>
+          <td><strong>Chữ Ký Email</strong></td>
+          <td>5 template, preview live, đẩy Zimbra tự động</td>
+          <td>Thương hiệu nhất quán trong mọi email</td>
+        </tr>
+        <tr>
+          <td><strong>Tra Cứu & Audit Log</strong></td>
+          <td>Tài sản, văn bản, lịch sử thay đổi toàn hệ thống</td>
+          <td>Truy xuất mọi thay đổi, minh bạch hoàn toàn</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ROI Section -->
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">Tác Động Đo Được</div>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-num">60%</div>
+        <div class="roi-unit">Trung bình</div>
+        <div class="roi-label">Tiết kiệm thời gian<br>quy trình phê duyệt</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">0</div>
+        <div class="roi-unit">Mục tiêu</div>
+        <div class="roi-label">Tài sản thất lạc<br>không có hồ sơ</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">1</div>
+        <div class="roi-unit">Nền tảng</div>
+        <div class="roi-label">Thay thế toàn bộ<br>phần mềm rời rạc</div>
+      </div>
+    </div>
+
+    <!-- Implementation Timeline -->
+    <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;">Lộ Trình Triển Khai</div>
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-dot">1</div>
+        <div class="tl-phase">Phase 1</div>
+        <div class="tl-title">Khởi Động</div>
+        <div class="tl-duration">Tuần 1</div>
+        <div class="tl-duration" style="color:var(--muted);font-size:8px;margin-top:3px;">Cấu hình hạ tầng, cài đặt Docker, import dữ liệu cơ bản</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">2</div>
+        <div class="tl-phase">Phase 2</div>
+        <div class="tl-title">Core Modules</div>
+        <div class="tl-duration">Tuần 2</div>
+        <div class="tl-duration" style="color:var(--muted);font-size:8px;margin-top:3px;">Tài sản, người dùng, tổ chức, phân quyền RBAC</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">3</div>
+        <div class="tl-phase">Phase 3</div>
+        <div class="tl-title">Tích Hợp</div>
+        <div class="tl-duration">Tuần 3</div>
+        <div class="tl-duration" style="color:var(--muted);font-size:8px;margin-top:3px;">Zimbra, ZKTeco, Telegram, email notification</div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot" style="background:linear-gradient(135deg,#10b981,#059669)">4</div>
+        <div class="tl-phase">Phase 4</div>
+        <div class="tl-title">Go Live</div>
+        <div class="tl-duration">Tuần 4</div>
+        <div class="tl-duration" style="color:var(--muted);font-size:8px;margin-top:3px;">Đào tạo người dùng, chuyển giao, vận hành production</div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-bar" style="margin-top:16px;">
+      <div class="contact-item">
+        <div class="contact-icon">🌐</div>
+        <div>
+          <div class="contact-label">Website</div>
+          <div class="contact-value">asset.fadoai.com</div>
+        </div>
+      </div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.08)"></div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value">datpham77777@gmail.com</div>
+        </div>
+      </div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.08)"></div>
+      <div class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div>
+          <div class="contact-label">Telegram</div>
+          <div class="contact-value">@fadoai</div>
+        </div>
+      </div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.08)"></div>
+      <div class="contact-item">
+        <div class="contact-icon">🐳</div>
+        <div>
+          <div class="contact-label">Deploy</div>
+          <div class="contact-value">Docker · Self-hosted · Port 4028</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — One-Page Sales Sheet</span>
+    <span>CONFIDENTIAL · 2026</span>
+    <span>Trang 5</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 3: FEATURE MATRIX (trang 1)
+══════════════════════════════════════════════════ -->
+<div class="page page-portrait">
+  <div class="matrix-page">
+
+    <div class="matrix-header">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div class="logo-icon" style="width:32px;height:32px;font-size:13px;">AF</div>
+        <div>
+          <div class="logo-text" style="font-size:13px;">FADO AssetFlow</div>
+          <div class="logo-sub">Feature Matrix — Ma Trận Phân Quyền Theo Role</div>
+        </div>
+      </div>
+      <div class="matrix-title">Ma Trận Phân Quyền Chi Tiết</div>
+      <div class="matrix-sub">Phân quyền theo 4 cấp: User · Manager · Admin · Super Admin — nhóm theo module thực tế</div>
+      <div class="matrix-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span class="role-user">● Đầy đủ quyền</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><span class="role-manager">● Quyền hạn chế / scope cấp dưới</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#818cf8"></div><span class="role-admin">● Quyền Admin (cấu hình)</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div><span class="role-super">● Super Admin only</span></div>
+        <div class="legend-item" style="opacity:0.4;"><span>○ Không có quyền</span></div>
+      </div>
+    </div>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th style="width:36%;text-align:left;">Tính Năng / Module</th>
+          <th style="width:16%;color:#10b981;">👤 User</th>
+          <th style="width:16%;color:#f59e0b;">👔 Manager</th>
+          <th style="width:16%;color:#818cf8;">🛡️ Admin</th>
+          <th style="width:16%;color:#f472b6;">👑 Super Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- DASHBOARD -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">📊</span>BẢNG ĐIỀU KHIỂN</td></tr>
+        <tr>
+          <td><div class="feature-name">Xem dashboard cá nhân</div><div class="feature-sub">KPI của mình, task gần hạn</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Dashboard team / cấp dưới</div><div class="feature-sub">Scope nhân viên quản lý</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Dashboard toàn công ty</div><div class="feature-sub">Tất cả nhân viên, KPI tổng</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Dashboard đa công ty</div><div class="feature-sub">Multi-company overview</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="role-super" style="font-size:14px;font-weight:700;">●</span></td>
+        </tr>
+
+        <!-- ASSET MANAGEMENT -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">🖥️</span>QUẢN LÝ TÀI SẢN</td></tr>
+        <tr>
+          <td><div class="feature-name">Xem tài sản được phân công</div><div class="feature-sub">Hardware, software của mình</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Xem tài sản team</div><div class="feature-sub">Tài sản nhân viên cấp dưới</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Thêm / Sửa tài sản</div><div class="feature-sub">Hardware, phần mềm, domain, email</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Yêu cầu xóa tài sản</div><div class="feature-sub">Tạo delete request, chờ duyệt</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Duyệt xóa tài sản</div><div class="feature-sub">Phê duyệt delete request 2 bước</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Quản lý email Zimbra</div><div class="feature-sub">Tạo, đổi mật khẩu, xóa mailbox</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- TICKET -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">🎫</span>TICKET HỖ TRỢ</td></tr>
+        <tr>
+          <td><div class="feature-name">Tạo ticket</div><div class="feature-sub">Gửi yêu cầu hỗ trợ nội bộ</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Xử lý ticket</div><div class="feature-sub">Nhận, xử lý, đóng ticket</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Cấu hình danh mục ticket</div><div class="feature-sub">Thêm, sửa category và priority</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- TASKS -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">✅</span>NHIỆM VỤ</td></tr>
+        <tr>
+          <td><div class="feature-name">Tạo và quản lý nhiệm vụ của mình</div><div class="feature-sub">Subtask, attachment, comment</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Giao nhiệm vụ cho người khác</div><div class="feature-sub">Assign, follower, deadline</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Task analytics</div><div class="feature-sub">Biểu đồ tiến độ, thống kê</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Liên kết task ↔ ticket</div><div class="feature-sub">2 chiều, điều hướng qua query param</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Feature Matrix (1/2)</span>
+    <span>CONFIDENTIAL · 2026</span>
+    <span>Trang 6</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PHẦN 3: FEATURE MATRIX (trang 2)
+══════════════════════════════════════════════════ -->
+<div class="page page-portrait">
+  <div class="matrix-page">
+
+    <div class="matrix-header">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="logo-icon" style="width:28px;height:28px;font-size:12px;">AF</div>
+          <div class="logo-text" style="font-size:13px;">FADO AssetFlow — Ma Trận Phân Quyền (tiếp)</div>
+        </div>
+        <div class="matrix-legend" style="margin-top:0;">
+          <div class="legend-item"><span class="role-user">● User</span></div>
+          <div class="legend-item"><span class="role-manager">● Manager</span></div>
+          <div class="legend-item"><span class="role-admin">● Admin</span></div>
+          <div class="legend-item"><span class="role-super">● Super Admin</span></div>
+        </div>
+      </div>
+    </div>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th style="width:36%;text-align:left;">Tính Năng / Module</th>
+          <th style="width:16%;color:#10b981;">👤 User</th>
+          <th style="width:16%;color:#f59e0b;">👔 Manager</th>
+          <th style="width:16%;color:#818cf8;">🛡️ Admin</th>
+          <th style="width:16%;color:#f472b6;">👑 Super Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ROOM BOOKING -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">🏢</span>ĐẶT PHÒNG HỌP</td></tr>
+        <tr>
+          <td><div class="feature-name">Đặt phòng họp</div><div class="feature-sub">Chọn phòng, giờ, mục đích</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Hủy đặt phòng của mình</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Quản lý tất cả booking</div><div class="feature-sub">Hủy, duyệt, xem lịch sử</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- APPROVAL -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">✍️</span>DUYỆT YÊU CẦU</td></tr>
+        <tr>
+          <td><div class="feature-name">Tạo yêu cầu bù công / tăng ca</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Duyệt yêu cầu cấp dưới</div><div class="feature-sub">Approve/reject với ghi chú</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Duyệt qua Telegram</div><div class="feature-sub">Nhận thông báo, bấm duyệt ngay bot</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- HR -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">👥</span>NGUỒN NHÂN LỰC & TUYỂN DỤNG</td></tr>
+        <tr>
+          <td><div class="feature-name">Xem thông tin cá nhân / hợp đồng</div><div class="feature-sub">Self-service hồ sơ của mình</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Tạo yêu cầu tuyển dụng</div><div class="feature-sub">JD, số lượng, thời gian cần</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Quản lý ATS & kho CV</div><div class="feature-sub">Kanban ứng viên, trích xuất CV AI</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Onboarding / Offboarding</div><div class="feature-sub">Checklist, phân công tài sản tự động</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Biến động nhân sự & báo cáo</div><div class="feature-sub">Dashboard, xuất Mẫu 01/PLI</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- ATTENDANCE -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">⏱️</span>CHẤM CÔNG & NGHỈ PHÉP</td></tr>
+        <tr>
+          <td><div class="feature-name">Tra cứu công của mình</div><div class="feature-sub">Check-in/out, giờ làm, số ngày nghỉ</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Tra cứu công team</div><div class="feature-sub">Scope cấp dưới theo phòng ban</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Xuất bảng công Excel</div><div class="feature-sub">Form DETAIL_fill chuẩn mẫu</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Cấu hình máy ZKTeco</div><div class="feature-sub">Thêm máy, sync dữ liệu</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- EMAIL SIG -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">✉️</span>CHỮ KÝ EMAIL & TRA CỨU</td></tr>
+        <tr>
+          <td><div class="feature-name">Xem chữ ký email của mình</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Tạo & đẩy chữ ký lên Zimbra</div><div class="feature-sub">5 template, preview, bulk push</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Tra cứu tài sản / đầu mối</div><div class="feature-sub">Của mình, theo quyền</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-partial">●</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Audit log toàn hệ thống</div><div class="feature-sub">Lịch sử mọi thay đổi, filter, export</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+        <!-- SYSTEM -->
+        <tr class="group-row"><td colspan="5"><span class="group-icon">⚙️</span>HỆ THỐNG & CẤU HÌNH</td></tr>
+        <tr>
+          <td><div class="feature-name">Quản lý người dùng</div><div class="feature-sub">Thêm, phân quyền, duyệt onboarding</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Cấu trúc tổ chức</div><div class="feature-sub">Công ty, phòng ban, chức danh, sơ đồ</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Multi-company management</div><div class="feature-sub">Quản lý nhiều công ty, switcher</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="role-super" style="font-size:14px;font-weight:700;">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Cài đặt hệ thống</div><div class="feature-sub">Cấu hình chung, biểu mẫu onboarding</div></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-none">○</span></td>
+          <td><span class="check-admin">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+        <tr>
+          <td><div class="feature-name">Đăng nhập Telegram</div><div class="feature-sub">Telegram Login Widget, HMAC verify</div></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+          <td><span class="check-full">●</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <!-- Footer note -->
+    <div style="margin-top:16px;padding:12px 16px;background:rgba(79,70,229,0.06);border:1px solid rgba(79,70,229,0.15);border-radius:8px;">
+      <div style="font-size:9px;color:var(--muted);line-height:1.6;">
+        <strong style="color:var(--indigo-pale);">Ghi chú:</strong>
+        Phân quyền RBAC được cấu hình chi tiết đến từng action (view/create/edit/delete/approve) cho từng module.
+        Manager scope được giới hạn theo cấu trúc tổ chức — chỉ thấy nhân viên báo cáo trực tiếp (manager_id).
+        Super Admin có toàn quyền vượt qua mọi permission check.
+        Quyền mẫu có thể chỉnh sửa trực tiếp trong DB qua bảng permissions.
+      </div>
+    </div>
+
+  </div>
+  <div class="page-footer">
+    <span>FADO AssetFlow — Feature Matrix (2/2)</span>
+    <span>asset.fadoai.com · CONFIDENTIAL · 2026</span>
+    <span>Trang 7</span>
+  </div>
+</div>
+
+<script src="/preview/_nav.js"></script>
+</body>
+</html>
